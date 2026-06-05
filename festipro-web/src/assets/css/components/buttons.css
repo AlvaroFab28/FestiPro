@@ -1,0 +1,100 @@
+/* --- BOTÓN DE CONTACTO PREMIUM (WHATSAPP CON ESTRELLAS) --- */
+.btn-wa-premium {
+    position: relative;
+    overflow: visible;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* MODO CLARO POR DEFECTO */
+    background: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.856) 0%, transparent 45%), 
+                radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.977) 0%, transparent 45%), 
+                linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 2px solid #ffffff;
+    color: #0f172a; /* Letras e icono negros */
+    animation: wa-pulse-primary-light 2.4s infinite ease-in-out;
+}
+
+.btn-wa-premium i.ph-whatsapp-logo {
+    color: #0f172a; /* Icono negro en modo claro */
+    transition: color 0.4s ease;
+}
+
+.btn-wa-premium:hover {
+    transform: translateY(-2px);
+    border-color: #6c5ce7; /* Púrpura primario de FestiPro */
+    color: #000000;
+    animation-play-state: paused;
+}
+
+.btn-wa-premium:hover i.ph-whatsapp-logo {
+    color: #000000;
+}
+
+/* MODO OSCURO */
+html.dark .btn-wa-premium {
+    background: linear-gradient(135deg, #090614 0%, #1a163b 50%, #090614 100%); /* Morado/púrpura muy oscuro y sutil */
+    border: 2px solid #a78bfa; /* Borde púrpura medio para contrastar con el neón */
+    color: #ffffff; /* Letras e iconos blancos */
+    animation: wa-pulse-purple 2.4s infinite ease-in-out;
+}
+
+html.dark .btn-wa-premium i.ph-whatsapp-logo {
+    color: #ffffff;
+}
+
+html.dark .btn-wa-premium:hover {
+    transform: translateY(-2px);
+    border-color: #a78bfa;
+    color: #ffffff;
+    animation-play-state: paused;
+}
+
+/* --- ESTRELLAS DE CONTACTO PREMIUM --- */
+.btn-wa-premium .star-item {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96);
+    pointer-events: none;
+    transform: scale(0.5);
+    
+    /* Configuración por defecto Modo Claro: Negras */
+    color: #000000;
+    filter: drop-shadow(0 0 0 rgba(108, 92, 231, 0));
+}
+
+/* Configuración Modo Oscuro: Blanco con sombras púrpura */
+html.dark .btn-wa-premium .star-item {
+    color: #ffffff;
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+}
+
+/* Posiciones base (inactivas, ocultas detrás del botón) */
+.btn-wa-premium .star-1 { top: 20%; left: 20%; font-size: 22px; }
+.btn-wa-premium .star-2 { top: 45%; left: 45%; font-size: 16px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); }
+.btn-wa-premium .star-3 { top: 40%; left: 40%; font-size: 8px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); }
+.btn-wa-premium .star-4 { top: 20%; left: 40%; font-size: 10px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); transition-duration: 0.8s; }
+.btn-wa-premium .star-5 { top: 25%; left: 45%; font-size: 16px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); transition-duration: 0.6s; }
+.btn-wa-premium .star-6 { top: 5%; left: 50%; font-size: 8px; transition-duration: 0.8s; }
+
+/* Efecto Hover (vuelo hacia afuera) */
+.btn-wa-premium:hover .star-item {
+    opacity: 1;
+    z-index: 10;
+    transform: scale(1);
+}
+
+/* Hover Modo Claro: Estrellas negras con sombras sutiles púrpura */
+.btn-wa-premium:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 4px 8px rgba(108, 92, 231, 0.4)); }
+.btn-wa-premium:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 4px 6px rgba(108, 92, 231, 0.4)); }
+.btn-wa-premium:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 2px 4px rgba(108, 92, 231, 0.4)); }
+.btn-wa-premium:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 3px 5px rgba(108, 92, 231, 0.4)); }
+.btn-wa-premium:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 4px 7px rgba(108, 92, 231, 0.4)); }
+.btn-wa-premium:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 2px 4px rgba(108, 92, 231, 0.4)); }
+
+/* Hover Modo Oscuro: Estrellas blancas con sombras púrpura */
+html.dark .btn-wa-premium:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 0 10px #8b5cf6) drop-shadow(0 0 16px #a78bfa); }
+html.dark .btn-wa-premium:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 0 8px #8b5cf6) drop-shadow(0 0 12px #a78bfa); }
+html.dark .btn-wa-premium:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 0 6px #8b5cf6) drop-shadow(0 0 10px #a78bfa); }
+html.dark .btn-wa-premium:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 0 7px #8b5cf6) drop-shadow(0 0 12px #a78bfa); }
+html.dark .btn-wa-premium:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 0 9px #8b5cf6) drop-shadow(0 0 14px #a78bfa); }
+html.dark .btn-wa-premium:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 0 6px #8b5cf6) drop-shadow(0 0 10px #a78bfa); }

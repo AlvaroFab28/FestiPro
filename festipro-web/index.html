@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FestiPro | Encuentra Talento Local para tu Evento</title>
+    <meta name="description" content="Conectamos el mejor talento boliviano (DJs, músicos, animadores) con organizadores de eventos. Contratación directa vía WhatsApp.">
+    <link rel="stylesheet" href="/src/assets/css/global.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="flex flex-col min-h-screen bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+    <!-- Header Pegajoso con min-h para evitar Layout Shift -->
+    <header id="app-header" class="sticky top-0 z-50 w-full min-h-[76px]"></header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow">
+        
+        <!-- HERO SECTION -->
+        <section class="relative overflow-hidden bg-slate-50 dark:bg-fp-bg-dark py-20 lg:py-32 border-b border-slate-200/50 dark:border-fp-border-dark transition-colors duration-300">
+            <!-- Blobs estéticos con gradiente y desenfoque -->
+            <div class="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-10 animate-pulse pointer-events-none"></div>
+            <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-10 animate-pulse pointer-events-none delay-1000"></div>
+            
+            <div class="container mx-auto px-6 relative z-10 text-center">
+                <!-- Badge Principal -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-fp-primary-light/10 text-fp-primary-light dark:bg-fp-primary-dark/15 dark:text-fp-primary-dark text-sm font-bold tracking-wide mb-8 border border-fp-primary-light/20 dark:border-fp-primary-dark/20 backdrop-blur-sm shadow-sm">
+                    <i class="ph-fill ph-confetti text-lg"></i> Más de 200 artistas en toda Bolivia
+                </div>
+                
+                <!-- Título -->
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-display font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight mb-6">
+                    Encuentra la <span class="text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark">chispa perfecta</span><br>para tu evento
+                </h1>
+                
+                <!-- Subtítulo -->
+                <p class="text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    Conectamos el talento local boliviano con organizadores de eventos. Músicos, DJs, bandas y animadores a un solo clic y de contratación directa.
+                </p>
+                
+                <!-- Botones CTA -->
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-20">
+                    <a href="/src/pages/publico/catalogo/catalogo.html" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-4 rounded-full bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white font-bold text-lg shadow-lg hover:shadow-fp-primary-light/35 dark:hover:shadow-fp-primary-dark/25 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                        <i class="ph-fill ph-music-notes text-xl"></i> Explorar Artistas
+                    </a>
+                    <a href="/src/pages/auth/registro.html" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-4 rounded-full bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-white border border-slate-200 dark:border-fp-border-dark hover:border-fp-primary-light dark:hover:border-fp-primary-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 font-bold text-lg shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                        Soy Artista <i class="ph-bold ph-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="grid grid-cols-3 gap-4 max-w-3xl mx-auto border-t border-slate-200/60 dark:border-fp-border-dark pt-10 backdrop-blur-sm">
+                    <div class="flex flex-col items-center justify-center">
+                        <span class="text-3xl lg:text-4xl font-display font-black text-slate-900 dark:text-white mb-1">240+</span>
+                        <span class="text-[10px] lg:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase">Artistas</span>
+                    </div>
+                    <div class="h-12 w-px bg-slate-200 dark:bg-fp-surface-dark self-center"></div>
+                    <div class="flex flex-col items-center justify-center">
+                        <span class="text-3xl lg:text-4xl font-display font-black text-slate-900 dark:text-white mb-1">180+</span>
+                        <span class="text-[10px] lg:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase">Eventos</span>
+                    </div>
+                    <div class="h-12 w-px bg-slate-200 dark:bg-fp-surface-dark self-center"></div>
+                    <div class="flex flex-col items-center justify-center">
+                        <span class="text-3xl lg:text-4xl font-display font-black text-slate-900 dark:text-white mb-1">4.9★</span>
+                        <span class="text-[10px] lg:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase">Calificación</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indicador Scroll -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1 text-[10px] text-slate-400 dark:text-slate-500 animate-bounce pointer-events-none">
+                <span>Desliza para explorar</span>
+                <span>↓</span>
+            </div>
+        </section>
+
+        <!-- CATEGORÍAS POPULARES -->
+        <section class="py-16 lg:py-24 bg-white dark:bg-fp-bg-dark transition-colors duration-300">
+            <div class="container mx-auto px-6">
+                <!-- Header de Sección -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+                    <div>
+                        <h2 class="text-3xl lg:text-4xl font-display font-extrabold text-slate-950 dark:text-white mb-2">Categorías Populares</h2>
+                        <p class="text-slate-600 dark:text-slate-400 font-medium">Elige el tipo de talento que necesitas para tu evento</p>
+                    </div>
+                    <a href="/src/pages/publico/catalogo/catalogo.html" class="group text-fp-primary-light dark:text-fp-primary-dark font-semibold inline-flex items-center gap-1 hover:underline mt-4 md:mt-0 transition-all">
+                        Ver todas las categorías <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+                
+                <!-- Grid de Categorías -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                    <a href="/src/pages/publico/catalogo/catalogo.html?categoria=1" class="group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-xl hover:border-fp-primary-light/35 dark:hover:border-fp-primary-dark/35 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-gradient-to-br from-indigo-300 to-indigo-600 text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph-fill ph-headphones text-4xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-slate-800 dark:text-slate-100 text-center group-hover:text-fp-primary-light dark:group-hover:text-fp-primary-dark transition-colors duration-300">DJs</span>
+                    </a>
+                    
+                    <a href="/src/pages/publico/catalogo/catalogo.html?categoria=2" class="group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-xl hover:border-fp-primary-light/35 dark:hover:border-fp-primary-dark/35 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-gradient-to-br from-rose-300 to-rose-600 text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph-fill ph-guitar text-4xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-slate-800 dark:text-slate-100 text-center group-hover:text-fp-primary-light dark:group-hover:text-fp-primary-dark transition-colors duration-300">Bandas de Rock</span>
+                    </a>
+                    
+                    <a href="/src/pages/publico/catalogo/catalogo.html?categoria=3" class="group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-xl hover:border-fp-primary-light/35 dark:hover:border-fp-primary-dark/35 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-gradient-to-br from-amber-300 to-amber-600 text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph-fill ph-magic-wand text-4xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-slate-800 dark:text-slate-100 text-center group-hover:text-fp-primary-light dark:group-hover:text-fp-primary-dark transition-colors duration-300">Magos</span>
+                    </a>
+                    
+                    <a href="/src/pages/publico/catalogo/catalogo.html?categoria=4" class="group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-xl hover:border-fp-primary-light/35 dark:hover:border-fp-primary-dark/35 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-gradient-to-br from-emerald-300 to-emerald-600 text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph-fill ph-microphone-stage text-4xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-slate-800 dark:text-slate-100 text-center group-hover:text-fp-primary-light dark:group-hover:text-fp-primary-dark transition-colors duration-300">Animadores</span>
+                    </a>
+                    
+                    <a href="/src/pages/publico/catalogo/catalogo.html?categoria=5" class="group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-xl hover:border-fp-primary-light/35 dark:hover:border-fp-primary-dark/35 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-gradient-to-br from-orange-300 to-orange-600 text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph-fill ph-mask-happy text-4xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-slate-800 dark:text-slate-100 text-center group-hover:text-fp-primary-light dark:group-hover:text-fp-primary-dark transition-colors duration-300">Payasos</span>
+                    </a>
+                    
+                    <a href="/src/pages/publico/catalogo/catalogo.html" class="group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-xl hover:border-fp-primary-light/35 dark:hover:border-fp-primary-dark/35 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md bg-gradient-to-br from-slate-300 to-slate-500 text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph-fill ph-sparkle text-4xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-slate-800 dark:text-slate-100 text-center group-hover:text-fp-primary-light dark:group-hover:text-fp-primary-dark transition-colors duration-300">Ver todo</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TALENTOS DESTACADOS -->
+        <section class="py-16 lg:py-24 bg-slate-50 dark:bg-fp-surface-dark/40 border-y border-slate-200/50 dark:border-slate-900/50 transition-colors duration-300">
+            <div class="container mx-auto px-6">
+                <!-- Header de Sección -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+                    <div>
+                        <h2 class="text-3xl lg:text-4xl font-display font-extrabold text-slate-950 dark:text-white mb-2">Talentos Destacados</h2>
+                        <p class="text-slate-600 dark:text-slate-400">Los artistas más solicitados e interactuados en la plataforma</p>
+                    </div>
+                    <a href="/src/pages/publico/catalogo/catalogo.html" class="group text-fp-primary-light dark:text-fp-primary-dark font-semibold inline-flex items-center gap-1 hover:underline mt-4 md:mt-0 transition-all">
+                        Ver catálogo completo <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+                
+                <!-- Contenedor Dinámico con Skeletons Iniciales -->
+                <div id="talentos-destacados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Skeletons se renderizan aquí y serán reemplazados por JS -->
+                    <!-- Skeleton 1 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                        <div class="h-48 bg-slate-200 dark:bg-fp-surface-muted-dark"></div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-2/3"></div>
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/6"></div>
+                            </div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/2"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                                <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                                <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Skeleton 2 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                        <div class="h-48 bg-slate-200 dark:bg-fp-surface-muted-dark"></div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-2/3"></div>
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/6"></div>
+                            </div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/2"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                                <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                                <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Skeleton 3 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                        <div class="h-48 bg-slate-200 dark:bg-fp-surface-muted-dark"></div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-2/3"></div>
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/6"></div>
+                            </div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/2"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                                <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                                <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Skeleton 4 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                        <div class="h-48 bg-slate-200 dark:bg-fp-surface-muted-dark"></div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-2/3"></div>
+                                <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/6"></div>
+                            </div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/2"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                                <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                                <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ¿CÓMO FUNCIONA? -->
+        <section class="py-16 lg:py-24 bg-white dark:bg-fp-bg-dark transition-colors duration-300">
+            <div class="container mx-auto px-6">
+                <!-- Header de Sección -->
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-3xl lg:text-4xl font-display font-extrabold text-slate-950 dark:text-white mb-4">¿Cómo funciona FestiPro?</h2>
+                    <p class="text-slate-600 dark:text-slate-400 text-lg">Encontrar y contratar entretenimiento local nunca ha sido tan rápido, directo y transparente</p>
+                </div>
+                
+                <!-- Grid de Pasos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Paso 1 -->
+                    <div class="group relative flex flex-col items-center text-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="relative w-16 h-16 rounded-full bg-fp-primary-light/10 text-fp-primary-light dark:bg-fp-primary-dark/10 dark:text-fp-primary-dark flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-magnifying-glass text-3xl"></i>
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-fp-accent-light text-white text-xs flex items-center justify-center font-display font-bold shadow">1</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white mb-2">Explora Artistas</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Navega libremente por nuestro catálogo y filtra por categoría, ciudad o tarifa base.</p>
+                        
+                        <!-- Flecha de transición (siguiente paso) -->
+                        <div class="absolute top-1/2 -right-8 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center text-slate-300 dark:text-slate-700 select-none pointer-events-none">
+                            <i class="ph-bold ph-caret-right text-3xl"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Paso 2 -->
+                    <div class="group relative flex flex-col items-center text-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="relative w-16 h-16 rounded-full bg-fp-primary-light/10 text-fp-primary-light dark:bg-fp-primary-dark/10 dark:text-fp-primary-dark flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-user-focus text-3xl"></i>
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-fp-accent-light text-white text-xs flex items-center justify-center font-display font-bold shadow">2</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white mb-2">Revisa Perfiles</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Mira sus portafolios de fotos, videos en vivo, opiniones y disponibilidad actual del artista.</p>
+                        
+                        <!-- Flecha de transición (siguiente paso) -->
+                        <div class="absolute top-1/2 -right-8 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center text-slate-300 dark:text-slate-700 select-none pointer-events-none">
+                            <i class="ph-bold ph-caret-right text-3xl"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Paso 3 -->
+                    <div class="group relative flex flex-col items-center text-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="relative w-16 h-16 rounded-full bg-fp-primary-light/10 text-fp-primary-light dark:bg-fp-primary-dark/10 dark:text-fp-primary-dark flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-whatsapp-logo text-3xl"></i>
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-fp-accent-light text-white text-xs flex items-center justify-center font-display font-bold shadow">3</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white mb-2">Conecta Directo</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Escríbeles directo por WhatsApp con un mensaje pre-armado con la info de tu evento.</p>
+                        
+                        <!-- Flecha de transición (siguiente paso) -->
+                        <div class="absolute top-1/2 -right-8 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center text-slate-300 dark:text-slate-700 select-none pointer-events-none">
+                            <i class="ph-bold ph-caret-right text-3xl"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Paso 4 -->
+                    <div class="group relative flex flex-col items-center text-center p-6 rounded-2xl bg-fp-bg-light dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="relative w-16 h-16 rounded-full bg-fp-primary-light/10 text-fp-primary-light dark:bg-fp-primary-dark/10 dark:text-fp-primary-dark flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-handshake text-3xl"></i>
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-fp-accent-light text-white text-xs flex items-center justify-center font-display font-bold shadow">4</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white mb-2">¡Haz tu Fiesta!</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Cierra los detalles de contratación directa sin pagar comisiones ni intermediarios.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVENTOS PRÓXIMOS / TRABAJOS PUBLICADOS -->
+        <section class="py-16 lg:py-24 bg-slate-50 dark:bg-fp-surface-dark/40 border-y border-slate-200/50 dark:border-fp-border-dark transition-colors duration-300">
+            <div class="container mx-auto px-6">
+                <!-- Header de Sección -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+                    <div>
+                        <h2 class="text-3xl lg:text-4xl font-display font-extrabold text-slate-950 dark:text-white mb-2">Eventos Próximos</h2>
+                        <p class="text-slate-600 dark:text-slate-400">Anfitriones y organizadores buscando artistas ahora mismo</p>
+                    </div>
+                    <a href="/src/pages/publico/eventos/eventos.html" class="group text-fp-primary-light dark:text-fp-primary-dark font-semibold inline-flex items-center gap-1 hover:underline mt-4 md:mt-0 transition-all">
+                        Ver tablón de anuncios <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+                
+                <!-- Contenedor Dinámico de Eventos con Skeletons -->
+                <div id="eventos-proximos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Skeletons se renderizan aquí y serán reemplazados por JS -->
+                    <!-- Skeleton Evento 1 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm p-6 animate-pulse space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/4"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/4"></div>
+                        </div>
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-3/4"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-full"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-5/6"></div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="h-10 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                        </div>
+                    </div>
+                    <!-- Skeleton Evento 2 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm p-6 animate-pulse space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/4"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/4"></div>
+                        </div>
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-3/4"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-full"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-5/6"></div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="h-10 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                        </div>
+                    </div>
+                    <!-- Skeleton Evento 3 -->
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm p-6 animate-pulse space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/4"></div>
+                            <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/4"></div>
+                        </div>
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-3/4"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-full"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-5/6"></div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-md w-1/3"></div>
+                            <div class="h-10 bg-slate-200 dark:bg-fp-surface-dark rounded-full w-1/3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="py-16 lg:py-24 bg-white dark:bg-fp-bg-dark transition-colors duration-300">
+            <div class="container mx-auto px-6">
+                <div class="bg-gradient-to-br from-fp-primary-light to-fp-primary-light/80 dark:from-fp-primary-dark dark:to-[#4e3ebd] text-white rounded-3xl p-8 md:p-16 relative overflow-hidden shadow-2xl">
+                    <!-- Efectos de círculos de fondo -->
+                    <div class="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full filter blur-xl pointer-events-none"></div>
+                    <div class="absolute top-0 right-0 w-80 h-80 bg-fp-accent-light/10 rounded-full filter blur-2xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10 max-w-2xl text-center mx-auto space-y-6">
+                        <h2 class="text-3xl md:text-5xl font-display font-extrabold tracking-tight">¿Tienes talento? Regístrate gratis</h2>
+                        <p class="text-indigo-100 text-base md:text-lg leading-relaxed">
+                            Crea tu perfil artístico en minutos, muestra tu portafolio de trabajo y empieza a recibir propuestas de contratación directo en tu celular. ¡Sin comisiones ocultas!
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+                            <a href="/src/pages/auth/registro.html" class="px-8 py-4 bg-fp-accent-light hover:bg-fp-accent-light/90 text-white font-bold text-lg rounded-full shadow-lg transition-transform transform hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="ph-fill ph-sparkle text-xl"></i> Crear mi Perfil Gratis
+                            </a>
+                            <a href="/src/pages/publico/catalogo/catalogo.html" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-lg rounded-full border border-white/20 transition-transform transform hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="ph-bold ph-magnifying-glass text-xl"></i> Buscar Talentos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <div id="app-footer"></div>
+
+    <script type="module" src="/src/assets/js/utils.js"></script>
+    <script type="module" src="/src/pages/publico/landing/landing.js"></script>
+</body>
+
+</html>

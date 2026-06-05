@@ -1,0 +1,46 @@
+/* --- FESTIPRO LOGIN/REGISTER PREMIUM STYLES --- */
+
+/* Panel Spotlight Efecto */
+.spotlight-panel {
+    position: relative;
+    overflow: hidden;
+}
+
+.spotlight-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: var(--mouse-opacity, 0);
+    transition: opacity 0.3s ease;
+}
+
+/* Spotlight Panel Izquierdo (Modo Claro): Luz blanca brillante */
+html:not(.dark) .spotlight-left::before {
+    background: radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(255, 255, 255, 0.28), transparent 70%);
+}
+
+/* Spotlight Panel Derecho (Modo Claro): Púrpura fuerte expansivo */
+html:not(.dark) .spotlight-right::before {
+    background: radial-gradient(450px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(108, 92, 231, 0.22), rgba(108, 92, 231, 0.08) 50%, transparent 80%);
+}
+
+/* Spotlight Ambos Paneles (Modo Oscuro): Púrpura sutil */
+html.dark .spotlight-left::before {
+    background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(140, 122, 230, 0.16), transparent 75%);
+}
+
+html.dark .spotlight-right::before {
+    background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(140, 122, 230, 0.16), transparent 75%);
+}
+
+/* Fondo del panel izquierdo con soporte de imagen personalizada (idéntico en claro/oscuro) */
+.login-left-bg {
+    background-image: var(--login-left-bg-image, linear-gradient(135deg, #6c5ce7 0%, #4834d4 100%));
+    background-size: cover;
+    background-position: center;
+}

@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import "@phosphor-icons/web/regular";
+@import "@phosphor-icons/web/fill";
+
+/* Inter Weights */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+/* Outfit Weights */
+@import "@fontsource/outfit/400.css";
+@import "@fontsource/outfit/700.css";
+@import "@fontsource/outfit/800.css";
+@import "@fontsource/outfit/900.css";
+
+
+/* En Tailwind v4, si queremos controlar el modo oscuro manualmente mediante la clase .dark en <html>, debemos definir esta variante personalizada */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /* --- FUENTES --- */
+    --font-sans: "Inter", sans-serif;
+    --font-display: "Outfit", sans-serif;
+
+    /* --- PALETA FESTIPRO: TEMA CLARO --- */
+    --color-fp-bg-light: #f1f5f9;
+    --color-fp-surface-light: #ffffff;
+    --color-fp-border-light: #e2e8f0;
+    --color-fp-primary-light: #6c5ce7;
+    --color-fp-accent-light: #ff7675;
+
+    /* --- PALETA FESTIPRO: TEMA OSCURO --- */
+    --color-fp-bg-dark: #0B0814;
+    --color-fp-surface-dark: #151124;
+    --color-fp-surface-muted-dark: #201A35;
+    --color-fp-border-dark: #2D264F;
+    --color-fp-primary-dark: #9350FF;
+    --color-fp-accent-dark: #ff9f43;
+}
+
+/* Base de estilos globales */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        @apply font-sans bg-fp-bg-light text-slate-800 antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-display font-bold text-slate-900;
+    }
+
+    button, 
+    a, 
+    select,
+    label,
+    input[type="submit"],
+    input[type="button"],
+    input[type="file"] {
+        cursor: pointer;
+    }
+
+    /* Ocultar el ojo de revelar contraseña nativo de Edge/Chromium */
+    input::-ms-reveal,
+    input::-ms-clear {
+        display: none;
+    }
+}
+
+/* --- ESTILOS MODULARES --- */
+@import "./components/animations.css";
+@import "./components/buttons.css";
+@import "./components/badges.css";
+@import "./components/cards.css";
+@import "./pages/auth.css";
+@import "./pages/profile.css";

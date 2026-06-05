@@ -1,0 +1,113 @@
+/* Glassmorphism Badges/Pills */
+.glass-badge-available {
+    backdrop-filter: blur(8px);
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #047857; /* Emerald 700 */
+    box-shadow: 0 2px 8px -1px rgba(16, 185, 129, 0.05);
+    transition: all 0.3s ease;
+}
+html.dark .glass-badge-available {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399; /* Emerald 400 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.glass-badge-available:hover {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    transform: scale(1.03);
+}
+html.dark .glass-badge-available:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.glass-badge-primary {
+    backdrop-filter: blur(8px);
+    background: rgba(108, 92, 231, 0.06);
+    border: 1px solid rgba(108, 92, 231, 0.18);
+    color: #4f46e5; /* Indigo 600 */
+    box-shadow: 0 2px 8px -1px rgba(108, 92, 231, 0.04);
+    transition: all 0.3s ease;
+}
+html.dark .glass-badge-primary {
+    background: rgba(147, 80, 255, 0.12);
+    border: 1px solid rgba(147, 80, 255, 0.25);
+    color: #c084fc; /* Purple 400 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.glass-badge-primary:hover {
+    background: rgba(108, 92, 231, 0.1);
+    border-color: rgba(108, 92, 231, 0.28);
+    transform: scale(1.03);
+}
+html.dark .glass-badge-primary:hover {
+    background: rgba(147, 80, 255, 0.18);
+    border-color: rgba(147, 80, 255, 0.35);
+}
+
+.glass-badge-accent {
+    backdrop-filter: blur(8px);
+    background: rgba(255, 118, 117, 0.06);
+    border: 1px solid rgba(255, 118, 117, 0.18);
+    color: #dc2626; /* Red 600 */
+    box-shadow: 0 2px 8px -1px rgba(255, 118, 117, 0.04);
+    transition: all 0.3s ease;
+}
+html.dark .glass-badge-accent {
+    background: rgba(255, 159, 67, 0.12);
+    border: 1px solid rgba(255, 159, 67, 0.25);
+    color: #fdba74; /* Orange 300 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.glass-badge-accent:hover {
+    background: rgba(255, 118, 117, 0.1);
+    border-color: rgba(255, 118, 117, 0.28);
+    transform: scale(1.03);
+}
+html.dark .glass-badge-accent:hover {
+    background: rgba(255, 159, 67, 0.18);
+    border-color: rgba(255, 159, 67, 0.35);
+}
+
+.glass-badge-views {
+    backdrop-filter: blur(8px);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    color: #475569; /* Slate 600 */
+    box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+}
+html.dark .glass-badge-views {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8; /* Slate 400 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.glass-badge-views:hover {
+    background: rgba(15, 23, 42, 0.06);
+    border-color: rgba(15, 23, 42, 0.12);
+    transform: scale(1.03);
+}
+html.dark .glass-badge-views:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.glass-badge-rating {
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.04);
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, transform 0.3s ease;
+    background: var(--badge-bg-light, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--badge-border-light, rgba(255, 255, 255, 0.1));
+    color: var(--badge-color, currentColor);
+}
+html.dark .glass-badge-rating {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    background: var(--badge-bg-dark, rgba(255, 255, 255, 0.02));
+    border-color: var(--badge-border-dark, rgba(255, 255, 255, 0.05));
+}
+.glass-badge-rating:hover {
+    transform: scale(1.04);
+}

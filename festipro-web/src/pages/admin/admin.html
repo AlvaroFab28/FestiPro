@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - FestiPro</title>
+    <link rel="stylesheet" href="/src/assets/css/global.css">
+    <script>
+        // Guardián de seguridad rápido antes de renderizar el DOM
+        const token = localStorage.getItem('token');
+        const isAdmin = localStorage.getItem('is_admin') === 'true';
+        if (!token || !isAdmin) {
+            window.location.href = '/src/pages/auth/login.html';
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <header id="app-header" class="sticky top-0 z-50 min-h-[76px] w-full"></header>
+    
+    <main class="flex-grow container mx-auto px-4 sm:px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar / Navegación del Panel -->
+            <aside class="w-full lg:w-64 shrink-0">
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sticky top-[100px]">
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="w-12 h-12 rounded-full bg-fp-accent-light/10 text-fp-accent-light flex items-center justify-center font-bold text-xl uppercase">AD</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 dark:text-white">Panel Interno</h2>
+                            <p class="text-xs text-slate-500">Administración</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="space-y-2">
+                        <button onclick="switchTab('usuarios')" id="btn-tab-usuarios" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors bg-fp-primary-light/10 text-fp-primary-light font-medium cursor-pointer">
+                            <!-- Icono Usuarios -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <span>Usuarios Registrados</span>
+                        </button>
+                        <button onclick="switchTab('categorias')" id="btn-tab-categorias" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer">
+                            <!-- Icono Categorías -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                            <span>Gestión de Categorías</span>
+                        </button>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Contenedor Principal de Pestañas -->
+            <div class="flex-1 w-full relative">
+
+
+                <!-- Pestaña Usuarios Registrados -->
+                <section id="tab-usuarios" class="block animate-fade-in">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+                        <div>
+                            <h1 class="text-3xl font-display font-bold text-slate-800 dark:text-white mb-2">Usuarios Registrados</h1>
+                            <p class="text-slate-500">Administra cuentas, roles y estados de suspensión de usuarios de FestiPro.</p>
+                        </div>
+                        <div class="relative w-full sm:w-72">
+                            <input 
+                                type="text" 
+                                id="search-usuarios" 
+                                placeholder="Buscar usuario o correo..." 
+                                class="w-full pl-10 pr-4 py-2 text-sm bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-fp-primary-light focus:border-transparent text-slate-800 dark:text-white placeholder-slate-400 transition-all shadow-sm"
+                            >
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Loader de Tabla -->
+                    <div id="usuarios-loader" class="flex justify-center items-center py-12">
+                        <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </div>
+
+                    <!-- Tabla de Usuarios -->
+                    <div id="usuarios-container" class="hidden bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-200 dark:border-fp-border-dark">
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Usuario</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Email</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Rol Base</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Rol Admin</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Estado</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usuarios-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
+                                    <!-- Dinámico -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pestaña Gestión de Categorías -->
+                <section id="tab-categorias" class="hidden animate-fade-in">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+                        <div>
+                            <h1 class="text-3xl font-display font-bold text-slate-800 dark:text-white mb-2">Gestión de Categorías</h1>
+                            <p class="text-slate-500">Crea, edita y suspende categorías de espectáculos artísticos en FestiPro.</p>
+                        </div>
+                        <button onclick="openCategoryModal()" class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-6 py-2.5 rounded-full font-medium transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Nueva Categoría
+                        </button>
+                    </div>
+
+                    <!-- Loader de Tabla -->
+                    <div id="categorias-loader" class="flex justify-center items-center py-12">
+                        <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </div>
+
+                    <!-- Tabla de Categorías -->
+                    <div id="categorias-container" class="hidden bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-200 dark:border-fp-border-dark">
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Ícono</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Nombre</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Estado</th>
+                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categorias-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
+                                    <!-- Dinámico -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Creación de Categoría -->
+    <div id="modal-categoria" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 dark:border-fp-border-dark">
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-4">Nueva Categoría</h3>
+            
+            <form id="form-categoria" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre *</label>
+                    <input type="text" id="cat-name" name="name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-white focus:ring-2 focus:ring-fp-primary-light outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Ícono *</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="file" id="cat-icon" name="icon" accept="image/*" required class="hidden">
+                        <button type="button" onclick="document.getElementById('cat-icon').click()" class="bg-slate-100 dark:bg-fp-surface-dark text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer">Seleccionar Archivo</button>
+                        <span id="cat-icon-filename" class="text-xs text-slate-500 truncate max-w-[200px]">Ningún archivo seleccionado</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-fp-border-dark">
+                    <button type="button" onclick="closeCategoryModal()" class="px-5 py-2.5 rounded-full border border-slate-200 dark:border-fp-border-dark text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" id="btn-save-category" class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-6 py-2.5 rounded-full font-medium transition-colors cursor-pointer shadow-sm">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación Genérico (HU 19) -->
+    <div id="modal-confirm" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-sm w-full p-6 shadow-xl border border-slate-200 dark:border-fp-border-dark">
+            <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-500 mb-4">
+                <!-- Icono Alerta -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2" id="confirm-title">Confirmar acción</h3>
+            <p class="text-sm text-slate-500 mb-6" id="confirm-message">¿Estás seguro de que deseas realizar esta acción?</p>
+            
+            <div class="flex justify-end gap-3">
+                <button id="btn-confirm-cancel" class="px-5 py-2.5 rounded-full border border-slate-200 dark:border-fp-border-dark text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
+                <button id="btn-confirm-proceed" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-full font-medium transition-colors cursor-pointer shadow-sm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="app-footer" class="min-h-[76px] w-full"></footer>
+
+    <script type="module" src="/src/pages/admin/admin.js"></script>
+    <script type="module" src="/src/assets/js/utils.js"></script>
+</body>
+</html>

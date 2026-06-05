@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - FestiPro</title>
+    <link rel="stylesheet" href="/src/assets/css/global.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <!-- Header dinámico (Inyectado por utils.js) -->
+    <header id="app-header" class="sticky top-0 z-50 min-h-[76px] w-full"></header>
+    
+    <!-- Contenedor Principal (Centrado) -->
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-5xl bg-white dark:bg-fp-surface-dark rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row transition-colors duration-300">
+            
+            <!-- Panel Izquierdo (Branding / Inspiración con Spotlight Claro/Oscuro y Estrellas) -->
+            <div class="md:w-1/2 login-left-bg p-10 flex-col justify-center text-white relative hidden md:flex spotlight-panel spotlight-left">
+                <!-- Blobs decorativos animados -->
+                <div class="absolute -top-10 -left-10 w-44 h-44 bg-white/10 rounded-full blur-2xl float-blob"></div>
+                <div class="absolute -bottom-10 -right-10 w-44 h-44 bg-white/10 rounded-full blur-2xl float-blob" style="animation-delay: -4s;"></div>
+                <div class="absolute top-1/2 left-1/4 w-32 h-32 bg-white/5 rounded-full blur-2xl float-blob" style="animation-delay: -2s;"></div>
+                
+                <!-- Campo de estrellas titilantes (estrellas vectoriales de 5 puntas) -->
+                <div class="absolute inset-0 z-0 pointer-events-none opacity-50">
+                    <i class="ph-fill ph-star star text-[10px] text-white/70" style="top: 12%; left: 15%; --star-duration: 3s; animation-delay: 0.1s;"></i>
+                    <i class="ph-fill ph-star star text-[14px] text-white/90" style="top: 25%; left: 78%; --star-duration: 4s; animation-delay: 1.2s;"></i>
+                    <i class="ph-fill ph-star star text-[11px] text-white/60" style="top: 38%; left: 42%; --star-duration: 2.5s; animation-delay: 0.5s;"></i>
+                    <i class="ph-fill ph-star star text-[16px] text-white/80" style="top: 55%; left: 12%; --star-duration: 5s; animation-delay: 2.2s;"></i>
+                    <i class="ph-fill ph-star star text-[12px] text-white/70" style="top: 68%; left: 82%; --star-duration: 3.5s; animation-delay: 0.8s;"></i>
+                    <i class="ph-fill ph-star star text-[15px] text-white/85" style="top: 82%; left: 32%; --star-duration: 4.5s; animation-delay: 1.7s;"></i>
+                    <i class="ph-fill ph-star star text-[10px] text-white/60" style="top: 8%; left: 62%; --star-duration: 3.2s; animation-delay: 0.3s;"></i>
+                    <i class="ph-fill ph-star star text-[13px] text-white/75" style="top: 48%; left: 88%; --star-duration: 3.8s; animation-delay: 1.4s;"></i>
+                    <i class="ph-fill ph-star star text-[11px] text-white/60" style="top: 88%; left: 70%; --star-duration: 3.6s; animation-delay: 0.9s;"></i>
+                    <i class="ph-fill ph-star star text-[14px] text-white/80" style="top: 30%; left: 28%; --star-duration: 4.2s; animation-delay: 0.6s;"></i>
+                    <i class="ph-fill ph-star star text-[12px] text-white/70" style="top: 62%; left: 52%; --star-duration: 2.8s; animation-delay: 1.9s;"></i>
+                    <i class="ph-fill ph-star star text-[10px] text-white/50" style="top: 76%; left: 22%; --star-duration: 3.4s; animation-delay: 0.4s;"></i>
+                    <i class="ph-fill ph-star star text-[15px] text-white/85" style="top: 20%; left: 50%; --star-duration: 4.8s; animation-delay: 1.5s;"></i>
+                    <i class="ph-fill ph-star star text-[12px] text-white/70" style="top: 92%; left: 10%; --star-duration: 3.1s; animation-delay: 0.7s;"></i>
+                    <i class="ph-fill ph-star star text-[13px] text-white/80" style="top: 45%; left: 68%; --star-duration: 3.9s; animation-delay: 1.1s;"></i>
+                </div>
+
+                <div class="relative z-10">
+                    <a href="/" class="flex items-center space-x-2 mb-12 group">
+                        <i class="ph-fill ph-music-notes text-2xl transition-transform duration-300 group-hover:scale-110"></i>
+                        <span class="text-3xl font-display font-bold tracking-tight">FestiPro.</span>
+                    </a>
+                    <h2 class="text-4xl font-display font-bold leading-tight mb-4">Talento local,<br>eventos increíbles</h2>
+                    <p class="text-white/80 text-lg mb-10">Más de 240 artistas listos para hacer de tu evento algo inolvidable en Bolivia.</p>
+                    
+                    <!-- Cita inspiradora en lugar del review falso -->
+                    <div class="flex flex-col bg-white/10 p-6 rounded-xl backdrop-blur-md border border-white/20 shadow-lg">
+                        <i class="ph ph-quotes text-3xl text-white/40 mb-2 leading-none"></i>
+                        <p class="text-base font-medium italic leading-relaxed text-white/95">
+                            "La música es el arte más directo, entra por el oído y va al corazón."
+                        </p>
+                        <span class="text-xs text-white/70 mt-3 block font-semibold tracking-wider uppercase">— Astor Piazzolla</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Derecho (Formulario de Login con Spotlight Claro/Oscuro) -->
+            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center spotlight-panel spotlight-right bg-white dark:bg-fp-surface-dark transition-colors duration-300">
+                <div class="max-w-md w-full mx-auto relative z-10">
+                    <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white mb-2">Bienvenido de vuelta</h1>
+                    <p class="text-slate-500 dark:text-slate-400 mb-8">Ingresa a tu cuenta para continuar</p>
+
+                    <!-- Formulario de Login (Primero el correo/contraseña) -->
+                    <form id="login-form" novalidate>
+                        <!-- Email -->
+                        <div class="mb-5">
+                            <label for="login-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Correo electrónico</label>
+                            <div class="relative">
+                                <input type="email" id="login-email" name="email" autocomplete="username email" class="peer w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-fp-primary-light dark:focus:ring-fp-primary-dark focus:border-transparent outline-none transition-all" placeholder="tuemail@ejemplo.com" required>
+                                <i class="ph ph-envelope-simple absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg input-icon-anim pointer-events-none"></i>
+                            </div>
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label for="login-pass" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Contraseña</label>
+                                <a href="#" class="text-sm font-medium text-fp-primary-light dark:text-fp-primary-dark hover:underline">¿Olvidaste tu contraseña?</a>
+                            </div>
+                            <div class="relative">
+                                <input type="password" id="login-pass" name="password" autocomplete="current-password" class="peer w-full pl-10 pr-10 py-2.5 rounded-lg border border-slate-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-fp-primary-light dark:focus:ring-fp-primary-dark focus:border-transparent outline-none transition-all" placeholder="••••••••" required>
+                                <i class="ph ph-lock-simple absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg input-icon-anim pointer-events-none"></i>
+                                <button type="button" class="toggle-password-btn absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer" aria-label="Mostrar contraseña">
+                                    <i class="ph ph-eye text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Botón CTA con degradado premium vibrante y Shimmer -->
+                        <button type="submit" class="shimmer-btn w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:shadow-fp-primary-light/20 dark:hover:shadow-fp-primary-dark/20 cursor-pointer flex items-center justify-center space-x-2">
+                            <span>Iniciar Sesión</span>
+                            <i class="ph ph-sign-in text-lg"></i>
+                        </button>
+                    </form>
+
+                    <!-- Divisor social (Intercambiado abajo) -->
+                    <div class="flex items-center space-x-4 my-6">
+                        <hr class="flex-grow border-slate-200 dark:border-fp-border-dark">
+                        <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">o continuar con</span>
+                        <hr class="flex-grow border-slate-200 dark:border-fp-border-dark">
+                    </div>
+
+                    <!-- Botón de Login Social Google (Intercambiado abajo) -->
+                    <button type="button" class="w-full flex items-center justify-center space-x-2 bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark text-slate-700 dark:text-slate-200 py-2.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium cursor-pointer shadow-sm hover:shadow-md">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                        <span>Google</span>
+                    </button>
+
+                    <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
+                        ¿No tienes cuenta? <a href="registro.html" class="font-medium text-fp-primary-light dark:text-fp-primary-dark hover:underline">Regístrate gratis</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer dinámico -->
+    <footer id="app-footer" class="min-h-[76px] w-full mt-auto"></footer>
+
+    <!-- Utils y Lógica (La lógica HTTP de Login se construirá en Tarea 2.2) -->
+    <script type="module" src="/src/assets/js/utils.js"></script>
+    <script type="module" src="./js/auth.js"></script>
+</body>
+</html>

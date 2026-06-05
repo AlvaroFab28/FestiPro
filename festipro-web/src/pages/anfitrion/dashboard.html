@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Anfitrión - FestiPro</title>
+    <link rel="stylesheet" href="/src/assets/css/global.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <header id="app-header" class="sticky top-0 z-50 min-h-[76px] w-full"></header>
+
+    <main class="flex-grow container mx-auto px-4 sm:px-6 py-8 requires-auth">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sidebar -->
+            <aside class="w-full md:w-64 shrink-0">
+                <div
+                    class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sticky top-[100px]">
+                    <div class="flex items-center gap-4 mb-8 px-2">
+                        <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white dark:border-fp-border-dark bg-slate-100 dark:bg-fp-surface-muted-dark flex items-center justify-center shrink-0 shadow-md">
+                            <img id="sidebar-avatar" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+                            <span id="sidebar-avatar-placeholder" class="text-xl font-bold text-slate-500 dark:text-slate-400 uppercase hidden">A</span>
+                        </div>
+                        <div class="overflow-hidden">
+                            <h2 class="font-bold text-slate-800 dark:text-white truncate text-lg" id="sidebar-name">Anfitrión</h2>
+                            <span class="text-sm text-fp-primary-light dark:text-fp-primary-dark font-medium block">Organizador</span>
+                        </div>
+                    </div>
+                    <script>
+                        (function () {
+                            const cachedName = localStorage.getItem('cached_host_name');
+                            const cachedAvatar = localStorage.getItem('cached_host_avatar_full');
+                            if (cachedName) {
+                                document.getElementById('sidebar-name').textContent = cachedName;
+                                const placeholder = document.getElementById('sidebar-avatar-placeholder');
+                                const img = document.getElementById('sidebar-avatar');
+                                if (cachedAvatar) {
+                                    img.src = cachedAvatar;
+                                    img.classList.remove('hidden');
+                                    placeholder.classList.add('hidden');
+                                } else {
+                                    placeholder.textContent = cachedName.charAt(0).toUpperCase();
+                                    placeholder.classList.remove('hidden');
+                                    img.classList.add('hidden');
+                                }
+                            }
+                        })();
+                    </script>
+
+                    <nav class="space-y-2">
+                        <button onclick="switchTab('cuenta')" id="btn-tab-cuenta"
+                            class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors bg-fp-primary-light/10 text-fp-primary-light font-medium">
+                            <i class="ph ph-user text-xl"></i>
+                            <span>Mi Cuenta</span>
+                        </button>
+                        <button onclick="switchTab('eventos')" id="btn-tab-eventos"
+                            class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                            <i class="ph ph-calendar-blank text-xl"></i>
+                            <span>Mis Eventos</span>
+                        </button>
+                        <button onclick="switchTab('favoritos')" id="btn-tab-favoritos"
+                            class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                            <i class="ph ph-heart text-xl"></i>
+                            <span>Favoritos</span>
+                        </button>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex-1 w-full max-w-4xl relative">
+
+
+                <!-- Tab Eventos -->
+                <section id="tab-eventos" class="hidden animate-fade-in">
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
+                                    <i class="ph-fill ph-calendar-blank text-fp-primary-light text-2xl"></i>
+                                    Mis Eventos
+                                </h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Publica tus necesidades y encuentra al talento perfecto.</p>
+                            </div>
+                            <button onclick="openEventoModal()"
+                                class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-5 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto text-sm">
+                                <i class="ph ph-plus text-lg"></i>
+                                Nuevo Evento
+                            </button>
+                        </div>
+
+                    <!-- Loader Eventos -->
+                    <div id="eventos-loader" class="flex justify-center items-center py-12">
+                        <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="eventos-empty"
+                        class="hidden bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-12 text-center">
+                        <div
+                            class="w-20 h-20 bg-slate-50 dark:bg-fp-surface-muted-dark rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                            <i class="ph ph-calendar-blank text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Aún no has publicado eventos
+                        </h3>
+                        <p class="text-slate-500 mb-6 max-w-md mx-auto">Crea tu primer evento para que los talentos
+                            puedan descubrirlo y postularse a tu fiesta.</p>
+                        <button onclick="openEventoModal()"
+                            class="text-fp-primary-light hover:text-fp-primary-light/80 font-medium transition-colors">Publicar
+                            mi primer evento &rarr;</button>
+                    </div>
+
+                    <!-- Container Grid -->
+                    <div id="eventos-container" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+                    </div>
+                </section>
+
+                <!-- Tab Favoritos -->
+                <section id="tab-favoritos" class="hidden animate-fade-in">
+                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph-fill ph-heart text-red-500 text-2xl"></i>
+                                Talentos Guardados
+                            </h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Los perfiles artísticos que has marcado como favoritos.</p>
+                        </div>
+                        <div id="favoritos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- El grid se llenará en la Tarea 4.4 -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab Cuenta -->
+                <section id="tab-cuenta" class="block animate-fade-in">
+                    <form id="form-cuenta" class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8 space-y-6">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph-fill ph-user-circle text-fp-primary-light text-2xl"></i>
+                                Configuración de Cuenta
+                            </h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Actualiza tus datos personales y credenciales.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Column 1: Input Fields -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nombre Completo <span class="text-red-500 font-bold">*</span></label>
+                                    <input type="text" id="cuenta-name" name="name" required class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Correo Electrónico <span class="text-red-500 font-bold">*</span></label>
+                                    <input type="email" id="cuenta-email" name="email" required class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Número de WhatsApp</label>
+                                    <input type="text" id="cuenta-whatsapp" name="whatsapp_number" placeholder="+591 70000000" class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nueva Contraseña (Opcional)</label>
+                                    <input type="password" id="cuenta-password" name="password" placeholder="Mínimo 8 caracteres" minlength="8" class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Avatar Section -->
+                            <div class="flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-200 dark:border-fp-border-dark pt-6 md:pt-0 md:pl-6">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-4 w-full text-center md:text-left">Foto de Perfil</label>
+                                
+                                <div class="relative group cursor-pointer w-48 h-48 rounded-full border-4 border-white dark:border-fp-border-dark shadow-xl bg-slate-100 dark:bg-fp-surface-muted-dark overflow-hidden shrink-0 mb-4">
+                                    <div id="cuenta-avatar-placeholder" class="w-full h-full rounded-full bg-fp-primary-light/10 text-fp-primary-light flex items-center justify-center font-bold text-7xl uppercase">A</div>
+                                    <img id="cuenta-avatar-preview" src="" alt="Avatar Preview" class="w-full h-full rounded-full object-cover hidden">
+                                    <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity" onclick="document.getElementById('cuenta-avatar').click()">
+                                        <i class="ph ph-camera text-3xl text-white"></i>
+                                    </div>
+                                    <input type="file" id="cuenta-avatar" name="avatar" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden">
+                                </div>
+                                
+                                <button type="button" onclick="document.getElementById('cuenta-avatar').click()" class="cursor-pointer bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark hover:bg-slate-50 dark:hover:bg-slate-700 px-4 py-2 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors shadow-sm flex items-center gap-2">
+                                    <i class="ph ph-upload-simple"></i>
+                                    Cambiar Foto
+                                </button>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 text-center">Se recomienda una imagen cuadrada de al menos 400x400px.</p>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- Action Buttons -->
+                    <div id="cuenta-action-buttons-container" class="mt-8 flex justify-center sm:justify-end gap-3 sticky bottom-4 z-10 opacity-0 max-h-0 overflow-hidden pointer-events-none transition-all duration-300 ease-out transform translate-y-4 scale-95">
+                        <button type="button" id="btn-cancelar-cuenta" class="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-fp-surface-muted-dark dark:hover:bg-slate-600 dark:text-slate-200 font-bold py-2.5 px-6 rounded-full shadow-lg transition-transform active:scale-95 flex items-center gap-2">
+                            <i class="ph ph-x-circle text-lg"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" form="form-cuenta" id="btn-submit-cuenta" class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white font-bold py-2.5 px-6 rounded-full shadow-lg shadow-fp-primary-light/30 transition-transform active:scale-95 flex items-center gap-2">
+                            <i class="ph ph-floppy-disk text-lg"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Modal Nuevo/Editar Evento -->
+    <div id="modal-evento" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeEventoModal()">
+        </div>
+        <div
+            class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0 pointer-events-none">
+            <div
+                class="pointer-events-auto relative bg-white dark:bg-fp-surface-dark rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:max-w-2xl w-full max-h-[90vh] flex flex-col">
+                <div
+                    class="px-6 py-5 border-b border-slate-200 dark:border-fp-border-dark flex justify-between items-center shrink-0">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="modal-evento-title">Publicar Evento
+                    </h3>
+                    <button onclick="closeEventoModal()" class="text-slate-400 hover:text-slate-500 transition-colors">
+                        <i class="ph ph-x text-2xl"></i>
+                    </button>
+                </div>
+
+                <form id="form-evento" class="flex flex-col flex-grow overflow-hidden">
+                    <div class="flex-grow overflow-y-auto px-6 py-6 space-y-6">
+                        <input type="hidden" id="evento-id" name="evento_id">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Título
+                                    del Evento <span class="text-red-500 font-bold">*</span></label>
+                                <input type="text" id="ev-title" name="title" required
+                                    placeholder="Ej. Fiesta Privada Neón"
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Categoría
+                                    <span class="text-red-500 font-bold">*</span></label>
+                                <select id="ev-category" name="category_id" required
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                    <option value="">Selecciona categoría</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Ciudad
+                                    <span class="text-red-500 font-bold">*</span></label>
+                                <select id="ev-city" name="city_id" required
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                    <option value="">Selecciona ciudad</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fecha
+                                    del Evento <span class="text-red-500 font-bold">*</span></label>
+                                <input type="date" id="ev-date" name="event_date" required
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Presupuesto
+                                    Estimado (Bs.) <span class="text-red-500 font-bold">*</span></label>
+                                <input type="number" step="0.01" min="0" id="ev-budget" name="estimated_budget" required
+                                    placeholder="0.00"
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                            </div>
+
+                            <div class="col-span-2 hidden" id="status-container">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Estado
+                                    del Evento</label>
+                                <select id="ev-status" name="status"
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                    <option value="abierto">Abierto (Buscando talento)</option>
+                                    <option value="cerrado">Cerrado (Talento encontrado)</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+
+                            <div class="col-span-2">
+                                <label
+                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Descripción
+                                    <span class="text-red-500 font-bold">*</span></label>
+                                <textarea id="ev-description" name="description" required rows="4"
+                                    placeholder="Describe los requerimientos específicos..."
+                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-fp-border-dark shrink-0">
+                        <button type="button" onclick="closeEventoModal()"
+                            class="px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors">Cancelar</button>
+                        <button type="submit" id="btn-submit-evento"
+                            class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-6 py-2.5 rounded-xl font-medium transition-colors shadow-sm">Guardar
+                            Evento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación Borrar -->
+    <div id="modal-confirm" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeConfirmModal()">
+        </div>
+        <div class="flex items-center justify-center min-h-screen px-4 text-center pointer-events-none">
+            <div
+                class="pointer-events-auto relative bg-white dark:bg-fp-surface-dark rounded-2xl p-8 max-w-sm w-full shadow-2xl transform transition-all text-center">
+                <div
+                    class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="ph ph-warning text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">¿Eliminar evento?</h3>
+                <p class="text-slate-500 mb-6">Esta acción no se puede deshacer. El evento será borrado permanentemente.
+                </p>
+                <div class="flex gap-3 justify-center">
+                    <button onclick="closeConfirmModal()"
+                        class="px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors w-full">Cancelar</button>
+                    <button id="btn-confirm-delete"
+                        class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="app-footer" class="min-h-[76px] w-full"></footer>
+
+    <script type="module" src="/src/assets/js/utils.js"></script>
+    <script type="module" src="/src/pages/anfitrion/dashboard.js"></script>
+</body>
+
+</html>

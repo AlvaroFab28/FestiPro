@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubre Artistas y Talentos - FestiPro</title>
+    <meta name="description" content="Explora el catálogo de artistas y talentos locales en toda Bolivia. Filtra por categoría, precio y ciudad. Contratación directa sin comisiones.">
+    <link rel="stylesheet" href="/src/assets/css/global.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <!-- Header Pegajoso -->
+    <header id="app-header" class="sticky top-0 z-50 w-full min-h-[76px]"></header>
+    
+    <!-- Contenido Principal -->
+    <main class="flex-grow container mx-auto px-6 py-8">
+        
+        <!-- Cabecera de Página (Hero Compacto) -->
+        <section class="relative py-6 px-8 mb-6 rounded-3xl bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200/50 dark:border-fp-border-dark overflow-hidden transition-colors duration-300">
+            <div class="absolute -top-32 -left-32 w-72 h-72 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-15 animate-pulse pointer-events-none"></div>
+            <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-15 animate-pulse pointer-events-none delay-1000"></div>
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-display font-extrabold text-slate-900 dark:text-white mb-2 leading-tight">
+                        Descubre Talento Local
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base font-medium max-w-xl">
+                        Artistas, músicos, payasos y animadores de toda Bolivia reunidos en un solo lugar. Contratación ágil y directa vía WhatsApp.
+                    </p>
+                </div>
+                <!-- Contadores (PULIDO PREMIUM) -->
+                <div class="flex flex-wrap gap-3 sm:flex-col sm:items-end justify-start flex-shrink-0">
+                    <span class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/70 dark:bg-fp-surface-dark/60 border border-slate-200/50 dark:border-fp-border-dark/50 shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]">
+                        <i class="ph-fill ph-sparkles text-fp-primary-light dark:text-fp-primary-dark text-base"></i>
+                        <span class="text-xs font-bold text-slate-700 dark:text-slate-350">
+                            <span id="counter-talentos" class="text-fp-primary-light dark:text-fp-primary-dark">50+</span> Artistas
+                        </span>
+                    </span>
+                    <span class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/70 dark:bg-fp-surface-dark/60 border border-slate-200/50 dark:border-fp-border-dark/50 shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]">
+                        <i class="ph-fill ph-map-pin text-fp-accent-light dark:text-fp-accent-dark text-base"></i>
+                        <span class="text-xs font-bold text-slate-700 dark:text-slate-350">
+                            <span id="counter-ciudades" class="text-fp-accent-light dark:text-fp-accent-dark">Todo</span> el país
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Top en Tendencia (Glassmorphism) -->
+        <section id="top-tendencia-seccion" class="hidden mb-6 p-6 rounded-3xl bg-white/20 dark:bg-fp-surface-dark/10 border border-white/25 dark:border-fp-border-dark/30 backdrop-blur-xl shadow-md transition-all duration-300">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl sm:text-2xl font-display font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="ph-fill ph-crown text-amber-500 animate-bounce-subtle"></i>
+                    Top en Tendencia
+                </h2>
+                <span class="text-[10px] font-bold text-fp-primary-light dark:text-fp-primary-dark bg-fp-primary-light/10 dark:bg-fp-primary-dark/20 px-2.5 py-1 rounded-full border border-fp-primary-light/20 dark:border-fp-primary-dark/20 uppercase tracking-wider">
+                    Más populares
+                </span>
+            </div>
+            <!-- Grid Horizontal -->
+            <div id="top-tendencia-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Se inyecta por JS -->
+            </div>
+        </section>
+
+        <!-- Barra de Filtros Superior Sticky -->
+        <section class="sticky top-[76px] z-40 bg-white/80 dark:bg-fp-bg-dark/80 backdrop-blur-md border border-slate-200/50 dark:border-fp-border-dark rounded-2xl p-4 mb-6 shadow-sm transition-all duration-300">
+            <form id="filtros-form" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3" onsubmit="event.preventDefault();">
+                <!-- Búsqueda texto -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-base">
+                        <i class="ph ph-magnifying-glass text-lg"></i>
+                    </span>
+                    <input type="text" id="filtro-buscar" placeholder="Nombre artístico, biografía..." 
+                        class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                </div>
+
+                <!-- Categoría -->
+                <div>
+                    <select id="filtro-categoria" 
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                        <option value="">Cargando categorías...</option>
+                    </select>
+                </div>
+
+                <!-- Ciudad -->
+                <div>
+                    <select id="filtro-ciudad" 
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                        <option value="">Cargando ciudades...</option>
+                    </select>
+                </div>
+
+                <!-- Botón de Abrir Filtros -->
+                <div>
+                    <button type="button" id="btn-mostrar-filtros" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-dark hover:bg-slate-100 dark:hover:bg-fp-surface-muted-dark text-slate-800 dark:text-slate-100 text-sm font-semibold transition-all relative">
+                        <i class="ph ph-sliders-horizontal text-lg"></i>
+                        <span>Filtros</span>
+                        <span id="filtros-badge" class="hidden w-5 h-5 flex items-center justify-center rounded-full bg-fp-accent-light dark:bg-fp-accent-dark text-white text-[10px] font-bold">0</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Contenedor de Filtros Activos (Se inyecta por JS) -->
+            <div id="active-filters-container" class="hidden flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-fp-border-dark">
+                <span class="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider mr-1">Filtros aplicados:</span>
+                <div id="active-filters-list" class="flex flex-wrap gap-1.5"></div>
+                <button type="button" id="btn-limpiar-filtros" class="text-xs font-bold text-fp-accent-light dark:text-fp-accent-dark hover:underline ml-auto flex items-center gap-1 cursor-pointer">
+                    <i class="ph-fill ph-trash text-sm"></i> Limpiar
+                </button>
+            </div>
+        </section>
+
+        <!-- Grid de Talentos y Resultados -->
+        <section>
+            <div id="catalogo-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Skeletons por defecto para una experiencia pulida -->
+                <!-- Card 1 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
+                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
+                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
+                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
+                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
+                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
+                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
+                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
+                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
+                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Filtros Avanzados -->
+    <div id="modal-filtros" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-fp-bg-dark/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="relative w-full max-w-md bg-white dark:bg-fp-surface-dark rounded-3xl border border-slate-200/50 dark:border-fp-border-dark shadow-2xl p-6 transform scale-95 transition-all duration-300">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-display font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="ph ph-sliders-horizontal text-fp-primary-light dark:text-fp-primary-dark"></i>
+                    Filtros Avanzados
+                </h3>
+                <button type="button" id="btn-cerrar-filtros" class="text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 transition-colors p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-fp-surface-muted-dark flex items-center justify-center">
+                    <i class="ph ph-x text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Cuerpo del Modal -->
+            <div class="space-y-6">
+                <!-- Rango de Precios -->
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-350 mb-3 flex items-center gap-1.5">
+                        <i class="ph ph-coins text-fp-primary-light dark:text-fp-primary-dark text-base"></i> Rango de Presupuesto
+                    </h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-xs font-semibold">Mín (Bs.)</span>
+                            <input type="number" id="filtro-precio-min" min="0" placeholder="0" 
+                                class="w-full pl-18 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 transition-all">
+                        </div>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-xs font-semibold">Máx (Bs.)</span>
+                            <input type="number" id="filtro-precio-max" min="0" placeholder="Cualquiera" 
+                                class="w-full pl-18 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtro de Estrellas -->
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-350 mb-3 flex items-center gap-1.5">
+                        <i class="ph ph-star-half text-fp-primary-light dark:text-fp-primary-dark text-base"></i> Puntuación Mínima
+                    </h4>
+                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-fp-surface-muted-dark/40 p-3 rounded-2xl border border-slate-150 dark:border-fp-border-dark/60">
+                        <div class="flex items-center gap-1.5 w-full justify-between">
+                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
+                                <input type="radio" name="filtro-puntuacion" value="" class="sr-only peer" checked>
+                                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 peer-checked:text-fp-primary-light dark:peer-checked:text-fp-primary-dark transition-colors text-center">Cualquiera</span>
+                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
+                            </label>
+                            
+                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
+                                <input type="radio" name="filtro-puntuacion" value="3" class="sr-only peer">
+                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 3+</span>
+                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
+                            </label>
+
+                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
+                                <input type="radio" name="filtro-puntuacion" value="4" class="sr-only peer">
+                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 4+</span>
+                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
+                            </label>
+
+                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
+                                <input type="radio" name="filtro-puntuacion" value="4.5" class="sr-only peer">
+                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 4.5+</span>
+                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
+                            </label>
+
+                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
+                                <input type="radio" name="filtro-puntuacion" value="5" class="sr-only peer">
+                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 5</span>
+                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disponibilidad -->
+                <div>
+                    <label class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-fp-surface-muted-dark/40 border border-slate-150 dark:border-fp-border-dark/60 rounded-2xl cursor-pointer hover:bg-slate-100/50 dark:hover:bg-fp-surface-muted-dark/60 transition-colors">
+                        <span class="flex items-center gap-2.5">
+                            <i class="ph ph-circle-wavy-check text-emerald-500 text-xl"></i>
+                            <span class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-800 dark:text-slate-100">Solo Disponibles</span>
+                                <span class="text-[11px] text-slate-500 dark:text-slate-400">Mostrar solo artistas libres ahora mismo</span>
+                            </span>
+                        </span>
+                        <div class="relative">
+                            <input type="checkbox" id="filtro-solo-disponibles" class="sr-only peer">
+                            <div class="w-10 h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 dark:after:border-fp-border-dark after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Footer del Modal -->
+            <div class="flex items-center gap-3 mt-8 pt-4 border-t border-slate-200/50 dark:border-fp-border-dark">
+                <button type="button" id="btn-limpiar-modal" class="flex-1 py-3 text-sm font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border border-slate-200 dark:border-fp-border-dark rounded-xl hover:bg-slate-50 dark:hover:bg-fp-surface-muted-dark transition-colors">
+                    Restablecer
+                </button>
+                <button type="button" id="btn-aplicar-filtros" class="flex-1 py-3 text-sm font-bold text-white bg-fp-primary-light dark:bg-fp-primary-dark rounded-xl hover:bg-fp-primary-light/90 dark:hover:bg-fp-primary-dark/90 shadow-md shadow-fp-primary-light/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    Aplicar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Pegajoso -->
+    <footer id="app-footer" class="min-h-[76px] w-full"></footer>
+
+    <!-- Utils y Lógica Base -->
+    <script type="module" src="/src/assets/js/utils.js"></script>
+    <!-- Lógica del Catálogo -->
+    <script type="module" src="./catalogo.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablón de Eventos y Oportunidades - FestiPro</title>
+    <meta name="description" content="Explora las solicitudes de talento y oportunidades de eventos en Bolivia. Músicos, DJs, animadores y espectáculos buscados por anfitriones.">
+    <link rel="stylesheet" href="/src/assets/css/global.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <!-- Header Pegajoso -->
+    <header id="app-header" class="sticky top-0 z-50 w-full min-h-[76px]"></header>
+    
+    <!-- Contenido Principal -->
+    <main class="flex-grow container mx-auto px-6 py-8">
+        
+        <!-- Cabecera de Página (Hero Compacto) -->
+        <section class="relative py-10 px-8 mb-8 rounded-3xl bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200/50 dark:border-fp-border-dark overflow-hidden transition-colors duration-300">
+            <div class="absolute -top-32 -left-32 w-72 h-72 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-15 animate-pulse pointer-events-none"></div>
+            <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-15 animate-pulse pointer-events-none delay-1000"></div>
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-display font-extrabold text-slate-900 dark:text-white mb-2 leading-tight">
+                        Tablón de Eventos y Oportunidades
+                    </h1>
+                    <p class="text-slate-655 dark:text-slate-400 text-sm sm:text-base font-medium max-w-xl">
+                        Encuentra shows, fiestas y eventos privados organizados por anfitriones en toda Bolivia. Postúlate o publica tu propio evento.
+                    </p>
+                </div>
+                <!-- Botón dinámico 'Crear Evento' para Anfitriones que ingresen aquí -->
+                <div id="hero-action-container" class="hidden">
+                    <a href="/src/pages/anfitrion/dashboard.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark text-white font-bold text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 cursor-pointer">
+                        ➕ Publicar mi Evento
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barra de Filtros Superior Sticky -->
+        <section class="sticky top-[76px] z-40 bg-white/80 dark:bg-fp-bg-dark/80 backdrop-blur-md border border-slate-200/50 dark:border-fp-border-dark rounded-2xl p-4 mb-8 shadow-sm transition-all duration-300">
+            <form id="filtros-form" class="grid grid-cols-1 sm:grid-cols-3 gap-3" onsubmit="event.preventDefault();">
+                <!-- Búsqueda texto -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-base">
+                        🔍
+                    </span>
+                    <input type="text" id="filtro-buscar" placeholder="Buscar por palabra clave..." 
+                        class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                </div>
+
+                <!-- Categoría -->
+                <div>
+                    <select id="filtro-categoria" 
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                        <option value="">Cargando categorías...</option>
+                    </select>
+                </div>
+
+                <!-- Ciudad -->
+                <div>
+                    <select id="filtro-ciudad" 
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                        <option value="">Cargando ciudades...</option>
+                    </select>
+                </div>
+            </form>
+
+            <!-- Contenedor de Filtros Activos (Se inyecta por JS) -->
+            <div id="active-filters-container" class="hidden flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-fp-border-dark">
+                <span class="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider mr-1">Filtros aplicados:</span>
+                <div id="active-filters-list" class="flex flex-wrap gap-1.5"></div>
+                <button type="button" id="btn-limpiar-filtros" class="text-xs font-bold text-fp-accent-light dark:text-fp-accent-dark hover:underline ml-auto flex items-center gap-1 cursor-pointer">
+                    ✕ Limpiar
+                </button>
+            </div>
+        </section>
+
+        <!-- Grid de Eventos y Resultados -->
+        <section>
+            <div id="eventos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Skeletons por defecto para una experiencia pulida -->
+                <!-- Card 1 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm p-6 animate-pulse space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/4"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/4"></div>
+                    </div>
+                    <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-3/4"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-full"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-5/6"></div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/3"></div>
+                        <div class="h-8 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-xl w-1/4"></div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm p-6 animate-pulse space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/4"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/4"></div>
+                    </div>
+                    <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-3/4"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-full"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-5/6"></div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/3"></div>
+                        <div class="h-8 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-xl w-1/4"></div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm p-6 animate-pulse space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/4"></div>
+                        <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/4"></div>
+                    </div>
+                    <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-3/4"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-full"></div>
+                    <div class="h-4 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-5/6"></div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
+                        <div class="h-6 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-md w-1/3"></div>
+                        <div class="h-8 bg-slate-200 dark:bg-fp-surface-muted-dark rounded-xl w-1/4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Pegajoso -->
+    <footer id="app-footer" class="min-h-[76px] w-full"></footer>
+
+    <!-- Utils y Lógica Base -->
+    <script type="module" src="/src/assets/js/utils.js"></script>
+    <!-- Lógica de Eventos -->
+    <script type="module" src="./eventos.js"></script>
+</body>
+</html>
