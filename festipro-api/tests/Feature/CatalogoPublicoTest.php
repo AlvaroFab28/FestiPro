@@ -108,14 +108,24 @@ class CatalogoPublicoTest extends TestCase
             'is_available' => false,
         ]);
 
-        // 1. Obtener todos los talentos (sin filtros)
+        // 1. Obtener todos los talentos (sin filtros - ahora incluye no disponibles por defecto)
         $response = $this->getJson('/api/talentos');
         $response->assertStatus(200)
                  ->assertJsonStructure(['status', 'message', 'data' => ['data', 'current_page', 'total']])
+                 ->assertJsonCount(3, 'data.data'); // DJ Juan, Pedro Rock y DJ Oculto
+
+        // 1b. Obtener solo disponibles
+        $response = $this->getJson('/api/talentos?solo_disponibles=true');
+        $response->assertStatus(200)
                  ->assertJsonCount(2, 'data.data'); // Solo DJ Juan y Pedro Rock
 
-        // 2. Filtrar por categoría
+        // 2. Filtrar por categoría (sin restringir disponibilidad)
         $response = $this->getJson('/api/talentos?categoria=' . $this->category1->id);
+        $response->assertStatus(200)
+                 ->assertJsonCount(2, 'data.data'); // DJ Juan y DJ Oculto
+
+        // 2b. Filtrar por categoría y disponibilidad
+        $response = $this->getJson('/api/talentos?categoria=' . $this->category1->id . '&solo_disponibles=true');
         $response->assertStatus(200)
                  ->assertJsonCount(1, 'data.data')
                  ->assertJsonPath('data.data.0.artistic_name', 'DJ Juan');
@@ -132,8 +142,13 @@ class CatalogoPublicoTest extends TestCase
                  ->assertJsonCount(1, 'data.data')
                  ->assertJsonPath('data.data.0.artistic_name', 'Pedro Rock');
 
-        // 5. Filtrar por rango de precio
+        // 5. Filtrar por rango de precio (sin restringir disponibilidad)
         $response = $this->getJson('/api/talentos?precio_min=1000&precio_max=2000');
+        $response->assertStatus(200)
+                 ->assertJsonCount(2, 'data.data'); // DJ Juan y DJ Oculto
+
+        // 5b. Filtrar por rango de precio y disponibilidad
+        $response = $this->getJson('/api/talentos?precio_min=1000&precio_max=2000&solo_disponibles=true');
         $response->assertStatus(200)
                  ->assertJsonCount(1, 'data.data')
                  ->assertJsonPath('data.data.0.artistic_name', 'DJ Juan');
@@ -227,16 +242,27 @@ class CatalogoPublicoTest extends TestCase
             'status' => 'cancelado',
         ]);
 
-        // 1. Obtener eventos (solo abiertos)
+        // 1. Obtener todos los eventos (sin filtros - ahora incluye no abiertos por defecto)
         $response = $this->getJson('/api/eventos');
+        $response->assertStatus(200)
+                 ->assertJsonCount(3, 'data.data');
+
+        // 1b. Obtener eventos (solo abiertos)
+        $response = $this->getJson('/api/eventos?status=abierto');
         $response->assertStatus(200)
                  ->assertJsonCount(1, 'data.data')
                  ->assertJsonPath('data.data.0.title', 'Boda Rockera');
 
-        // 2. Filtrar por categoría del evento abierto
+        // 2. Filtrar por categoría (sin restringir estado por defecto)
         $response = $this->getJson('/api/eventos?categoria=' . $this->category1->id);
         $response->assertStatus(200)
-                 ->assertJsonCount(1, 'data.data');
+                 ->assertJsonCount(2, 'data.data'); // Boda Rockera y Fiesta Privada Cerrada
+
+        // 2b. Filtrar por categoría y estado
+        $response = $this->getJson('/api/eventos?categoria=' . $this->category1->id . '&status=abierto');
+        $response->assertStatus(200)
+                 ->assertJsonCount(1, 'data.data')
+                 ->assertJsonPath('data.data.0.title', 'Boda Rockera');
 
         // 3. Filtrar por búsqueda de texto
         $response = $this->getJson('/api/eventos?q=Boda');

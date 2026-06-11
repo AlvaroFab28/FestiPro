@@ -1,5 +1,5 @@
-import { getHeaderHTML } from '../../components/Header.js';
-import { getFooterHTML } from '../../components/Footer.js';
+import { getHeaderHTML } from '../../components/header.js';
+import { getFooterHTML, setupFooter } from '../../components/footer.js';
 
 /**
  * Alterna el tema visual (Claro/Oscuro) y guarda la preferencia
@@ -30,6 +30,7 @@ export function injectShell() {
 
     if (footerContainer) {
         footerContainer.innerHTML = getFooterHTML();
+        setupFooter();
     }
 
     setupSpotlights();
@@ -313,8 +314,17 @@ export function setupSpotlights() {
         if (panel.dataset.spotlightInitialized) return;
         panel.dataset.spotlightInitialized = 'true';
         
+        let rect = null;
+        
+        panel.addEventListener('mouseenter', () => {
+            rect = panel.getBoundingClientRect();
+            panel.style.setProperty('--mouse-opacity', '1');
+        });
+        
         panel.addEventListener('mousemove', (e) => {
-            const rect = panel.getBoundingClientRect();
+            if (!rect) {
+                rect = panel.getBoundingClientRect();
+            }
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
@@ -322,12 +332,9 @@ export function setupSpotlights() {
             panel.style.setProperty('--mouse-y', `${y}px`);
         });
         
-        panel.addEventListener('mouseenter', () => {
-            panel.style.setProperty('--mouse-opacity', '1');
-        });
-        
         panel.addEventListener('mouseleave', () => {
             panel.style.setProperty('--mouse-opacity', '0');
+            rect = null;
         });
     });
 }

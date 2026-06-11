@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="/src/assets/css/global.css">
     <script>
         // Guardián de seguridad rápido antes de renderizar el DOM
-        const token = localStorage.getItem('token');
-        const isAdmin = localStorage.getItem('is_admin') === 'true';
-        if (!token || !isAdmin) {
-            window.location.href = '/src/pages/auth/login.html';
+        if (!localStorage.getItem('token') || localStorage.getItem('is_admin') !== 'true') {
+            window.location.replace('/src/pages/auth/login.html');
         }
 
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -20,171 +18,746 @@
         }
     </script>
 </head>
-<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
-    <header id="app-header" class="sticky top-0 z-50 min-h-[76px] w-full"></header>
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 relative">
     
-    <main class="flex-grow container mx-auto px-4 sm:px-6 py-8">
-        <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Decoración de Orbes de Fondo -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="orb-glow orb-primary absolute -top-40 -left-40 opacity-30 dark:opacity-20"></div>
+        <div class="orb-glow orb-accent absolute top-1/2 -right-40 opacity-30 dark:opacity-20"></div>
+    </div>
+
+    <div class="relative z-10 flex flex-col min-h-screen">
+        <!-- Navbar con min-h fijo para evitar saltos de layout cuando inyecta el JS -->
+        <div id="app-header" class="sticky top-0 z-50 min-h-[64px]"></div>
+        
+        <!-- Layout principal -->
+        <div class="flex-1 flex flex-col lg:flex-row max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-8">
             <!-- Sidebar / Navegación del Panel -->
             <aside class="w-full lg:w-64 shrink-0">
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sticky top-[100px]">
-                    <div class="flex items-center space-x-4 mb-8">
-                        <div class="w-12 h-12 rounded-full bg-fp-accent-light/10 text-fp-accent-light flex items-center justify-center font-bold text-xl uppercase">AD</div>
-                        <div>
-                            <h2 class="font-bold text-slate-800 dark:text-white">Panel Interno</h2>
-                            <p class="text-xs text-slate-500">Administración</p>
+                <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-4 sticky top-24 flex flex-col">
+                    <div>
+                        <!-- Watermark Festipro -->
+                        <div class="flex flex-col items-center justify-center py-4 mb-6 border-b border-slate-100 dark:border-fp-border-dark/60 select-none">
+                            <span class="text-xl font-display font-black text-slate-800 dark:text-white tracking-wider flex items-center gap-1">
+                                FestiPro<span class="text-fp-primary-light dark:text-fp-primary-dark">.</span>
+                                <span class="text-[8px] font-black bg-gradient-to-r from-fp-primary-light to-red-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider star-cosmic-pulse">ADMIN</span>
+                            </span>
+                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Consola de Control</span>
                         </div>
+                        
+                        <nav class="space-y-1.5">
+                            <button onclick="switchTab('resumen')" id="btn-tab-resumen" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 hover:bg-slate-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300 cursor-pointer">
+                                <i class="ph ph-chart-bar animate-bounce-hover text-lg shrink-0"></i>
+                                <span>Control Central</span>
+                            </button>
+                            <button onclick="switchTab('usuarios')" id="btn-tab-usuarios" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 hover:bg-slate-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300 cursor-pointer">
+                                <i class="ph ph-users animate-bounce-hover text-lg shrink-0"></i>
+                                <span>Usuarios Registrados</span>
+                            </button>
+                            <button onclick="switchTab('contenido')" id="btn-tab-contenido" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 hover:bg-slate-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300 cursor-pointer">
+                                <i class="ph ph-shield-check animate-wiggle-hover text-lg shrink-0"></i>
+                                <span>Moderación</span>
+                            </button>
+                            <button onclick="switchTab('categorias')" id="btn-tab-categorias" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 hover:bg-slate-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300 cursor-pointer">
+                                <i class="ph ph-tag animate-wiggle-hover text-lg shrink-0"></i>
+                                <span>Gestión de Categorías</span>
+                            </button>
+                            <button onclick="switchTab('actividad')" id="btn-tab-actividad" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 hover:bg-slate-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300 cursor-pointer">
+                                <i class="ph ph-bell-ringing animate-wiggle-hover text-lg shrink-0"></i>
+                                <span>Actividad Reciente</span>
+                            </button>
+                        </nav>
                     </div>
-                    
-                    <nav class="space-y-2">
-                        <button onclick="switchTab('usuarios')" id="btn-tab-usuarios" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors bg-fp-primary-light/10 text-fp-primary-light font-medium cursor-pointer">
-                            <!-- Icono Usuarios -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            <span>Usuarios Registrados</span>
-                        </button>
-                        <button onclick="switchTab('categorias')" id="btn-tab-categorias" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer">
-                            <!-- Icono Categorías -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                            <span>Gestión de Categorías</span>
-                        </button>
-                    </nav>
                 </div>
             </aside>
 
             <!-- Contenedor Principal de Pestañas -->
-            <div class="flex-1 w-full relative">
-
-
-                <!-- Pestaña Usuarios Registrados -->
-                <section id="tab-usuarios" class="block animate-fade-in">
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
-                        <div>
-                            <h1 class="text-3xl font-display font-bold text-slate-800 dark:text-white mb-2">Usuarios Registrados</h1>
-                            <p class="text-slate-500">Administra cuentas, roles y estados de suspensión de usuarios de FestiPro.</p>
+            <div class="flex-grow w-full max-w-4xl relative">
+                
+                <!-- PESTAÑA 1: Resumen (Control Central) -->
+                <section id="tab-resumen" class="tab-panel hidden space-y-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 space-y-6 relative overflow-hidden">
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph ph-chart-bar text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                                Control Central
+                            </h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Estadísticas y estado general del ecosistema de FestiPro.</p>
                         </div>
-                        <div class="relative w-full sm:w-72">
-                            <input 
-                                type="text" 
-                                id="search-usuarios" 
-                                placeholder="Buscar usuario o correo..." 
-                                class="w-full pl-10 pr-4 py-2 text-sm bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-fp-primary-light focus:border-transparent text-slate-800 dark:text-white placeholder-slate-400 transition-all shadow-sm"
-                            >
-                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                            </span>
+
+                        <!-- Grid de KPIs -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <!-- Card 1 -->
+                            <div class="adm-stat-card group bg-white dark:bg-fp-surface-dark p-4.5 rounded-2xl border border-slate-200/60 dark:border-fp-border-dark/60 flex items-center gap-3.5 shadow-sm hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(147,80,255,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-xl shrink-0 shadow-md shadow-blue-500/10 dark:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:scale-115">
+                                    <i class="ph ph-users text-xl animate-bounce-hover"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider truncate">Total Usuarios</div>
+                                    <div class="text-xl font-black text-slate-800 dark:text-white mt-0.5" id="stat-total-usuarios">0</div>
+                                </div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="adm-stat-card group bg-white dark:bg-fp-surface-dark p-4.5 rounded-2xl border border-slate-200/60 dark:border-fp-border-dark/60 flex items-center gap-3.5 shadow-sm hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(147,80,255,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="p-3 bg-gradient-to-br from-emerald-400 to-teal-600 text-white rounded-xl shrink-0 shadow-md shadow-emerald-500/10 dark:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all duration-300 group-hover:scale-115">
+                                    <i class="ph ph-star text-xl animate-wiggle-hover"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider truncate">Talentos Activos</div>
+                                    <div class="text-xl font-black text-slate-800 dark:text-white mt-0.5" id="stat-talentos-publicados">0</div>
+                                </div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="adm-stat-card group bg-white dark:bg-fp-surface-dark p-4.5 rounded-2xl border border-slate-200/60 dark:border-fp-border-dark/60 flex items-center gap-3.5 shadow-sm hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(147,80,255,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="p-3 bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-xl shrink-0 shadow-md shadow-amber-500/10 dark:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-300 group-hover:scale-115">
+                                    <i class="ph ph-calendar text-xl animate-bounce-hover"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider truncate">Eventos Abiertos</div>
+                                    <div class="text-xl font-black text-slate-800 dark:text-white mt-0.5" id="stat-eventos-abiertos">0</div>
+                                </div>
+                            </div>
+                            <!-- Card 4 -->
+                            <div class="adm-stat-card group bg-white dark:bg-fp-surface-dark p-4.5 rounded-2xl border border-slate-200/60 dark:border-fp-border-dark/60 flex items-center gap-3.5 shadow-sm hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(147,80,255,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="p-3 bg-gradient-to-br from-purple-500 to-indigo-600 text-white rounded-xl shrink-0 shadow-md shadow-purple-500/10 dark:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all duration-300 group-hover:scale-115">
+                                    <i class="ph ph-tag text-xl animate-wiggle-hover"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider truncate">Categorías Activas</div>
+                                    <div class="text-xl font-black text-slate-800 dark:text-white mt-0.5" id="stat-categorias-activas">0</div>
+                                </div>
+                            </div>
+                             <!-- Card 5 -->
+                             <div class="adm-stat-card group bg-white dark:bg-fp-surface-dark p-4.5 rounded-2xl border border-slate-200/60 dark:border-fp-border-dark/60 flex items-center gap-3.5 shadow-sm hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(147,80,255,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+                                 <div class="p-3 bg-gradient-to-br from-pink-500 to-rose-600 text-white rounded-xl shrink-0 shadow-md shadow-pink-500/10 dark:shadow-[0_0_15px_rgba(236,72,153,0.4)] transition-all duration-300 group-hover:scale-115">
+                                     <i class="ph ph-chat-circle text-xl animate-bounce-hover"></i>
+                                 </div>
+                                 <div class="min-w-0">
+                                     <div class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider truncate">Reseñas Publicadas</div>
+                                     <div class="text-xl font-black text-slate-800 dark:text-white mt-0.5" id="stat-reviews-totales">0</div>
+                                 </div>
+                             </div>
+                            <!-- Card 6 -->
+                            <div class="adm-stat-card group bg-white dark:bg-fp-surface-dark p-4.5 rounded-2xl border border-slate-200/60 dark:border-fp-border-dark/60 flex items-center gap-3.5 shadow-sm hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(147,80,255,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="p-3 bg-gradient-to-br from-rose-500 to-red-700 text-white rounded-xl shrink-0 shadow-md shadow-rose-500/10 dark:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all duration-300 group-hover:scale-115">
+                                    <i class="ph ph-prohibit text-xl animate-wiggle-hover"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider truncate">Suspendidos</div>
+                                    <div class="text-xl font-black text-slate-800 dark:text-white mt-0.5" id="stat-usuarios-suspendidos">0</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Loader de Tabla -->
-                    <div id="usuarios-loader" class="flex justify-center items-center py-12">
-                        <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </div>
-
-                    <!-- Tabla de Usuarios -->
-                    <div id="usuarios-container" class="hidden bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-200 dark:border-fp-border-dark">
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Usuario</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Email</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Rol Base</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Rol Admin</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Estado</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="usuarios-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
-                                    <!-- Dinámico -->
-                                </tbody>
-                            </table>
+                        <!-- Gráfico / Distribución Visual -->
+                        <div class="bg-slate-50 dark:bg-fp-surface-muted-dark/40 border border-slate-100 dark:border-fp-border-dark/50 rounded-2xl p-5 space-y-4">
+                            <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Distribución de Roles</h4>
+                            
+                            <div class="space-y-3">
+                                <!-- Talentos -->
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-600 dark:text-slate-400">Talentos</span>
+                                        <span id="role-pct-talentos">0% (0)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                        <div id="role-bar-talentos" class="bg-gradient-to-r from-fp-primary-light to-indigo-500 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <!-- Anfitriones -->
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-600 dark:text-slate-400">Anfitriones</span>
+                                        <span id="role-pct-anfitriones">0% (0)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                        <div id="role-bar-anfitriones" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <!-- Administradores -->
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-600 dark:text-slate-400">Administradores</span>
+                                        <span id="role-pct-admins">0% (0)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                        <div id="role-bar-admins" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Pestaña Gestión de Categorías -->
-                <section id="tab-categorias" class="hidden animate-fade-in">
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
-                        <div>
-                            <h1 class="text-3xl font-display font-bold text-slate-800 dark:text-white mb-2">Gestión de Categorías</h1>
-                            <p class="text-slate-500">Crea, edita y suspende categorías de espectáculos artísticos en FestiPro.</p>
+                <!-- PESTAÑA 2: Usuarios Registrados -->
+                <section id="tab-usuarios" class="tab-panel hidden space-y-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 space-y-6 relative overflow-hidden">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <div>
+                                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                    <i class="ph ph-users text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                                    Usuarios Registrados
+                                </h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Administra cuentas, roles y estados de suspensión.</p>
+                            </div>
+                            
+                            <!-- Buscador Premium -->
+                            <div class="relative w-full sm:w-72 shrink-0">
+                                <input 
+                                    type="text" 
+                                    id="search-usuarios" 
+                                    placeholder="Buscar usuario o correo..." 
+                                    class="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-fp-primary-light focus:border-transparent text-slate-800 dark:text-white placeholder-slate-400 transition-all shadow-inner"
+                                >
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                    <i class="ph ph-magnifying-glass text-sm"></i>
+                                </span>
+                            </div>
                         </div>
-                        <button onclick="openCategoryModal()" class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-6 py-2.5 rounded-full font-medium transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            Nueva Categoría
-                        </button>
-                    </div>
 
-                    <!-- Loader de Tabla -->
-                    <div id="categorias-loader" class="flex justify-center items-center py-12">
-                        <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </div>
+                        <!-- Filtros Rápidos por Rol/Estado -->
+                        <div class="flex flex-wrap gap-2 pb-4">
+                            <button onclick="filterUsuarios('todos')" id="pill-usr-todos" class="pill-filter active px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-muted-dark/50 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                                Todos
+                            </button>
+                            <button onclick="filterUsuarios('talentos')" id="pill-usr-talentos" class="pill-filter px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-muted-dark/50 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                                Talentos
+                            </button>
+                            <button onclick="filterUsuarios('anfitriones')" id="pill-usr-anfitriones" class="pill-filter px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-muted-dark/50 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                                Anfitriones
+                            </button>
+                            <button onclick="filterUsuarios('admins')" id="pill-usr-admins" class="pill-filter px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-muted-dark/50 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                                Administradores
+                            </button>
+                            <button onclick="filterUsuarios('baneados')" id="pill-usr-baneados" class="pill-filter px-4 py-2 rounded-xl text-xs font-bold transition-all border border-red-200 dark:border-red-950 bg-red-50/10 dark:bg-red-950/10 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 cursor-pointer">
+                                🚫 Baneados
+                            </button>
+                        </div>
 
-                    <!-- Tabla de Categorías -->
-                    <div id="categorias-container" class="hidden bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-200 dark:border-fp-border-dark">
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Ícono</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Nombre</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Estado</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="categorias-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
-                                    <!-- Dinámico -->
-                                </tbody>
-                            </table>
+                        <!-- Loader de Tabla -->
+                        <div id="usuarios-loader" class="flex justify-center items-center py-12">
+                            <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </div>
+
+                        <!-- Tabla de Usuarios -->
+                        <div id="usuarios-container" class="hidden overflow-hidden rounded-xl border border-slate-100 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark">
+                            <div class="overflow-x-auto overflow-y-hidden">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-100 dark:border-fp-border-dark">
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Usuario</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Email</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Rol Base</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Rol Admin</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Estado</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usuarios-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
+                                        <!-- Dinámico -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PESTAÑA 3: Moderación de Contenido -->
+                <section id="tab-contenido" class="tab-panel hidden space-y-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 space-y-6 relative overflow-hidden">
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph ph-shield-check text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                                Moderación de Contenido
+                            </h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Elimina eventos inapropiados o perfiles de talento fraudulentos.</p>
+                        </div>
+
+                        <!-- Sub-pestañas: Talentos / Eventos -->
+                        <div class="flex bg-slate-100 dark:bg-fp-surface-muted-dark p-1.5 rounded-xl w-max gap-2 mb-2">
+                            <button id="btn-sub-talentos" onclick="switchSubTab('talentos')" class="text-xs font-bold px-4 py-2 transition-all cursor-pointer rounded-lg bg-white dark:bg-fp-surface-dark text-fp-primary-light dark:text-white shadow-sm">Perfiles de Talentos</button>
+                            <button id="btn-sub-eventos" onclick="switchSubTab('eventos')" class="text-xs font-bold px-4 py-2 transition-all cursor-pointer rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">Eventos de Anfitriones</button>
+                        </div>
+
+                        <!-- Contenedor Moderación de Talentos -->
+                        <div id="sub-panel-talentos" class="space-y-4">
+                            <!-- Buscador y Filtro por Categoría en Moderación -->
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+                                <div class="w-full sm:w-48 shrink-0">
+                                    <select 
+                                        id="filter-moderacion-categoria" 
+                                        class="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-fp-primary-light text-slate-800 dark:text-white transition-all cursor-pointer"
+                                    >
+                                        <option value="todas">Todas las Categorías</option>
+                                    </select>
+                                </div>
+                                <div class="relative w-full sm:w-72">
+                                    <input 
+                                        type="text" 
+                                        id="search-moderacion-talentos" 
+                                        placeholder="Buscar talento por nombre..." 
+                                        class="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-fp-primary-light focus:border-transparent text-slate-800 dark:text-white placeholder-slate-400 transition-all shadow-inner"
+                                    >
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                        <i class="ph ph-magnifying-glass text-sm"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto overflow-y-hidden rounded-xl border border-slate-100 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-100 dark:border-fp-border-dark">
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Talento</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Categoría</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Ciudad</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Precio Base</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Rating</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="talentos-moderacion-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
+                                        <tr>
+                                            <td colspan="6" class="px-5 py-8 text-center text-slate-400">Cargando perfiles...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Contenedor Moderación de Eventos -->
+                        <div id="sub-panel-eventos" class="hidden space-y-4">
+                            <!-- Buscador Eventos Moderación -->
+                            <div class="flex justify-end">
+                                <div class="relative w-full sm:w-72">
+                                    <input 
+                                        type="text" 
+                                        id="search-moderacion-eventos" 
+                                        placeholder="Buscar evento por título o anfitrión..." 
+                                        class="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-fp-primary-light focus:border-transparent text-slate-800 dark:text-white placeholder-slate-400 transition-all shadow-inner"
+                                    >
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                        <i class="ph ph-magnifying-glass text-sm"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto overflow-y-hidden rounded-xl border border-slate-100 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-100 dark:border-fp-border-dark">
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Evento</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Anfitrión</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Categoría</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Presupuesto</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Fecha</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="eventos-moderacion-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
+                                        <tr>
+                                            <td colspan="6" class="px-5 py-8 text-center text-slate-400">Cargando eventos...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PESTAÑA 4: Gestión de Categorías -->
+                <section id="tab-categorias" class="tab-panel hidden space-y-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 space-y-6 relative overflow-hidden">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <div>
+                                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                    <i class="ph ph-tag text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                                    Gestión de Categorías
+                                </h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Crea, edita y suspende categorías de espectáculos artísticos.</p>
+                            </div>
+                            <button onclick="openCategoryModal()" class="shimmer-btn bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
+                                <i class="ph ph-plus text-sm"></i>
+                                Nueva Categoría
+                            </button>
+                        </div>
+
+                        <!-- Loader de Tabla -->
+                        <div id="categorias-loader" class="flex justify-center items-center py-12">
+                            <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </div>
+
+                        <!-- Tabla de Categorías -->
+                        <div id="categorias-container" class="hidden overflow-hidden rounded-xl border border-slate-100 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark">
+                            <div class="overflow-x-auto overflow-y-hidden">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 dark:bg-fp-surface-muted-dark border-b border-slate-100 dark:border-fp-border-dark">
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Ícono</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Nombre</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Talentos</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Estado</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="categorias-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-slate-700 dark:text-slate-300">
+                                        <!-- Dinámico -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PESTAÑA 5: Actividad Reciente -->
+                <section id="tab-actividad" class="tab-panel hidden space-y-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 space-y-6 relative overflow-hidden">
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph ph-bell-ringing text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                                Actividad Reciente
+                            </h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Historial de registros, eventos y opiniones en la plataforma.</p>
+                        </div>
+
+                        <!-- Sub-pestañas: Actividad Pública / Log de Admins -->
+                        <div class="flex bg-slate-100 dark:bg-fp-surface-muted-dark p-1.5 rounded-xl w-max gap-2 mb-4">
+                            <button id="btn-sub-actividad-publica" onclick="switchActividadSubTab('publica')" class="text-xs font-bold px-4 py-2 transition-all cursor-pointer rounded-lg bg-white dark:bg-fp-surface-dark text-fp-primary-light dark:text-white shadow-sm">Actividad Pública</button>
+                            <button id="btn-sub-actividad-admins" onclick="switchActividadSubTab('admins')" class="text-xs font-bold px-4 py-2 transition-all cursor-pointer rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">Acciones de Admins</button>
+                        </div>
+
+                        <!-- Actividad Pública -->
+                        <div id="sub-panel-actividad-publica" class="space-y-4">
+                            <div class="adm-timeline" id="recent-activity-timeline">
+                                <div class="text-center py-8 text-slate-400">Cargando feed de actividad...</div>
+                            </div>
+                        </div>
+
+                        <!-- Acciones de Admins -->
+                        <div id="sub-panel-actividad-admins" class="hidden space-y-4">
+                            <div class="adm-timeline" id="admin-actions-timeline">
+                                <div class="text-center py-8 text-slate-400">Cargando logs de administración...</div>
+                            </div>
                         </div>
                     </div>
                 </section>
             </div>
         </div>
-    </main>
+    </div>
 
-    <!-- Modal de Creación de Categoría -->
-    <div id="modal-categoria" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 dark:border-fp-border-dark">
-            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-4">Nueva Categoría</h3>
+    <!-- Modal de Creación de Categoría (Premium Redesigned) -->
+    <div id="modal-categoria" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-fp-border-dark/50 pb-3 mb-4">
+                <h3 class="text-lg font-display font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="ph ph-tag text-fp-primary-light"></i>
+                    <span id="modal-categoria-title">Nueva Categoría</span>
+                </h3>
+                <button type="button" onclick="closeCategoryModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
             
             <form id="form-categoria" class="space-y-4">
+                <input type="hidden" id="cat-edit-id" value="">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre *</label>
-                    <input type="text" id="cat-name" name="name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-white focus:ring-2 focus:ring-fp-primary-light outline-none">
+                    <label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1.5">Nombre *</label>
+                    <input type="text" id="cat-name" name="name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark/50 text-slate-800 dark:text-white focus:ring-2 focus:ring-fp-primary-light outline-none text-sm shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Ícono *</label>
-                    <div class="flex items-center space-x-4">
-                        <input type="file" id="cat-icon" name="icon" accept="image/*" required class="hidden">
-                        <button type="button" onclick="document.getElementById('cat-icon').click()" class="bg-slate-100 dark:bg-fp-surface-dark text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer">Seleccionar Archivo</button>
-                        <span id="cat-icon-filename" class="text-xs text-slate-500 truncate max-w-[200px]">Ningún archivo seleccionado</span>
+                    <label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1.5">Seleccionar Ícono *</label>
+                    <input type="hidden" id="cat-icon-class" name="icon_class" value="">
+                    
+                    <!-- Contenedor del Grid de Íconos -->
+                    <div id="cat-icon-grid" class="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto p-2 bg-slate-50 dark:bg-fp-surface-muted-dark/40 border border-slate-200 dark:border-fp-border-dark rounded-xl focus-within:ring-2 focus-within:ring-fp-primary-light">
+                        <!-- Los íconos serán inyectados por JS -->
+                    </div>
+                    <!-- Indicador visual del ícono seleccionado -->
+                    <div class="mt-2 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                        <span>Seleccionado:</span>
+                        <div id="selected-icon-preview" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-850 border border-slate-200 dark:border-fp-border-dark flex items-center justify-center text-lg font-bold text-fp-primary-light">
+                            <i class="ph ph-question"></i>
+                        </div>
+                        <span id="selected-icon-name" class="font-mono font-semibold">-</span>
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-fp-border-dark">
-                    <button type="button" onclick="closeCategoryModal()" class="px-5 py-2.5 rounded-full border border-slate-200 dark:border-fp-border-dark text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
-                    <button type="submit" id="btn-save-category" class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-6 py-2.5 rounded-full font-medium transition-colors cursor-pointer shadow-sm">Guardar</button>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-fp-border-dark/50">
+                    <button type="button" onclick="closeCategoryModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark text-slate-500 dark:text-slate-400 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" id="btn-save-category" class="bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md">Guardar Categoría</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal de Confirmación Genérico (HU 19) -->
-    <div id="modal-confirm" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-sm w-full p-6 shadow-xl border border-slate-200 dark:border-fp-border-dark">
-            <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-500 mb-4">
-                <!-- Icono Alerta -->
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+    <!-- Modal de Moderación Granular de Talento -->
+    <div id="modal-moderar-talento" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-fp-border-dark/50 pb-3 mb-4 shrink-0">
+                <h3 class="text-lg font-display font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="ph ph-shield-check text-fp-primary-light"></i>
+                    Moderar Perfil: <span id="mod-artistic-name" class="text-fp-primary-light dark:text-fp-primary-dark">Talento</span>
+                </h3>
+                <button type="button" onclick="closeModerarTalentoModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
             </div>
-            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2" id="confirm-title">Confirmar acción</h3>
-            <p class="text-sm text-slate-500 mb-6" id="confirm-message">¿Estás seguro de que deseas realizar esta acción?</p>
+            
+            <!-- Loader del modal para feedback inmediato -->
+            <div id="modal-moderar-loading" class="hidden flex-1 flex flex-col items-center justify-center py-20">
+                <svg class="animate-spin h-10 w-10 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <p class="text-xs text-slate-400 mt-4 font-semibold">Cargando detalles del talento...</p>
+            </div>
+            
+            <div id="modal-moderar-body" class="space-y-6 overflow-y-auto pr-1 flex-1">
+                <!-- Info Básica (Lectura) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50/50 dark:bg-fp-surface-muted-dark/40 p-4 rounded-xl border border-slate-100 dark:border-fp-border-dark/40">
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Categoría</span>
+                        <span id="mod-category" class="text-xs font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Ciudad</span>
+                        <span id="mod-city" class="text-xs font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Precio Base</span>
+                        <span id="mod-price" class="text-xs font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                </div>
+
+                <!-- Avatar Moderation -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-xl border border-slate-100 dark:border-fp-border-dark/40">
+                    <div id="mod-avatar-container" class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-fp-border-dark shrink-0 flex items-center justify-center font-bold text-lg text-fp-primary-light">
+                        <!-- Imagen o Iniciales -->
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300">Foto de Perfil / Avatar</h4>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Si la foto es inapropiada, puedes borrarla individualmente.</p>
+                    </div>
+                    <button type="button" id="btn-mod-delete-avatar" class="bg-rose-50 dark:bg-rose-950/20 text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-900/30 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-200/30">
+                        <i class="ph ph-image-square"></i> Eliminar Foto
+                    </button>
+                </div>
+
+                <!-- Banner Moderation -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-xl border border-slate-100 dark:border-fp-border-dark/40">
+                    <div id="mod-banner-container" class="w-full sm:w-36 h-16 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-fp-border-dark shrink-0 flex items-center justify-center font-bold text-xs text-fp-primary-light relative">
+                        <!-- Imagen de banner o placeholder -->
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300">Banner de Perfil</h4>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Si la portada del perfil tiene contenido inapropiado, puedes eliminarla.</p>
+                    </div>
+                    <button type="button" id="btn-mod-delete-banner" class="bg-rose-50 dark:bg-rose-950/20 text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-900/30 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-200/30">
+                        <i class="ph ph-image-square"></i> Eliminar Banner
+                    </button>
+                </div>
+
+                <!-- Descripción Moderation -->
+                <div class="p-4 bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-xl border border-slate-100 dark:border-fp-border-dark/40 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300">Descripción / Biografía</h4>
+                        <button type="button" id="btn-mod-delete-bio" class="bg-rose-50 dark:bg-rose-950/20 text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-900/30 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-200/30">
+                            <i class="ph ph-text-align-left"></i> Borrar Texto
+                        </button>
+                    </div>
+                    <div id="mod-bio" class="text-xs text-slate-600 dark:text-slate-400 bg-white dark:bg-fp-surface-dark p-3 rounded-lg border border-slate-200/50 dark:border-fp-border-dark/50 italic min-h-[50px] whitespace-pre-line">
+                        <!-- Bio del talento -->
+                    </div>
+                </div>
+
+                <!-- Galería Moderation -->
+                <div class="p-4 bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-xl border border-slate-100 dark:border-fp-border-dark/40 space-y-3">
+                    <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300">Galería de Fotos (<span id="mod-gallery-count">0</span>)</h4>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500">Haz click en la papelera para eliminar fotos individuales.</p>
+                    <div id="mod-gallery-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                        <!-- Dinámico -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer: Acciones del talento -->
+            <div id="modal-moderar-footer" class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4 border-t border-slate-100 dark:border-fp-border-dark/50 mt-4 shrink-0">
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button type="button" id="btn-mod-delete-profile" class="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="ph ph-trash"></i>
+                        Eliminar Perfil
+                    </button>
+                    <button type="button" id="btn-mod-suspend-user" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="ph ph-prohibit"></i>
+                        Suspender Cuenta
+                    </button>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto justify-end">
+                    <button type="button" onclick="closeModerarTalentoModal()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark text-slate-500 dark:text-slate-400 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalle de Evento (Moderación) -->
+    <div id="modal-ver-evento" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-fp-border-dark/50 pb-3 mb-4 shrink-0">
+                <h3 class="text-lg font-display font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="ph ph-calendar text-fp-primary-light"></i>
+                    Detalle del Evento
+                </h3>
+                <button type="button" onclick="closeVerEventoModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4 overflow-y-auto pr-1 flex-1">
+                <!-- Título y Estado -->
+                <div>
+                    <div class="flex justify-between items-start gap-2">
+                        <h4 id="evt-title" class="text-base font-bold text-slate-800 dark:text-white">-</h4>
+                        <span id="evt-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">abierto</span>
+                    </div>
+                </div>
+
+                <!-- Detalles Rápidos -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/50 dark:bg-fp-surface-muted-dark/40 p-3.5 rounded-xl border border-slate-100 dark:border-fp-border-dark/40 text-xs">
+                    <div>
+                        <span class="block text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Categoría</span>
+                        <span id="evt-category" class="font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                    <div>
+                        <span class="block text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Ciudad</span>
+                        <span id="evt-city" class="font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                    <div>
+                        <span class="block text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Presupuesto</span>
+                        <span id="evt-budget" class="font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                    <div>
+                        <span class="block text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Fecha</span>
+                        <span id="evt-date" class="font-semibold text-slate-700 dark:text-slate-300">-</span>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="p-3.5 bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-xl border border-slate-100 dark:border-fp-border-dark/40 space-y-1">
+                    <h5 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Descripción</h5>
+                    <p id="evt-description" class="text-xs text-slate-600 dark:text-slate-400 min-h-[40px] whitespace-pre-line">-</p>
+                </div>
+
+                <!-- Datos del Anfitrión -->
+                <div class="p-3.5 bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-xl border border-slate-100 dark:border-fp-border-dark/40">
+                    <h5 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Anfitrión</h5>
+                    <div class="flex items-center gap-3">
+                        <div id="evt-host-avatar" class="w-9 h-9 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-fp-border-dark shrink-0 flex items-center justify-center font-bold text-xs text-fp-primary-light">
+                            <!-- Avatar or initials -->
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p id="evt-host-name" class="text-xs font-bold text-slate-700 dark:text-white truncate">-</p>
+                            <p id="evt-host-email" class="text-[10px] text-slate-400 dark:text-slate-500 truncate">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer con Acciones -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4 border-t border-slate-100 dark:border-fp-border-dark/50 mt-4 shrink-0">
+                <button type="button" id="btn-evt-delete" class="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i class="ph ph-trash"></i>
+                    Eliminar Evento
+                </button>
+                <div class="flex gap-2 w-full sm:w-auto justify-end">
+                    <button type="button" id="btn-evt-close" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1">
+                        <i class="ph ph-lock"></i> Cerrar Evento
+                    </button>
+                    <button type="button" onclick="closeVerEventoModal()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark text-slate-500 dark:text-slate-400 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ban con Selección de Duración (Pestaña 2) -->
+    <div id="modal-ban-duration" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner">
+            <div class="w-12 h-12 bg-red-50 dark:bg-red-950/30 rounded-full flex items-center justify-center text-red-500 mb-4 animate-pulse">
+                <i class="ph ph-prohibit text-2xl"></i>
+            </div>
+            
+            <h3 class="text-lg font-display font-bold text-slate-800 dark:text-white mb-2">Suspender Cuenta de Usuario</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-5">Por favor selecciona la duración del bloqueo. Durante este tiempo, el usuario no podrá acceder al sistema.</p>
+            
+            <div class="grid grid-cols-2 gap-2.5 mb-6">
+                <button type="button" onclick="selectBanDuration(1)" id="ban-p-1" class="adm-ban-pill px-4 py-3 rounded-xl border border-slate-200 dark:border-fp-border-dark text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-center">1 Día</button>
+                <button type="button" onclick="selectBanDuration(7)" id="ban-p-7" class="adm-ban-pill px-4 py-3 rounded-xl border border-slate-200 dark:border-fp-border-dark text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-center">7 Días</button>
+                <button type="button" onclick="selectBanDuration(30)" id="ban-p-30" class="adm-ban-pill px-4 py-3 rounded-xl border border-slate-200 dark:border-fp-border-dark text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-center">30 Días</button>
+                <button type="button" onclick="selectBanDuration(0)" id="ban-p-0" class="adm-ban-pill px-4 py-3 rounded-xl border border-slate-200 dark:border-fp-border-dark text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-center active">Indefinido</button>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-fp-border-dark/50">
+                <button type="button" onclick="closeBanModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark text-slate-500 dark:text-slate-400 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
+                <button type="button" id="btn-ban-proceed" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer">Confirmar Suspensión</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación Genérico (HU 19) -->
+    <div id="modal-confirm" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-fp-surface-dark rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner">
+            <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-500 mb-4">
+                <i class="ph ph-warning text-2xl"></i>
+            </div>
+            <h3 class="text-base font-display font-bold text-slate-800 dark:text-white mb-2" id="confirm-title">Confirmar acción</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6" id="confirm-message">¿Estás seguro de que deseas realizar esta acción?</p>
             
             <div class="flex justify-end gap-3">
-                <button id="btn-confirm-cancel" class="px-5 py-2.5 rounded-full border border-slate-200 dark:border-fp-border-dark text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
-                <button id="btn-confirm-proceed" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-full font-medium transition-colors cursor-pointer shadow-sm">Confirmar</button>
+                <button id="btn-confirm-cancel" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark text-slate-500 dark:text-slate-400 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
+                <button id="btn-confirm-proceed" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Bienvenida para Administradores Ascendidos (localStorage) -->
+    <div id="admin-welcome-overlay" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-md items-center justify-center p-4 adm-welcome-overlay">
+        <div class="bg-gradient-to-br from-fp-surface-dark to-slate-900 text-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-fp-border-dark relative overflow-hidden adm-welcome-pop">
+            <!-- Glow background effect -->
+            <div class="absolute -top-20 -right-20 w-44 h-44 bg-fp-primary-dark/30 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-20 -left-20 w-44 h-44 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col items-center text-center space-y-6 relative z-10">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-fp-primary-light to-purple-600 flex items-center justify-center text-white text-3xl shadow-lg star-cosmic-pulse">
+                    <i class="ph ph-crown"></i>
+                </div>
+                
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-display font-black tracking-wide">¡Te damos la bienvenida al Panel de Control!</h2>
+                    <p class="text-xs text-slate-400">Has sido promovido al rol de Administrador. Ahora cuentas con privilegios avanzados para moderar el ecosistema de FestiPro.</p>
+                </div>
+
+                <div class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left space-y-3">
+                    <h4 class="text-xs font-bold text-fp-primary-dark uppercase tracking-widest flex items-center gap-1.5">
+                        <i class="ph ph-shield-check"></i>
+                        Tus poderes de moderador
+                    </h4>
+                    <ul class="text-xs space-y-2 text-slate-300">
+                        <li class="flex items-start gap-2">
+                            <i class="ph ph-check-circle text-emerald-400 mt-0.5"></i>
+                            <span><strong>Control de Cuentas:</strong> Promover usuarios a administradores o revertir sus permisos.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="ph ph-check-circle text-emerald-400 mt-0.5"></i>
+                            <span><strong>Suspensiones Temporales:</strong> Bloquear usuarios por 1, 7, 30 días o indefinidamente.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="ph ph-check-circle text-emerald-400 mt-0.5"></i>
+                            <span><strong>Moderación de Contenido:</strong> Auditar y eliminar eventos publicados o perfiles de talento.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="ph ph-check-circle text-emerald-400 mt-0.5"></i>
+                            <span><strong>Estructura Global:</strong> Gestionar y crear categorías de espectáculos artísticos en tiempo real.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button id="btn-welcome-start" class="w-full shimmer-btn bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white py-3.5 rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/25 transition-all">
+                    Entendido, Comenzar
+                </button>
             </div>
         </div>
     </div>

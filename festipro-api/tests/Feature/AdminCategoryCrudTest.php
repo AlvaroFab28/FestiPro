@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Modules\Autenticacion\Models\User;
@@ -42,8 +40,6 @@ class AdminCategoryCrudTest extends TestCase
             'role' => 'talento',
             'is_admin' => false,
         ]);
-
-        Storage::fake('public');
     }
 
     public function test_non_admin_cannot_access_category_crud_endpoints()
@@ -53,21 +49,21 @@ class AdminCategoryCrudTest extends TestCase
         // Store Category
         $response = $this->postJson('/api/admin/categorias', [
             'name' => 'New Category',
-            'icon' => UploadedFile::fake()->image('icon.png')
+            'icon_class' => 'ph-star'
         ]);
         $response->assertStatus(403);
 
         // Create a dummy category first
         $category = Category::create([
             'name' => 'Dummy Category',
-            'icon_url' => '/storage/categories/dummy.png',
+            'icon_class' => 'ph-sparkle',
             'is_active' => true
         ]);
 
         // Update Category
         $response = $this->postJson("/api/admin/categorias/{$category->id}", [
             'name' => 'Updated Name',
-            'icon' => UploadedFile::fake()->image('icon2.png')
+            'icon_class' => 'ph-guitar'
         ]);
         $response->assertStatus(403);
 
@@ -76,92 +72,51 @@ class AdminCategoryCrudTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_admin_can_create_category_with_icon()
+    public function test_admin_can_create_category_with_icon_class()
     {
         Sanctum::actingAs($this->adminUser);
 
-        $file = UploadedFile::fake()->image('icon.png');
-
         $response = $this->postJson('/api/admin/categorias', [
             'name' => 'Magos',
-            'icon' => $file
+            'icon_class' => 'ph-magic-wand'
         ]);
 
         $response->assertStatus(201)
             ->assertJsonPath('status', 'success')
-            ->assertJsonPath('data.name', 'Magos');
+            ->assertJsonPath('data.name', 'Magos')
+            ->assertJsonPath('data.icon_class', 'ph-magic-wand');
 
         $category = Category::where('name', 'Magos')->first();
         $this->assertNotNull($category);
         $this->assertTrue($category->is_active);
-
-        // Assert the file was stored
-        $storedPath = str_replace('/storage/', '', $category->icon_url);
-        Storage::disk('public')->assertExists($storedPath);
+        $this->assertEquals('ph-magic-wand', $category->icon_class);
     }
 
-    public function test_admin_can_update_category_name_and_icon()
+    public function test_admin_can_update_category_name_and_icon_class()
     {
         Sanctum::actingAs($this->adminUser);
 
         // First create a category
-        $file1 = UploadedFile::fake()->image('old_icon.png');
         $storeResponse = $this->postJson('/api/admin/categorias', [
             'name' => 'Acrobatas',
-            'icon' => $file1
+            'icon_class' => 'ph-star'
         ]);
         $category = Category::find($storeResponse->json('data.id'));
-        $oldStoredPath = str_replace('/storage/', '', $category->icon_url);
-        Storage::disk('public')->assertExists($oldStoredPath);
 
-        // Now update name and change icon
-        $file2 = UploadedFile::fake()->image('new_icon.png');
-        
+        // Now update name and change icon_class
         $updateResponse = $this->postJson("/api/admin/categorias/{$category->id}", [
             'name' => 'Acrobatas y Payasos',
-            'icon' => $file2
+            'icon_class' => 'ph-mask-happy'
         ]);
 
         $updateResponse->assertStatus(200)
             ->assertJsonPath('status', 'success')
-            ->assertJsonPath('data.name', 'Acrobatas y Payasos');
+            ->assertJsonPath('data.name', 'Acrobatas y Payasos')
+            ->assertJsonPath('data.icon_class', 'ph-mask-happy');
 
         $updatedCategory = Category::find($category->id);
-        $newStoredPath = str_replace('/storage/', '', $updatedCategory->icon_url);
-
-        // Verify the old file was deleted and the new one was stored
-        Storage::disk('public')->assertMissing($oldStoredPath);
-        Storage::disk('public')->assertExists($newStoredPath);
-        $this->assertNotEquals($oldStoredPath, $newStoredPath);
-    }
-
-    public function test_admin_can_update_category_name_only_without_replacing_icon()
-    {
-        Sanctum::actingAs($this->adminUser);
-
-        // First create a category
-        $file = UploadedFile::fake()->image('icon.png');
-        $storeResponse = $this->postJson('/api/admin/categorias', [
-            'name' => 'Cantantes',
-            'icon' => $file
-        ]);
-        $category = Category::find($storeResponse->json('data.id'));
-        $oldIconUrl = $category->icon_url;
-
-        // Now update name only
-        $updateResponse = $this->postJson("/api/admin/categorias/{$category->id}", [
-            'name' => 'Cantantes Solistas'
-        ]);
-
-        $updateResponse->assertStatus(200);
-        
-        $updatedCategory = Category::find($category->id);
-        $this->assertEquals('Cantantes Solistas', $updatedCategory->name);
-        $this->assertEquals($oldIconUrl, $updatedCategory->icon_url);
-        
-        // Verify the file still exists
-        $storedPath = str_replace('/storage/', '', $oldIconUrl);
-        Storage::disk('public')->assertExists($storedPath);
+        $this->assertEquals('Acrobatas y Payasos', $updatedCategory->name);
+        $this->assertEquals('ph-mask-happy', $updatedCategory->icon_class);
     }
 
     public function test_admin_can_toggle_category_active_state()
@@ -170,7 +125,7 @@ class AdminCategoryCrudTest extends TestCase
 
         $category = Category::create([
             'name' => 'Malabaristas',
-            'icon_url' => '/storage/categories/dummy.png',
+            'icon_class' => 'ph-star',
             'is_active' => true
         ]);
 
@@ -189,5 +144,21 @@ class AdminCategoryCrudTest extends TestCase
             ->assertJsonPath('data.is_active', true);
 
         $this->assertTrue(Category::find($category->id)->is_active);
+    }
+
+    public function test_admin_can_delete_category()
+    {
+        Sanctum::actingAs($this->adminUser);
+
+        $category = Category::create([
+            'name' => 'Malabaristas',
+            'icon_class' => 'ph-star',
+            'is_active' => true
+        ]);
+
+        $response = $this->deleteJson("/api/admin/categorias/{$category->id}");
+        $response->assertStatus(200);
+
+        $this->assertNull(Category::find($category->id));
     }
 }

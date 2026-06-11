@@ -30,6 +30,7 @@ class User extends Authenticatable
         'whatsapp_number',
         'avatar_url',
         'banned_at',
+        'banned_until',
     ];
 
     /**
@@ -55,7 +56,24 @@ class User extends Authenticatable
             'password' => 'hashed', // Laravel encriptará automáticamente la contraseña
             'is_admin' => 'boolean', // Lo tratamos como true/false, no como 0/1
             'banned_at' => 'datetime', // Lo tratamos como fecha
+            'banned_until' => 'datetime', // Lo tratamos como fecha
         ];
+    }
+
+    /**
+     * Verifica si el usuario está actualmente suspendido.
+     */
+    public function isBanned(): bool
+    {
+        if ($this->banned_at === null) {
+            return false;
+        }
+
+        if ($this->banned_until === null) {
+            return true;
+        }
+
+        return $this->banned_until->isFuture();
     }
 
     /**

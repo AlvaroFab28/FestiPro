@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descubre Artistas y Talentos - FestiPro</title>
-    <meta name="description" content="Explora el catálogo de artistas y talentos locales en toda Bolivia. Filtra por categoría, precio y ciudad. Contratación directa sin comisiones.">
+    <meta name="description"
+        content="Explora el catálogo de artistas y talentos locales en toda Bolivia. Filtra por categoría, precio y ciudad. Contratación directa sin comisiones.">
     <link rel="stylesheet" href="/src/assets/css/global.css">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -14,312 +16,351 @@
         }
     </script>
 </head>
-<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+<body
+    class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 relative overflow-x-hidden">
+
+    <!-- Orbes de Decoración de Fondo (Anclados al documento y scroll natural) -->
+    <div class="absolute inset-x-0 top-0 bottom-0 pointer-events-none z-0 overflow-hidden">
+        <div class="orb-glow orb-primary -top-40 -left-40 animate-pulse"></div>
+        <div class="orb-glow orb-accent -top-20 -right-40 animate-pulse delay-1000"></div>
+        <div class="orb-glow orb-accent -bottom-20 -left-40 animate-pulse delay-700"></div>
+        <div class="orb-glow orb-primary -bottom-40 -right-20 animate-pulse delay-500"></div>
+    </div>
+
     <!-- Header Pegajoso -->
     <header id="app-header" class="sticky top-0 z-50 w-full min-h-[76px]"></header>
-    
+
     <!-- Contenido Principal -->
-    <main class="flex-grow container mx-auto px-6 py-8">
-        
-        <!-- Cabecera de Página (Hero Compacto) -->
-        <section class="relative py-6 px-8 mb-6 rounded-3xl bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200/50 dark:border-fp-border-dark overflow-hidden transition-colors duration-300">
-            <div class="absolute -top-32 -left-32 w-72 h-72 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-15 animate-pulse pointer-events-none"></div>
-            <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full filter blur-3xl opacity-20 dark:opacity-15 animate-pulse pointer-events-none delay-1000"></div>
-            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-3xl sm:text-4xl font-display font-extrabold text-slate-900 dark:text-white mb-2 leading-tight">
+    <main class="flex-grow container mx-auto px-4 sm:px-6 py-6 relative z-10 max-w-7xl">
+
+        <!-- Cabecera de Página (Hero Compacto y Parallax Suave) -->
+        <section
+            class="relative py-7 px-6 sm:px-8 mb-6 rounded-3xl bg-white/45 dark:bg-fp-surface-muted-dark/30 border border-white/60 dark:border-fp-border-dark/30 overflow-hidden transition-all duration-300 shadow-sm backdrop-blur-md spotlight-card">
+
+            <!-- Resplandor Degradado de la Bandera Boliviana (Rojo, Amarillo, Verde) -->
+            <div
+                class="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[radial-gradient(circle_at_top_right,#E93B3E_15%,#F4D13B_45%,#00A859_75%)] opacity-40 dark:opacity-30 blur-2xl pointer-events-none select-none">
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="lg:col-span-7">
+                    <h1
+                        class="text-2xl sm:text-3.5xl font-display font-extrabold text-slate-900 dark:text-white mb-2 leading-tight tracking-tight">
                         Descubre Talento Local
                     </h1>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base font-medium max-w-xl">
-                        Artistas, músicos, payasos y animadores de toda Bolivia reunidos en un solo lugar. Contratación ágil y directa vía WhatsApp.
+                    <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium max-w-xl">
+                        Artistas, músicos, payasos y animadores de toda Bolivia reunidos en un solo lugar. Contratación
+                        ágil
+                        y directa vía WhatsApp sin comisiones ni intermediarios.
                     </p>
                 </div>
-                <!-- Contadores (PULIDO PREMIUM) -->
-                <div class="flex flex-wrap gap-3 sm:flex-col sm:items-end justify-start flex-shrink-0">
-                    <span class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/70 dark:bg-fp-surface-dark/60 border border-slate-200/50 dark:border-fp-border-dark/50 shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]">
-                        <i class="ph-fill ph-sparkles text-fp-primary-light dark:text-fp-primary-dark text-base"></i>
-                        <span class="text-xs font-bold text-slate-700 dark:text-slate-350">
-                            <span id="counter-talentos" class="text-fp-primary-light dark:text-fp-primary-dark">50+</span> Artistas
-                        </span>
-                    </span>
-                    <span class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/70 dark:bg-fp-surface-dark/60 border border-slate-200/50 dark:border-fp-border-dark/50 shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]">
-                        <i class="ph-fill ph-map-pin text-fp-accent-light dark:text-fp-accent-dark text-base"></i>
-                        <span class="text-xs font-bold text-slate-700 dark:text-slate-350">
-                            <span id="counter-ciudades" class="text-fp-accent-light dark:text-fp-accent-dark">Todo</span> el país
-                        </span>
-                    </span>
+                <!-- Contadores Dinámicos Animados -->
+                <div class="lg:col-span-5 flex flex-wrap gap-3 sm:gap-4 justify-start lg:justify-end">
+                    <div
+                        class="px-4 py-2 bg-white/70 dark:bg-fp-surface-dark/50 backdrop-blur-lg rounded-2xl border border-white/50 dark:border-white/5 flex items-center gap-3 shadow-xs group hover:scale-[1.02] hover:shadow-md transition-all duration-300">
+                        <div
+                            class="w-9 h-9 rounded-xl bg-fp-primary-light/10 dark:bg-fp-primary-dark/20 flex items-center justify-center text-fp-primary-light dark:text-fp-primary-dark">
+                            <i class="ph-fill ph-users text-lg animate-bounce-subtle animate-bounce-hover"></i>
+                        </div>
+                        <div>
+                            <div id="stat-talentos"
+                                class="text-base sm:text-lg font-bold font-display text-slate-950 dark:text-white"
+                                data-target="124">0</div>
+                            <div
+                                class="text-[9px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                                Artistas</div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="px-4 py-2 bg-white/70 dark:bg-fp-surface-dark/50 backdrop-blur-lg rounded-2xl border border-white/50 dark:border-white/5 flex items-center gap-3 shadow-xs group hover:scale-[1.02] hover:shadow-md transition-all duration-300">
+                        <div
+                            class="w-9 h-9 rounded-xl bg-fp-accent-light/10 dark:bg-fp-accent-dark/20 flex items-center justify-center text-fp-accent-light dark:text-fp-accent-dark">
+                            <i class="ph-fill ph-map-pin text-lg animate-bounce-subtle animate-wiggle-hover"></i>
+                        </div>
+                        <div>
+                            <div id="stat-ciudades"
+                                class="text-base sm:text-lg font-bold font-display text-slate-950 dark:text-white"
+                                data-target="9">0</div>
+                            <div
+                                class="text-[9px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                                Ciudades</div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="px-4 py-2 bg-white/70 dark:bg-fp-surface-dark/50 backdrop-blur-lg rounded-2xl border border-white/50 dark:border-white/5 flex items-center gap-3 shadow-xs group hover:scale-[1.02] hover:shadow-md transition-all duration-300">
+                        <div
+                            class="w-9 h-9 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                            <i class="ph-fill ph-tag text-lg animate-bounce-subtle animate-wiggle-hover"></i>
+                        </div>
+                        <div>
+                            <div id="stat-categorias"
+                                class="text-base sm:text-lg font-bold font-display text-slate-950 dark:text-white"
+                                data-target="15">0</div>
+                            <div
+                                class="text-[9px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                                Categorías</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Top en Tendencia (Glassmorphism) -->
-        <section id="top-tendencia-seccion" class="hidden mb-6 p-6 rounded-3xl bg-white/20 dark:bg-fp-surface-dark/10 border border-white/25 dark:border-fp-border-dark/30 backdrop-blur-xl shadow-md transition-all duration-300">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl sm:text-2xl font-display font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="ph-fill ph-crown text-amber-500 animate-bounce-subtle"></i>
-                    Top en Tendencia
-                </h2>
-                <span class="text-[10px] font-bold text-fp-primary-light dark:text-fp-primary-dark bg-fp-primary-light/10 dark:bg-fp-primary-dark/20 px-2.5 py-1 rounded-full border border-fp-primary-light/20 dark:border-fp-primary-dark/20 uppercase tracking-wider">
-                    Más populares
-                </span>
-            </div>
-            <!-- Grid Horizontal -->
-            <div id="top-tendencia-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <!-- Se inyecta por JS -->
+        <!-- Sección Top en Tendencia (Podio Premium Glassmorphic) -->
+        <section id="seccion-tendencias" class="mb-8 hidden">
+            <div class="trending-glass-panel rounded-3xl p-6 sm:p-7 pt-6 sm:pt-7 spotlight-card">
+                <!-- Título y adorno dentro del panel -->
+                <div class="flex items-center gap-2 mb-4">
+                    <div
+                        class="w-1.5 h-6 bg-gradient-to-b from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full">
+                    </div>
+                    <h2
+                        class="text-lg sm:text-xl font-display font-extrabold text-slate-950 dark:text-white flex items-center gap-1.5">
+                        Top en Tendencia <i class="ph-fill ph-lightning text-amber-500 animate-pulse"></i>
+                    </h2>
+                </div>
+
+                <!-- Podio de 3 items: En mobile es slider/scroll horizontal, en desktop es grid de 3 columnas -->
+                <div id="tendencias-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Skeletons de Tendencia -->
+                    <div class="h-28 bg-slate-200/50 dark:bg-fp-surface-dark/40 rounded-2xl animate-pulse"></div>
+                    <div class="h-28 bg-slate-200/50 dark:bg-fp-surface-dark/40 rounded-2xl animate-pulse"></div>
+                    <div class="h-28 bg-slate-200/50 dark:bg-fp-surface-dark/40 rounded-2xl animate-pulse"></div>
+                </div>
             </div>
         </section>
 
-        <!-- Barra de Filtros Superior Sticky -->
-        <section class="sticky top-[76px] z-40 bg-white/80 dark:bg-fp-bg-dark/80 backdrop-blur-md border border-slate-200/50 dark:border-fp-border-dark rounded-2xl p-4 mb-6 shadow-sm transition-all duration-300">
-            <form id="filtros-form" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3" onsubmit="event.preventDefault();">
+        <!-- Barra de Filtros en Fila Única Sticky -->
+        <section
+            class="sticky top-[76px] z-40 spotlight-card overflow-visible bg-white/70 dark:bg-fp-bg-dark/70 backdrop-blur-lg border border-slate-200/40 dark:border-fp-border-dark/40 rounded-2xl p-3 sm:p-4 mb-6 shadow-xs transition-all duration-300">
+            <div class="relative z-20 flex flex-col md:flex-row gap-3 items-stretch md:items-center">
                 <!-- Búsqueda texto -->
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-base">
-                        <i class="ph ph-magnifying-glass text-lg"></i>
+                <div class="relative flex-grow">
+                    <span
+                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                        <i class="ph ph-magnifying-glass text-base"></i>
                     </span>
-                    <input type="text" id="filtro-buscar" placeholder="Nombre artístico, biografía..." 
-                        class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                    <input type="text" id="filtro-buscar" placeholder="Buscar artista, instrumento, especialidad..."
+                        class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
                 </div>
 
                 <!-- Categoría -->
-                <div>
-                    <select id="filtro-categoria" 
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
-                        <option value="">Cargando categorías...</option>
+                <div class="w-full md:w-48 lg:w-56">
+                    <select id="filtro-categoria"
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                        <option value="">Todas las Categorías</option>
                     </select>
                 </div>
 
                 <!-- Ciudad -->
-                <div>
-                    <select id="filtro-ciudad" 
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
-                        <option value="">Cargando ciudades...</option>
+                <div class="w-full md:w-48 lg:w-56">
+                    <select id="filtro-ciudad"
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark/60 bg-white dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 focus:border-transparent transition-all">
+                        <option value="">Todas las Ciudades</option>
                     </select>
                 </div>
 
-                <!-- Botón de Abrir Filtros -->
-                <div>
-                    <button type="button" id="btn-mostrar-filtros" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-dark hover:bg-slate-100 dark:hover:bg-fp-surface-muted-dark text-slate-800 dark:text-slate-100 text-sm font-semibold transition-all relative">
-                        <i class="ph ph-sliders-horizontal text-lg"></i>
-                        <span>Filtros</span>
-                        <span id="filtros-badge" class="hidden w-5 h-5 flex items-center justify-center rounded-full bg-fp-accent-light dark:bg-fp-accent-dark text-white text-[10px] font-bold">0</span>
-                    </button>
-                </div>
-            </form>
+                <!-- Botón de Filtros Avanzados -->
+                <button type="button" id="btn-abrir-filtros"
+                    class="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-fp-surface-dark dark:hover:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-xs sm:text-sm font-semibold transition-all">
+                    <i class="ph ph-sliders-horizontal text-base"></i>
+                    <span>Filtros</span>
+                    <span id="filtro-count-badge" class="filter-badge-count hidden">0</span>
+                </button>
+            </div>
 
-            <!-- Contenedor de Filtros Activos (Se inyecta por JS) -->
-            <div id="active-filters-container" class="hidden flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-fp-border-dark">
-                <span class="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider mr-1">Filtros aplicados:</span>
+            <!-- Chips de Filtros Activos -->
+            <div id="active-filters-container"
+                class="relative z-20 hidden flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-200/50 dark:border-fp-border-dark/40">
+                <span
+                    class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">Filtros
+                    aplicados:</span>
                 <div id="active-filters-list" class="flex flex-wrap gap-1.5"></div>
-                <button type="button" id="btn-limpiar-filtros" class="text-xs font-bold text-fp-accent-light dark:text-fp-accent-dark hover:underline ml-auto flex items-center gap-1 cursor-pointer">
-                    <i class="ph-fill ph-trash text-sm"></i> Limpiar
+                <button type="button" id="btn-limpiar-filtros"
+                    class="text-xs font-bold text-fp-accent-light dark:text-fp-accent-dark hover:underline ml-auto flex items-center gap-1 cursor-pointer">
+                    <i class="ph-fill ph-trash text-sm"></i> Limpiar todos
                 </button>
             </div>
         </section>
 
-        <!-- Grid de Talentos y Resultados -->
-        <section>
-            <div id="catalogo-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Skeletons por defecto para una experiencia pulida -->
-                <!-- Card 1 -->
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
-                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex gap-3">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                            <div class="flex-1 space-y-2">
-                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
-                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
-                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
-                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
-                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex gap-3">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                            <div class="flex-1 space-y-2">
-                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
-                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
-                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
-                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
-                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex gap-3">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                            <div class="flex-1 space-y-2">
-                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
-                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
-                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
-                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 4 -->
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl border border-slate-200 dark:border-fp-border-dark shadow-sm overflow-hidden animate-pulse">
-                    <div class="h-48 bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex gap-3">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-fp-surface-dark/60"></div>
-                            <div class="flex-1 space-y-2">
-                                <div class="h-4 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-3/4"></div>
-                                <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-full"></div>
-                            <div class="h-3 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-5/6"></div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-200 dark:border-fp-border-dark flex justify-between items-center">
-                            <div class="h-5 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-md w-1/3"></div>
-                            <div class="h-8 bg-slate-200 dark:bg-fp-surface-dark/60 rounded-xl w-1/4"></div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Resultados e información general -->
+        <div class="flex items-center justify-between mb-4 px-1">
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                <i class="ph ph-funnel text-base text-fp-primary-light dark:text-fp-primary-dark"></i>
+                <span id="resultados-conteo">Cargando talentos de FestiPro...</span>
             </div>
+        </div>
+
+        <!-- Grid General de Talentos -->
+        <section>
+            <div id="catalogo-grid" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+                <!-- Skeletons dinámicos serán inyectados aquí inmediatamente por JS -->
+            </div>
+            <!-- Sentinel de scroll infinito -->
+            <div id="sentinel-catalogo" class="w-full mt-8 py-6 flex flex-col items-center justify-center min-h-[80px]"></div>
         </section>
     </main>
 
-    <!-- Modal de Filtros Avanzados -->
-    <div id="modal-filtros" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-fp-bg-dark/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-        <div class="relative w-full max-w-md bg-white dark:bg-fp-surface-dark rounded-3xl border border-slate-200/50 dark:border-fp-border-dark shadow-2xl p-6 transform scale-95 transition-all duration-300">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-display font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="ph ph-sliders-horizontal text-fp-primary-light dark:text-fp-primary-dark"></i>
-                    Filtros Avanzados
-                </h3>
-                <button type="button" id="btn-cerrar-filtros" class="text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 transition-colors p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-fp-surface-muted-dark flex items-center justify-center">
-                    <i class="ph ph-x text-xl"></i>
-                </button>
+    <!-- Modal de Filtros Avanzados (Glassmorphic z-50/51) -->
+    <div id="modal-filtros-overlay" class="filter-modal-overlay"></div>
+    <div id="modal-filtros-panel" class="filter-modal-panel spotlight-card w-[calc(100%-2rem)] sm:w-full max-w-[460px]">
+        <!-- Header -->
+        <div
+            class="relative z-20 flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#6c5ce7] to-[#9350FF] text-white shadow-md">
+            <h3
+                class="text-base sm:text-lg font-display font-extrabold text-white flex items-center gap-2">
+                <i id="icon-modal-sliders"
+                    class="ph ph-sliders-horizontal text-lg text-violet-100"></i>
+                Filtros Avanzados
+            </h3>
+            <button type="button" id="btn-cerrar-filtros"
+                class="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white transition-all">
+                <i class="ph ph-x text-lg transition-transform duration-300"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="relative z-20 p-5 space-y-4.5 max-h-[68vh] overflow-y-auto">
+            <!-- Rango de Precio -->
+            <div class="space-y-3">
+                <label
+                    class="text-xs font-bold text-slate-450 dark:text-slate-400 uppercase tracking-wider flex items-center">
+                    <i id="icon-modal-coins"
+                        class="ph-fill ph-hand-coins text-slate-400 dark:text-slate-500 mr-2 text-base"></i> Presupuesto
+                    Base
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="relative">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Mín</span>
+                        <input type="number" id="filtro-precio-min" min="0" placeholder="0"
+                            class="w-full pl-10 pr-8 py-2 rounded-xl border-0 bg-slate-100/70 dark:bg-fp-surface-dark/50 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 transition-all">
+                        <span
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[11px] font-bold text-slate-400 dark:text-slate-500">Bs.</span>
+                    </div>
+                    <div class="relative">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Máx</span>
+                        <input type="number" id="filtro-precio-max" min="0" placeholder="Cualquiera"
+                            class="w-full pl-10 pr-8 py-2 rounded-xl border-0 bg-slate-100/70 dark:bg-fp-surface-dark/50 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 transition-all">
+                        <span
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[11px] font-bold text-slate-400 dark:text-slate-500">Bs.</span>
+                    </div>
+                </div>
+                <!-- Preselecciones rápidas -->
+                <div class="flex gap-2 pt-1">
+                    <button type="button" data-preset="eco"
+                        class="btn-preset-price flex-1 py-1.5 px-3 rounded-xl text-xs font-bold border border-slate-200 dark:border-fp-border-dark/60 bg-slate-50/50 hover:bg-slate-100 dark:bg-fp-surface-dark/10 dark:hover:bg-fp-surface-dark/40 text-slate-700 dark:text-slate-200 transition-all flex items-center justify-center gap-1.5">
+                        <i class="ph ph-wallet text-sm transition-transform duration-300"></i> Económico
+                    </button>
+                    <button type="button" data-preset="std"
+                        class="btn-preset-price flex-1 py-1.5 px-3 rounded-xl text-xs font-bold border border-slate-200 dark:border-fp-border-dark/60 bg-slate-50/50 hover:bg-slate-100 dark:bg-fp-surface-dark/10 dark:hover:bg-fp-surface-dark/40 text-slate-700 dark:text-slate-200 transition-all flex items-center justify-center gap-1.5">
+                        <i class="ph ph-coins text-sm transition-transform duration-300"></i> Estándar
+                    </button>
+                    <button type="button" data-preset="premium"
+                        class="btn-preset-price flex-1 py-1.5 px-3 rounded-xl text-xs font-bold border border-slate-200 dark:border-fp-border-dark/60 bg-slate-50/50 hover:bg-slate-100 dark:bg-fp-surface-dark/10 dark:hover:bg-fp-surface-dark/40 text-slate-700 dark:text-slate-200 transition-all flex items-center justify-center gap-1.5">
+                        <i class="ph ph-crown text-sm transition-transform duration-300"></i> Premium
+                    </button>
+                </div>
             </div>
 
-            <!-- Cuerpo del Modal -->
-            <div class="space-y-6">
-                <!-- Rango de Precios -->
-                <div>
-                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-350 mb-3 flex items-center gap-1.5">
-                        <i class="ph ph-coins text-fp-primary-light dark:text-fp-primary-dark text-base"></i> Rango de Presupuesto
-                    </h4>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-xs font-semibold">Mín (Bs.)</span>
-                            <input type="number" id="filtro-precio-min" min="0" placeholder="0" 
-                                class="w-full pl-18 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 transition-all">
-                        </div>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-xs font-semibold">Máx (Bs.)</span>
-                            <input type="number" id="filtro-precio-max" min="0" placeholder="Cualquiera" 
-                                class="w-full pl-18 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-fp-border-dark bg-slate-50 dark:bg-fp-surface-dark text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 dark:focus:ring-fp-primary-dark/50 transition-all">
-                        </div>
+            <!-- Calificación (Estrellas) -->
+            <div class="space-y-2.5">
+                <label
+                    class="text-xs font-bold text-slate-450 dark:text-slate-400 uppercase tracking-wider flex items-center">
+                    <i id="icon-modal-star"
+                        class="ph-fill ph-star-half text-slate-400 dark:text-slate-500 mr-2 text-base"></i> Calificación
+                    Mínima
+                </label>
+                <div
+                    class="flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-fp-surface-dark/15 p-3 rounded-2xl">
+                    <!-- Contenedor invertido para selector CSS sibling (~ / +) -->
+                    <div class="flex flex-row-reverse justify-end items-center gap-2 rating-stars-group">
+                        <input type="radio" id="star-5" name="filtro-rating-star" value="5"
+                            class="sr-only star-radio" />
+                        <label for="star-5"
+                            class="star-label cursor-pointer text-3xl hover:scale-115 transition-all duration-150 animate-glow">
+                            <i class="ph-fill ph-star"></i>
+                        </label>
+
+                        <input type="radio" id="star-4" name="filtro-rating-star" value="4"
+                            class="sr-only star-radio" />
+                        <label for="star-4"
+                            class="star-label cursor-pointer text-3xl hover:scale-115 transition-all duration-150 animate-glow">
+                            <i class="ph-fill ph-star"></i>
+                        </label>
+
+                        <input type="radio" id="star-3" name="filtro-rating-star" value="3"
+                            class="sr-only star-radio" />
+                        <label for="star-3"
+                            class="star-label cursor-pointer text-3xl hover:scale-115 transition-all duration-150 animate-glow">
+                            <i class="ph-fill ph-star"></i>
+                        </label>
+
+                        <input type="radio" id="star-2" name="filtro-rating-star" value="2"
+                            class="sr-only star-radio" />
+                        <label for="star-2"
+                            class="star-label cursor-pointer text-3xl hover:scale-115 transition-all duration-150 animate-glow">
+                            <i class="ph-fill ph-star"></i>
+                        </label>
+
+                        <input type="radio" id="star-1" name="filtro-rating-star" value="1"
+                            class="sr-only star-radio" />
+                        <label for="star-1"
+                            class="star-label cursor-pointer text-3xl hover:scale-115 transition-all duration-150 animate-glow">
+                            <i class="ph-fill ph-star"></i>
+                        </label>
                     </div>
+                    <span id="star-text-indicator"
+                        class="text-xs font-bold text-slate-500 dark:text-slate-400 tracking-tight transition-colors duration-150">Cualquier
+                        calificación</span>
                 </div>
+            </div>
 
-                <!-- Filtro de Estrellas -->
-                <div>
-                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-350 mb-3 flex items-center gap-1.5">
-                        <i class="ph ph-star-half text-fp-primary-light dark:text-fp-primary-dark text-base"></i> Puntuación Mínima
-                    </h4>
-                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-fp-surface-muted-dark/40 p-3 rounded-2xl border border-slate-150 dark:border-fp-border-dark/60">
-                        <div class="flex items-center gap-1.5 w-full justify-between">
-                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
-                                <input type="radio" name="filtro-puntuacion" value="" class="sr-only peer" checked>
-                                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 peer-checked:text-fp-primary-light dark:peer-checked:text-fp-primary-dark transition-colors text-center">Cualquiera</span>
-                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
-                            </label>
-                            
-                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
-                                <input type="radio" name="filtro-puntuacion" value="3" class="sr-only peer">
-                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 3+</span>
-                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
-                            </label>
-
-                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
-                                <input type="radio" name="filtro-puntuacion" value="4" class="sr-only peer">
-                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 4+</span>
-                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
-                            </label>
-
-                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
-                                <input type="radio" name="filtro-puntuacion" value="4.5" class="sr-only peer">
-                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 4.5+</span>
-                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
-                            </label>
-
-                            <label class="flex flex-col items-center gap-1 cursor-pointer flex-1 group">
-                                <input type="radio" name="filtro-puntuacion" value="5" class="sr-only peer">
-                                <span class="flex items-center gap-0.5 text-amber-500 text-sm font-extrabold peer-checked:scale-110 transition-transform"><i class="ph-fill ph-star"></i> 5</span>
-                                <span class="w-full h-1 bg-transparent peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark rounded-full transition-all mt-1"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Disponibilidad -->
-                <div>
-                    <label class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-fp-surface-muted-dark/40 border border-slate-150 dark:border-fp-border-dark/60 rounded-2xl cursor-pointer hover:bg-slate-100/50 dark:hover:bg-fp-surface-muted-dark/60 transition-colors">
-                        <span class="flex items-center gap-2.5">
-                            <i class="ph ph-circle-wavy-check text-emerald-500 text-xl"></i>
-                            <span class="flex flex-col">
-                                <span class="text-sm font-bold text-slate-800 dark:text-slate-100">Solo Disponibles</span>
-                                <span class="text-[11px] text-slate-500 dark:text-slate-400">Mostrar solo artistas libres ahora mismo</span>
-                            </span>
-                        </span>
-                        <div class="relative">
-                            <input type="checkbox" id="filtro-solo-disponibles" class="sr-only peer">
-                            <div class="w-10 h-6 bg-slate-200 dark:bg-fp-surface-dark rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 dark:after:border-fp-border-dark after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fp-primary-light dark:peer-checked:bg-fp-primary-dark"></div>
-                        </div>
+            <!-- Disponibilidad (Solo Disponibles) -->
+            <div id="card-disponibles"
+                class="flex items-center justify-between p-3 rounded-2xl bg-slate-50/50 dark:bg-fp-surface-dark/15 transition-all duration-300">
+                <div class="pr-4">
+                    <label for="filtro-disponibles"
+                        class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center cursor-pointer">
+                        <i id="icon-modal-check"
+                            class="ph-fill ph-check-circle text-slate-400 dark:text-slate-500 mr-2 text-base"></i> Solo
+                        Disponibles
                     </label>
+                    <span class="text-[10px] text-slate-450 dark:text-slate-500 block mt-0.5 leading-relaxed">Mostrar
+                        únicamente artistas libres para contratación inmediata.</span>
                 </div>
+                <label class="relative inline-flex items-center cursor-pointer select-none shrink-0">
+                    <input type="checkbox" id="filtro-disponibles" class="sr-only peer">
+                    <div
+                        class="w-11 h-6 bg-slate-200 dark:bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-zinc-600">
+                    </div>
+                </label>
             </div>
+        </div>
 
-            <!-- Footer del Modal -->
-            <div class="flex items-center gap-3 mt-8 pt-4 border-t border-slate-200/50 dark:border-fp-border-dark">
-                <button type="button" id="btn-limpiar-modal" class="flex-1 py-3 text-sm font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border border-slate-200 dark:border-fp-border-dark rounded-xl hover:bg-slate-50 dark:hover:bg-fp-surface-muted-dark transition-colors">
-                    Restablecer
-                </button>
-                <button type="button" id="btn-aplicar-filtros" class="flex-1 py-3 text-sm font-bold text-white bg-fp-primary-light dark:bg-fp-primary-dark rounded-xl hover:bg-fp-primary-light/90 dark:hover:bg-fp-primary-dark/90 shadow-md shadow-fp-primary-light/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                    Aplicar
-                </button>
-            </div>
+        <!-- Footer -->
+        <div
+            class="relative z-20 flex gap-3 px-6 py-4 border-t border-slate-100 dark:border-fp-border-dark/40 bg-white/90 dark:bg-fp-surface-dark/90 backdrop-blur-md rounded-b-2xl">
+            <button type="button" id="btn-modal-limpiar"
+                class="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-fp-surface-dark dark:hover:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-xs sm:text-sm font-semibold transition-all">
+                Restablecer
+            </button>
+            <button type="button" id="btn-modal-aplicar"
+                class="flex-1 px-4 py-2.5 bg-gradient-to-r from-[#6c5ce7] to-[#9350FF] hover:opacity-95 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-[#6c5ce7]/25 transition-all shimmer-btn">
+                Aplicar Filtros
+            </button>
         </div>
     </div>
 
-    <!-- Footer Pegajoso -->
-    <footer id="app-footer" class="min-h-[76px] w-full"></footer>
 
-    <!-- Utils y Lógica Base -->
-    <script type="module" src="/src/assets/js/utils.js"></script>
-    <!-- Lógica del Catálogo -->
+    <!-- Footer Pegajoso -->
+    <footer id="app-footer" class="relative z-20 min-h-[76px] w-full"></footer>
+
+    <!-- Lógica del Catálogo (Importa utils internamente) -->
     <script type="module" src="./catalogo.js"></script>
 </body>
+
 </html>

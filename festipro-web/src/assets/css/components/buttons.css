@@ -30,11 +30,26 @@
 }
 
 /* MODO OSCURO */
+@keyframes wa-pulse-multicolor {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(147, 80, 255, 0.4), 0 4px 10px rgba(147, 80, 255, 0.15);
+        border-color: #a78bfa;
+    }
+    33% {
+        box-shadow: 0 0 14px 4px rgba(255, 159, 67, 0.45), 0 4px 12px rgba(255, 159, 67, 0.2);
+        border-color: #ff9f43;
+    }
+    66% {
+        box-shadow: 0 0 14px 4px rgba(16, 185, 129, 0.45), 0 4px 12px rgba(16, 185, 129, 0.2);
+        border-color: #34d399;
+    }
+}
+
 html.dark .btn-wa-premium {
     background: linear-gradient(135deg, #090614 0%, #1a163b 50%, #090614 100%); /* Morado/púrpura muy oscuro y sutil */
     border: 2px solid #a78bfa; /* Borde púrpura medio para contrastar con el neón */
     color: #ffffff; /* Letras e iconos blancos */
-    animation: wa-pulse-purple 2.4s infinite ease-in-out;
+    animation: wa-pulse-multicolor 4.5s infinite ease-in-out;
 }
 
 html.dark .btn-wa-premium i.ph-whatsapp-logo {
@@ -98,3 +113,247 @@ html.dark .btn-wa-premium:hover .star-3 { top: 60%; left: -12%; filter: drop-sha
 html.dark .btn-wa-premium:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 0 7px #8b5cf6) drop-shadow(0 0 12px #a78bfa); }
 html.dark .btn-wa-premium:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 0 9px #8b5cf6) drop-shadow(0 0 14px #a78bfa); }
 html.dark .btn-wa-premium:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 0 6px #8b5cf6) drop-shadow(0 0 10px #a78bfa); }
+
+/* --- BOTONES DE CONTACTO TOP DINÁMICOS (ORO, PLATA, BRONCE) --- */
+.btn-wa-oro, .btn-wa-plata, .btn-wa-bronce {
+    position: relative;
+    overflow: visible;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    background: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.856) 0%, transparent 45%), 
+                radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.977) 0%, transparent 45%), 
+                linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 2px solid #ffffff;
+    color: #0f172a; /* Letras e icono negros */
+}
+
+.btn-wa-oro i.ph-whatsapp-logo,
+.btn-wa-plata i.ph-whatsapp-logo,
+.btn-wa-bronce i.ph-whatsapp-logo {
+    color: #0f172a;
+    transition: color 0.4s ease;
+}
+
+.btn-wa-oro:hover i.ph-whatsapp-logo,
+.btn-wa-plata:hover i.ph-whatsapp-logo,
+.btn-wa-bronce:hover i.ph-whatsapp-logo {
+    color: #000000;
+}
+
+/* Animaciones de Pulso (Modo Claro) */
+.btn-wa-oro {
+    animation: wa-pulse-oro-light 2.4s infinite ease-in-out;
+}
+.btn-wa-plata {
+    animation: wa-pulse-plata-light 2.4s infinite ease-in-out;
+}
+.btn-wa-bronce {
+    animation: wa-pulse-bronce-light 2.4s infinite ease-in-out;
+}
+
+/* Efecto Hover (Modo Claro) */
+.btn-wa-oro:hover {
+    transform: translateY(-2px);
+    border-color: #f59e0b;
+    color: #000000;
+    animation-play-state: paused;
+}
+.btn-wa-plata:hover {
+    transform: translateY(-2px);
+    border-color: #94a3b8;
+    color: #000000;
+    animation-play-state: paused;
+}
+.btn-wa-bronce:hover {
+    transform: translateY(-2px);
+    border-color: #ea580c;
+    color: #000000;
+    animation-play-state: paused;
+}
+
+/* Keyframes de Pulso (Modo Claro) */
+@keyframes wa-pulse-oro-light {
+    0%, 100% {
+        box-shadow: 0 0 4px rgba(245, 158, 11, 0.15), 0 4px 10px rgba(245, 158, 11, 0.05);
+    }
+    50% {
+        box-shadow: 0 0 16px 4px rgba(245, 158, 11, 0.4), 0 4px 15px rgba(245, 158, 11, 0.2);
+    }
+}
+@keyframes wa-pulse-plata-light {
+    0%, 100% {
+        box-shadow: 0 0 4px rgba(148, 163, 184, 0.15), 0 4px 10px rgba(148, 163, 184, 0.05);
+    }
+    50% {
+        box-shadow: 0 0 16px 4px rgba(148, 163, 184, 0.4), 0 4px 15px rgba(148, 163, 184, 0.2);
+    }
+}
+@keyframes wa-pulse-bronce-light {
+    0%, 100% {
+        box-shadow: 0 0 4px rgba(194, 65, 12, 0.15), 0 4px 10px rgba(194, 65, 12, 0.05);
+    }
+    50% {
+        box-shadow: 0 0 16px 4px rgba(194, 65, 12, 0.4), 0 4px 15px rgba(194, 65, 12, 0.2);
+    }
+}
+
+/* Modificadores en Modo Oscuro */
+html.dark .btn-wa-oro {
+    background: linear-gradient(135deg, #0f0a02 0%, #291a03 50%, #0f0a02 100%);
+    border: 2px solid #fbbf24;
+    color: #ffffff;
+    animation: wa-pulse-oro-dark 4.5s infinite ease-in-out;
+}
+html.dark .btn-wa-plata {
+    background: linear-gradient(135deg, #0b0f19 0%, #1e293b 50%, #0b0f19 100%);
+    border: 2px solid #cbd5e1;
+    color: #ffffff;
+    animation: wa-pulse-plata-dark 4.5s infinite ease-in-out;
+}
+html.dark .btn-wa-bronce {
+    background: linear-gradient(135deg, #0f0502 0%, #431407 50%, #0f0502 100%);
+    border: 2px solid #fed7aa;
+    color: #ffffff;
+    animation: wa-pulse-bronce-dark 4.5s infinite ease-in-out;
+}
+
+html.dark .btn-wa-oro i.ph-whatsapp-logo,
+html.dark .btn-wa-plata i.ph-whatsapp-logo,
+html.dark .btn-wa-bronce i.ph-whatsapp-logo {
+    color: #ffffff;
+}
+
+html.dark .btn-wa-oro:hover {
+    transform: translateY(-2px);
+    border-color: #fbbf24;
+    color: #ffffff;
+    animation-play-state: paused;
+}
+html.dark .btn-wa-plata:hover {
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+    color: #ffffff;
+    animation-play-state: paused;
+}
+html.dark .btn-wa-bronce:hover {
+    transform: translateY(-2px);
+    border-color: #fed7aa;
+    color: #ffffff;
+    animation-play-state: paused;
+}
+
+/* Keyframes de Pulso (Modo Oscuro) */
+@keyframes wa-pulse-oro-dark {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(245, 158, 11, 0.4), 0 4px 10px rgba(245, 158, 11, 0.15);
+        border-color: #fbbf24;
+    }
+    50% {
+        box-shadow: 0 0 16px 5px rgba(251, 191, 36, 0.65), 0 4px 16px rgba(245, 158, 11, 0.3);
+        border-color: #f59e0b;
+    }
+}
+@keyframes wa-pulse-plata-dark {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(148, 163, 184, 0.4), 0 4px 10px rgba(148, 163, 184, 0.15);
+        border-color: #cbd5e1;
+    }
+    50% {
+        box-shadow: 0 0 16px 5px rgba(203, 213, 225, 0.65), 0 4px 16px rgba(148, 163, 184, 0.3);
+        border-color: #94a3b8;
+    }
+}
+@keyframes wa-pulse-bronce-dark {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(194, 65, 12, 0.4), 0 4px 10px rgba(194, 65, 12, 0.15);
+        border-color: #fed7aa;
+    }
+    50% {
+        box-shadow: 0 0 16px 5px rgba(253, 215, 170, 0.65), 0 4px 16px rgba(194, 65, 12, 0.3);
+        border-color: #ea580c;
+    }
+}
+
+/* --- PARTÍCULAS DE ESTRELLAS PARA BOTONES TOP --- */
+.btn-wa-oro .star-item,
+.btn-wa-plata .star-item,
+.btn-wa-bronce .star-item {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96);
+    pointer-events: none;
+    transform: scale(0.5);
+    
+    color: #000000; /* Negro por defecto en modo claro */
+    filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+}
+
+html.dark .btn-wa-oro .star-item,
+html.dark .btn-wa-plata .star-item,
+html.dark .btn-wa-bronce .star-item {
+    color: #ffffff; /* Blanco en modo oscuro */
+}
+
+/* Posiciones inactivas */
+.btn-wa-oro .star-1, .btn-wa-plata .star-1, .btn-wa-bronce .star-1 { top: 20%; left: 20%; font-size: 22px; }
+.btn-wa-oro .star-2, .btn-wa-plata .star-2, .btn-wa-bronce .star-2 { top: 45%; left: 45%; font-size: 16px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); }
+.btn-wa-oro .star-3, .btn-wa-plata .star-3, .btn-wa-bronce .star-3 { top: 40%; left: 40%; font-size: 8px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); }
+.btn-wa-oro .star-4, .btn-wa-plata .star-4, .btn-wa-bronce .star-4 { top: 20%; left: 40%; font-size: 10px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); transition-duration: 0.8s; }
+.btn-wa-oro .star-5, .btn-wa-plata .star-5, .btn-wa-bronce .star-5 { top: 25%; left: 45%; font-size: 16px; transition-timing-function: cubic-bezier(0, 0.4, 0, 1.01); transition-duration: 0.6s; }
+.btn-wa-oro .star-6, .btn-wa-plata .star-6, .btn-wa-bronce .star-6 { top: 5%; left: 50%; font-size: 8px; transition-duration: 0.8s; }
+
+/* Despliegue en Hover */
+.btn-wa-oro:hover .star-item,
+.btn-wa-plata:hover .star-item,
+.btn-wa-bronce:hover .star-item {
+    opacity: 1;
+    z-index: 10;
+    transform: scale(1);
+}
+
+/* Hover ORO: Sombras Ámbar (Claro) y Oro Neón (Oscuro) */
+.btn-wa-oro:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.5)); }
+.btn-wa-oro:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 4px 6px rgba(245, 158, 11, 0.5)); }
+.btn-wa-oro:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.5)); }
+.btn-wa-oro:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 3px 5px rgba(245, 158, 11, 0.5)); }
+.btn-wa-oro:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 4px 7px rgba(245, 158, 11, 0.5)); }
+.btn-wa-oro:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.5)); }
+
+html.dark .btn-wa-oro:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 0 10px #f59e0b) drop-shadow(0 0 16px #fbbf24); }
+html.dark .btn-wa-oro:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 0 8px #f59e0b) drop-shadow(0 0 12px #fbbf24); }
+html.dark .btn-wa-oro:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 0 6px #f59e0b) drop-shadow(0 0 10px #fbbf24); }
+html.dark .btn-wa-oro:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 0 7px #f59e0b) drop-shadow(0 0 12px #fbbf24); }
+html.dark .btn-wa-oro:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 0 9px #f59e0b) drop-shadow(0 0 14px #fbbf24); }
+html.dark .btn-wa-oro:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 0 6px #f59e0b) drop-shadow(0 0 10px #fbbf24); }
+
+/* Hover PLATA: Sombras Plateadas (Claro y Oscuro) */
+.btn-wa-plata:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 4px 8px rgba(148, 163, 184, 0.5)); }
+.btn-wa-plata:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 4px 6px rgba(148, 163, 184, 0.5)); }
+.btn-wa-plata:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 2px 4px rgba(148, 163, 184, 0.5)); }
+.btn-wa-plata:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 3px 5px rgba(148, 163, 184, 0.5)); }
+.btn-wa-plata:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 4px 7px rgba(148, 163, 184, 0.5)); }
+.btn-wa-plata:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 2px 4px rgba(148, 163, 184, 0.5)); }
+
+html.dark .btn-wa-plata:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 0 10px #94a3b8) drop-shadow(0 0 16px #cbd5e1); }
+html.dark .btn-wa-plata:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 0 8px #94a3b8) drop-shadow(0 0 12px #cbd5e1); }
+html.dark .btn-wa-plata:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 0 6px #94a3b8) drop-shadow(0 0 10px #cbd5e1); }
+html.dark .btn-wa-plata:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 0 7px #94a3b8) drop-shadow(0 0 12px #cbd5e1); }
+html.dark .btn-wa-plata:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 0 9px #94a3b8) drop-shadow(0 0 14px #cbd5e1); }
+html.dark .btn-wa-plata:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 0 6px #94a3b8) drop-shadow(0 0 10px #cbd5e1); }
+
+/* Hover BRONCE: Sombras Cobrizas (Claro y Oscuro) */
+.btn-wa-bronce:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 4px 8px rgba(194, 65, 12, 0.5)); }
+.btn-wa-bronce:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 4px 6px rgba(194, 65, 12, 0.5)); }
+.btn-wa-bronce:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 2px 4px rgba(194, 65, 12, 0.5)); }
+.btn-wa-bronce:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 3px 5px rgba(194, 65, 12, 0.5)); }
+.btn-wa-bronce:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 4px 7px rgba(194, 65, 12, 0.5)); }
+.btn-wa-bronce:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 2px 4px rgba(194, 65, 12, 0.5)); }
+
+html.dark .btn-wa-bronce:hover .star-1 { top: -65%; left: -15%; filter: drop-shadow(0 0 10px #ea580c) drop-shadow(0 0 16px #fed7aa); }
+html.dark .btn-wa-bronce:hover .star-2 { top: -35%; left: 8%; filter: drop-shadow(0 0 8px #ea580c) drop-shadow(0 0 12px #fed7aa); }
+html.dark .btn-wa-bronce:hover .star-3 { top: 60%; left: -12%; filter: drop-shadow(0 0 6px #ea580c) drop-shadow(0 0 10px #fed7aa); }
+html.dark .btn-wa-bronce:hover .star-4 { top: 75%; left: 85%; filter: drop-shadow(0 0 7px #ea580c) drop-shadow(0 0 12px #fed7aa); }
+html.dark .btn-wa-bronce:hover .star-5 { top: 20%; left: 108%; filter: drop-shadow(0 0 9px #ea580c) drop-shadow(0 0 14px #fed7aa); }
+html.dark .btn-wa-bronce:hover .star-6 { top: -25%; left: 92%; filter: drop-shadow(0 0 6px #ea580c) drop-shadow(0 0 10px #fed7aa); }
+

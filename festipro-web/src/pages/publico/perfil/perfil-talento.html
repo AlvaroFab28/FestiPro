@@ -63,6 +63,9 @@
             <!-- SECCIÓN HERO: BANNER Y AVATAR -->
             <!-- Hero Banner Expansivo -->
             <section class="relative h-60 sm:h-80 md:h-96 w-full rounded-3xl bg-slate-200 dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark shadow-lg">
+                <!-- Disponibilidad como Pill en la esquina superior izquierda -->
+                <div id="perfil-disponibilidad" class="absolute top-4 left-4 sm:top-6 sm:left-6 z-30"></div>
+
                 <div class="absolute inset-0 rounded-3xl overflow-hidden">
                     <img id="perfil-banner" src="" alt="Banner del artista" class="w-full h-full object-cover cursor-zoom-in transition-transform duration-500 hover:scale-[1.02]">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent pointer-events-none"></div>
@@ -71,7 +74,7 @@
                 <!-- Avatar Solapado con Aura Glow -->
                 <div class="absolute -bottom-10 sm:-bottom-12 left-1/2 -translate-x-1/2 sm:left-12 sm:translate-x-0 flex items-end gap-4 z-20">
                     <div class="avatar-glow-aura group/avatar">
-                        <div class="relative z-10 p-1 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full shadow-2xl transition-transform duration-300 group-hover/avatar:scale-105">
+                        <div id="perfil-avatar-container" class="relative z-10 p-1 bg-gradient-to-tr from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark rounded-full shadow-2xl transition-transform duration-300 group-hover/avatar:scale-105">
                             <img id="perfil-avatar" src="" alt="Avatar" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover bg-slate-150 dark:bg-fp-surface-dark cursor-zoom-in">
                         </div>
                     </div>
@@ -80,16 +83,12 @@
 
             <!-- SECCIÓN INFO BÁSICA: CÁPSULAS -->
             <!-- Cabecera de Información Básica -->
-            <section class="pt-10 px-2 sm:px-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-slate-200 dark:border-fp-border-dark pb-6">
-                <div>
-                    <div class="flex items-center gap-3 flex-wrap mb-3">
-                        <h1 id="perfil-nombre" class="text-3xl sm:text-4xl font-display font-extrabold text-slate-900 dark:text-white leading-tight"></h1>
-                        <span class="glass-badge-available px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm select-none">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Disponible
-                        </span>
+            <section class="pt-12 px-2 sm:px-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-slate-200 dark:border-fp-border-dark pb-5">
+                <div class="flex flex-col items-center md:items-start text-center md:text-left w-full">
+                    <div class="mb-3">
+                        <h1 id="perfil-nombre" class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 dark:text-white leading-tight"></h1>
                     </div>
-                    <div class="flex items-center gap-3 flex-wrap">
+                    <div class="flex items-center justify-center md:justify-start gap-3 flex-wrap w-full">
                         <span id="perfil-categoria" class="glass-badge-primary px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm"></span>
                         <span id="perfil-ciudad" class="glass-badge-accent px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm"></span>
                         <span id="perfil-vistas" class="glass-badge-views px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm">
@@ -110,7 +109,7 @@
                 <!-- Columna Principal (Ancha: Bio, YouTube, Galería) -->
                 <div class="lg:col-span-2 space-y-8">
                     <!-- Bio del Artista -->
-                    <article class="spotlight-card card-accent-border bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-6 sm:p-8 shadow-sm transition-all duration-500 group">
+                    <article class="spotlight-card card-accent-border relative bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-5 sm:p-6 shadow-sm transition-all duration-500 group">
                         <h2 class="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                             <i class="ph-fill ph-info text-xl text-fp-primary-light dark:text-fp-accent-dark animate-bounce-hover"></i>
                             Sobre mí
@@ -119,7 +118,7 @@
                     </article>
 
                     <!-- Show en Vivo (YouTube) -->
-                    <section id="perfil-youtube-container" class="hidden spotlight-card card-accent-border bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-6 sm:p-8 shadow-sm transition-all duration-500 group">
+                    <section id="perfil-youtube-container" class="hidden spotlight-card card-accent-border relative bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-5 sm:p-6 shadow-sm transition-all duration-500 group">
                         <h2 class="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                             <i class="ph-fill ph-video-camera text-xl text-fp-primary-light dark:text-fp-accent-dark animate-bounce-hover"></i>
                             Presentación y Show
@@ -130,7 +129,7 @@
                     </section>
 
                     <!-- Galería de Fotos con Lightbox -->
-                    <section id="perfil-galeria-container" class="hidden spotlight-card card-accent-border bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-6 sm:p-8 shadow-sm transition-all duration-500 group">
+                    <section id="perfil-galeria-container" class="hidden spotlight-card card-accent-border relative bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-5 sm:p-6 shadow-sm transition-all duration-500 group">
                         <h2 class="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                             <i class="ph-fill ph-image text-xl text-fp-primary-light dark:text-fp-accent-dark animate-bounce-hover"></i>
                             Galería de Fotos
@@ -141,7 +140,7 @@
                     </section>
 
                     <!-- Sección de Reseñas y Calificaciones -->
-                    <section id="seccion-reseñas" class="spotlight-card card-accent-border bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-6 sm:p-8 shadow-sm transition-all duration-500 group">
+                    <section id="seccion-reseñas" class="spotlight-card card-accent-border relative bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark rounded-3xl p-5 sm:p-6 shadow-sm transition-all duration-500 group">
                         <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
                             <h2 class="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <i class="ph-fill ph-chats text-xl text-fp-primary-light dark:text-fp-accent-dark animate-bounce-hover"></i>
@@ -212,12 +211,12 @@
                 <!-- Columna Lateral (Sticky: Tarifa, Botones, Info de Contacto) -->
                 <div class="lg:col-span-1">
                     <!-- SIDEBAR STICKY: PRECIO, CONTACTO, SEGURIDAD -->
-                    <aside class="lg:sticky lg:top-[96px] space-y-6">
+                    <aside class="lg:sticky lg:top-[96px] space-y-4">
                         <!-- Panel de Contratación / Tarifa -->
-                        <div class="premium-price-card spotlight-card card-accent-border rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                        <div class="premium-price-card spotlight-card card-accent-border rounded-3xl p-4 sm:p-6 relative overflow-hidden">
                             <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-fp-primary-light/5 to-transparent rounded-bl-full pointer-events-none"></div>
                             
-                            <div class="mb-6 flex flex-col justify-center items-start">
+                            <div class="mb-4 flex flex-col justify-center items-start">
                                 <span class="text-xs text-slate-400 dark:text-slate-500 font-bold tracking-wide block mb-2 font-display">Tarifa base desde</span>
                                 <div id="perfil-precio" class="flex items-baseline gap-1.5 font-display">
                                     <!-- Rellenado dinámicamente por JS -->
@@ -225,11 +224,11 @@
                                 <span class="text-xs text-slate-500 dark:text-slate-400 mt-3 block font-medium leading-relaxed">Sujeto a negociación de acuerdo al evento.</span>
                             </div>
 
-                            <hr class="border-slate-100 dark:border-fp-border-dark my-6">
+                            <hr class="border-slate-100 dark:border-fp-border-dark my-4">
 
                             <!-- Botón de WhatsApp Intermitente/Animado y Adaptado -->
                             <div class="space-y-4">
-                                <a id="btn-contacto" href="" class="btn-wa-premium w-full inline-flex items-center justify-center gap-3 px-6 py-4.5 font-bold rounded-2xl text-base md:text-lg cursor-pointer transition-all duration-300">
+                                <a id="btn-contacto" href="" class="btn-wa-premium relative z-20 w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 font-bold rounded-2xl text-base md:text-lg cursor-pointer transition-all duration-300">
                                     <i class="ph-fill ph-whatsapp-logo text-3xl flex-shrink-0"></i>
                                     <span>Contactar</span>
                                     <!-- Estrellas interactivas -->
@@ -247,7 +246,7 @@
                         </div>
 
                         <!-- Consejos de Seguridad / Contratación -->
-                        <div class="safety-card-premium rounded-3xl p-6 group">
+                        <div class="safety-card-premium rounded-3xl p-4 group">
                             <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
                                 <i class="ph ph-shield-check text-base text-fp-primary-light dark:text-fp-accent-dark animate-bounce-hover"></i>
                                 Contratación Segura

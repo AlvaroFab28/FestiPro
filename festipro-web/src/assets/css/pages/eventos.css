@@ -1,0 +1,1025 @@
+/* ==========================================================================
+   ESTILOS PREMIUM PARA EL TABLÓN DE EVENTOS PÚBLICOS - FESTIPRO
+   ========================================================================== */
+
+/* --- Orbes Decorativos de Fondo (Tema Azul & Teal) --- */
+.orb-glow-blue {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    width: 350px;
+    height: 350px;
+}
+
+.orb-glow-teal {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    width: 300px;
+    height: 300px;
+}
+
+.dark .orb-glow-blue {
+    opacity: 0.12;
+}
+
+.dark .orb-glow-teal {
+    opacity: 0.1;
+}
+
+/* --- Glassmorphism Panel para Eventos Mejor Pagados (Top Eventos) --- */
+.top-eventos-glass-panel {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 12px 40px 0 rgba(37, 99, 235, 0.06);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .top-eventos-glass-panel {
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* --- Tarjetas del Top 3 (Eventos Mejor Pagados) --- */
+.top-event-card {
+    position: relative;
+    overflow: visible;
+    /* Permitir que la copa/medalla sobresalga */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    z-index: 20;
+}
+
+.dark .top-event-card {
+    background: rgba(11, 15, 25, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Glow saturados según podio */
+.top-event-card.glow-oro {
+    box-shadow: 0 12px 30px rgba(245, 158, 11, 0.08), inset 0 0 12px rgba(245, 158, 11, 0.03);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+.top-event-card.glow-oro:hover {
+    box-shadow: 0 20px 50px rgba(245, 158, 11, 0.28), inset 0 0 20px rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.55);
+    transform: translateY(-6px) scale(1.01);
+}
+
+.top-event-card.glow-plata {
+    box-shadow: 0 12px 40px 2px rgba(130, 155, 188, 0.22), 0 2px 4px rgba(130, 155, 188, 0.05);
+    border-color: rgba(130, 155, 188, 0.35);
+}
+
+.top-event-card.glow-plata:hover {
+    box-shadow: 0 16px 48px 4px rgba(130, 155, 188, 0.35);
+    border-color: rgba(130, 155, 188, 0.65);
+    transform: translateY(-6px) scale(1.01);
+}
+
+.top-event-card.glow-bronce {
+    box-shadow: 0 12px 30px rgba(194, 65, 12, 0.08), inset 0 0 12px rgba(194, 65, 12, 0.03);
+    border-color: rgba(194, 65, 12, 0.25);
+}
+
+.top-event-card.glow-bronce:hover {
+    box-shadow: 0 20px 50px rgba(194, 65, 12, 0.28), inset 0 0 20px rgba(194, 65, 12, 0.1);
+    border-color: rgba(194, 65, 12, 0.55);
+    transform: translateY(-6px) scale(1.01);
+}
+
+/* Modo oscuro glows */
+.dark .top-event-card.glow-oro {
+    box-shadow: 0 12px 35px rgba(245, 158, 11, 0.12), inset 0 0 15px rgba(245, 158, 11, 0.05);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.dark .top-event-card.glow-oro:hover {
+    box-shadow: 0 20px 50px rgba(245, 158, 11, 0.35), inset 0 0 20px rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.45);
+}
+
+.dark .top-event-card.glow-plata {
+    box-shadow: 0 14px 44px 3px rgba(130, 155, 188, 0.32), 0 4px 12px rgba(0, 0, 0, 0.4);
+    border-color: rgba(130, 155, 188, 0.3);
+}
+
+.dark .top-event-card.glow-plata:hover {
+    box-shadow: 0 18px 54px 5px rgba(130, 155, 188, 0.52);
+    border-color: rgba(130, 155, 188, 0.65);
+}
+
+.dark .top-event-card.glow-bronce {
+    box-shadow: 0 12px 35px rgba(194, 65, 12, 0.15), inset 0 0 15px rgba(194, 65, 12, 0.05);
+    border-color: rgba(194, 65, 12, 0.2);
+}
+
+.dark .top-event-card.glow-bronce:hover {
+    box-shadow: 0 20px 50px rgba(194, 65, 12, 0.38), inset 0 0 20px rgba(194, 65, 12, 0.1);
+    border-color: rgba(194, 65, 12, 0.45);
+}
+
+/* Efecto Shimmer Metálico Avanzado */
+.card-shimmer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.card-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: -150%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.18) 30%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.18) 70%,
+            rgba(255, 255, 255, 0) 100%);
+    animation: top-shimmer 7s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+/* Shimmers específicos de color en Modo Oscuro */
+.dark .glow-oro .card-shimmer::after {
+    background: linear-gradient(90deg,
+            rgba(245, 158, 11, 0) 0%,
+            rgba(245, 158, 11, 0.03) 30%,
+            rgba(245, 158, 11, 0.18) 50%,
+            rgba(245, 158, 11, 0.03) 70%,
+            rgba(245, 158, 11, 0) 100%);
+}
+
+.dark .glow-plata .card-shimmer::after {
+    background: linear-gradient(90deg,
+            rgba(148, 163, 184, 0) 0%,
+            rgba(148, 163, 184, 0.03) 30%,
+            rgba(148, 163, 184, 0.18) 50%,
+            rgba(148, 163, 184, 0.03) 70%,
+            rgba(148, 163, 184, 0) 100%);
+}
+
+.dark .glow-bronce .card-shimmer::after {
+    background: linear-gradient(90deg,
+            rgba(194, 65, 12, 0) 0%,
+            rgba(194, 65, 12, 0.03) 30%,
+            rgba(194, 65, 12, 0.18) 50%,
+            rgba(194, 65, 12, 0.03) 70%,
+            rgba(194, 65, 12, 0) 100%);
+}
+
+@keyframes top-shimmer {
+    0% {
+        left: -150%;
+    }
+
+    35% {
+        left: 150%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+/* --- Medallas 3D para el Podio --- */
+.medal-container {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    z-index: 30;
+    animation: float-badge-wrapper 3s ease-in-out infinite;
+}
+
+@keyframes float-badge-wrapper {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.medal-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dark .medal-badge {
+    border: 2px solid rgba(15, 23, 42, 0.9);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
+}
+
+.medal-oro {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    color: #b45309 !important;
+    animation: gold-glow 2s infinite alternate;
+}
+
+.medal-plata {
+    background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%) !important;
+    color: #334155 !important;
+    animation: silver-glow 2s infinite alternate;
+}
+
+.medal-bronce {
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%) !important;
+    color: #9a3412 !important;
+    animation: bronze-glow 2s infinite alternate;
+}
+
+@keyframes gold-glow {
+    0% {
+        box-shadow: 0 0 4px rgba(245, 158, 11, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 16px rgba(245, 158, 11, 0.85);
+    }
+}
+
+@keyframes silver-glow {
+    0% {
+        box-shadow: 0 0 4px rgba(130, 155, 188, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 12px rgba(130, 155, 188, 0.75);
+    }
+}
+
+@keyframes bronze-glow {
+    0% {
+        box-shadow: 0 0 4px rgba(194, 65, 12, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 12px rgba(194, 65, 12, 0.75);
+    }
+}
+
+
+
+.top-event-card:hover .medal-badge {
+    transform: scale(1.2) rotate(15deg);
+}
+
+/* Ocultar spotlight de cursor nativo en tarjetas de podio */
+.top-event-card.spotlight-card::before {
+    display: none !important;
+}
+
+
+
+/* --- Tarjeta de Evento General (Estructura base para Scroll Reveal) --- */
+.event-card {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.event-card-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.event-card.event-card-visible:hover {
+    transform: translateY(-6px) !important;
+}
+
+
+/* --- Modal de Filtros Avanzados (Estilo Glassmorphism) --- */
+.event-filter-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 24, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.event-filter-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.event-filter-modal-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+    visibility: hidden;
+    width: calc(100% - 2rem);
+    max-width: 460px;
+    background: rgb(255, 255, 255);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
+    z-index: 51;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+}
+
+.dark .event-filter-modal-panel {
+    background: rgb(15, 23, 42);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.event-filter-modal-panel.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* --- Chips de Rango de Presupuesto Rápido --- */
+.btn-preset-price {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-preset-price.chip-active {
+    background-color: rgba(108, 92, 231, 0.1) !important;
+    border-color: #6c5ce7 !important;
+    color: #6c5ce7 !important;
+}
+
+.dark .btn-preset-price.chip-active {
+    background-color: rgba(255, 159, 67, 0.15) !important;
+    border-color: #ff9f43 !important;
+    color: #ff9f43 !important;
+}
+
+/* Inputs de rango de presupuesto */
+#filtro-precio-min,
+#filtro-precio-max {
+    background-color: rgba(241, 245, 249, 0.8) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dark #filtro-precio-min,
+.dark #filtro-precio-max {
+    background-color: #151124 !important;
+    border: 1px solid rgba(147, 80, 255, 0.12) !important;
+    color: #f1f5f9 !important;
+}
+
+#filtro-precio-min:focus,
+#filtro-precio-max:focus {
+    background-color: #ffffff !important;
+    border-color: #6c5ce7 !important;
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15), 0 4px 12px rgba(108, 92, 231, 0.08) !important;
+    outline: none !important;
+}
+
+.dark #filtro-precio-min:focus,
+.dark #filtro-precio-max:focus {
+    background-color: #1d1830 !important;
+    border-color: #9350FF !important;
+    box-shadow: 0 0 0 3px rgba(147, 80, 255, 0.25), 0 4px 16px rgba(147, 80, 255, 0.15) !important;
+    outline: none !important;
+}
+
+
+/* Toggle Switch Abiertos y Futuros */
+#filtro-solo-abiertos:checked+div,
+#filtro-solo-futuros:checked+div {
+    background-color: #6c5ce7 !important;
+}
+
+.dark #filtro-solo-abiertos:checked+div,
+.dark #filtro-solo-futuros:checked+div {
+    background-color: #ff9f43 !important;
+}
+
+
+/* --- Badge Contador de Filtros en Botón --- */
+.filter-badge-count {
+    background: #6c5ce7;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(108, 92, 231, 0.3);
+}
+
+.filter-badge-count.hidden {
+    display: none !important;
+}
+
+.dark .filter-badge-count {
+    background: #ff9f43;
+    box-shadow: 0 2px 5px rgba(255, 159, 67, 0.4);
+}
+
+
+/* --- Micro-animaciones para Iconos y Botón Aplicar --- */
+.event-filter-modal-panel.active #icon-modal-sliders {
+    animation: modal-sliders-spin 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modal-sliders-spin {
+    0% {
+        transform: rotate(-30deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+#icon-modal-coins {
+    animation: float-coins 3s ease-in-out infinite;
+}
+
+@keyframes float-coins {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+#btn-cerrar-filtros:hover i {
+    transform: rotate(90deg);
+    transition: transform 0.25s ease;
+}
+
+.btn-preset-price:hover .ph-wallet {
+    animation: wallet-tilt 0.5s ease infinite alternate;
+}
+
+@keyframes wallet-tilt {
+    0% {
+        transform: rotate(-8deg);
+    }
+
+    100% {
+        transform: rotate(8deg);
+    }
+}
+
+.btn-preset-price:hover .ph-coins {
+    animation: coin-spin 0.8s ease-in-out infinite;
+}
+
+@keyframes coin-spin {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.btn-preset-price:hover .ph-crown {
+    animation: crown-float 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes crown-float {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-3px) scale(1.08);
+    }
+}
+
+#btn-modal-aplicar {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#btn-modal-aplicar:hover,
+.dark #btn-modal-aplicar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.35) !important;
+}
+
+#btn-modal-aplicar:active {
+    transform: translateY(1px);
+}
+
+/* ==========================================================================
+   NUEVOS ESTILOS PREMIUM (DETALLES UI/UX EXQUISITOS)
+   ========================================================================== */
+
+/* --- Cinta/Ribbon diagonal para estado Abierto --- */
+.ribbon-shimmer-diagonal {
+    position: absolute;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.ribbon-shimmer-diagonal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: -100%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.25) 30%,
+            rgba(255, 255, 255, 0.55) 50%,
+            rgba(255, 255, 255, 0.25) 70%,
+            rgba(255, 255, 255, 0) 100%);
+    animation: ribbon-glow-animation 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes ribbon-glow-animation {
+    0% {
+        left: -100%;
+    }
+
+    25% {
+        left: 100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* --- Uniformidad de Altura de Detalles de Requerimiento --- */
+.event-card-details {
+    min-height: 2.5rem;
+    /* Garantizar al menos 2 líneas de texto */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- Micro-animaciones en Tags e Iconos de Ubicación --- */
+.hover-tag-anim,
+.hover-map-anim {
+    transition: all 0.3s ease;
+}
+
+.event-card:hover .hover-tag-anim {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+}
+
+.event-card:hover .hover-map-anim {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(100, 116, 139, 0.25);
+}
+
+.event-card:hover .hover-tag-anim i {
+    animation: tag-jiggle 0.6s ease;
+}
+
+.event-card:hover .hover-map-anim i {
+    animation: map-pulse 0.8s ease infinite alternate;
+}
+
+@keyframes tag-jiggle {
+
+    0%,
+    100% {
+        transform: rotate(0);
+    }
+
+    25% {
+        transform: rotate(-15deg);
+    }
+
+    75% {
+        transform: rotate(15deg);
+    }
+}
+
+@keyframes map-pulse {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-2px);
+    }
+}
+
+/* --- Contenedor del Maletín Glassmorphic Dinámico (Día: Azul FestiPro) --- */
+.briefcase-oro,
+.briefcase-plata,
+.briefcase-bronce {
+    background: rgba(37, 99, 235, 0.05);
+    border-color: rgba(37, 99, 235, 0.18);
+    color: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.04);
+}
+
+.top-event-card.glow-oro:hover .briefcase-oro,
+.top-event-card.glow-plata:hover .briefcase-plata,
+.top-event-card.glow-bronce:hover .briefcase-bronce {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.4);
+    color: #1e40af;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+}
+
+/* --- Modo Oscuro (Noche: Oro, Plata, Bronce Metálicos) --- */
+.dark .briefcase-oro {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #fbbf24;
+    box-shadow: none;
+}
+
+.dark .top-event-card.glow-oro:hover .briefcase-oro {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.45);
+    color: #d97706;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
+}
+
+.dark .briefcase-plata {
+    background: rgba(130, 155, 188, 0.15);
+    border-color: rgba(130, 155, 188, 0.3);
+    color: #cbdcf0;
+    box-shadow: none;
+}
+
+.dark .top-event-card.glow-plata:hover .briefcase-plata {
+    background: rgba(130, 155, 188, 0.2);
+    border-color: rgba(130, 155, 188, 0.5);
+    color: #6a83a6;
+    box-shadow: 0 8px 20px rgba(130, 155, 188, 0.25);
+}
+
+.dark .briefcase-bronce {
+    background: rgba(194, 65, 12, 0.08);
+    border-color: rgba(194, 65, 12, 0.25);
+    color: #fed7aa;
+    box-shadow: none;
+}
+
+.dark .top-event-card.glow-bronce:hover .briefcase-bronce {
+    background: rgba(194, 65, 12, 0.15);
+    border-color: rgba(194, 65, 12, 0.45);
+    color: #ea580c;
+    box-shadow: 0 8px 20px rgba(194, 65, 12, 0.25);
+}
+
+/* Hover general del icono maletín en el podio (Animación de saltito suave) */
+@keyframes briefcase-jump {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    25% {
+        transform: translateY(-6px) scale(1.15) rotate(-3deg);
+    }
+
+    50% {
+        transform: translateY(1px) scale(0.95) rotate(3deg);
+    }
+
+    75% {
+        transform: translateY(-2px) scale(1.05) rotate(-1deg);
+    }
+}
+
+.top-event-card:hover .briefcase-container i {
+    animation: briefcase-jump 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+
+/* ==========================================================================
+   DISEÑO PREMIUM DEL CALENDARIO COLGANTE (DISEÑO 3D & BALANCEO)
+   ========================================================================== */
+
+/* Contenedor Principal del Calendario */
+.calendar-premium-container {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 6px;
+    /* Espacio para que respiren las anillas */
+    width: 52px;
+    height: 52px;
+}
+
+/* Anillas del Calendario */
+.calendar-premium-rings {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 12px;
+    z-index: 12;
+}
+
+.calendar-premium-rings .ring-loop {
+    width: 4px;
+    height: 10px;
+    background: linear-gradient(to bottom, #94a3b8, #cbd5e1, #64748b);
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.dark .calendar-premium-rings .ring-loop {
+    background: linear-gradient(to bottom, #475569, #94a3b8, #334155);
+}
+
+/* Tarjeta / Hoja del Calendario */
+.calendar-premium-card {
+    width: 46px;
+    height: 46px;
+    background: #ffffff;
+    border: 1.5px solid #dbeafe;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.06);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top center;
+    z-index: 10;
+}
+
+.dark .calendar-premium-card {
+    background: #0d1220;
+    border-color: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Cabecera Roja/Azul de Encuadernación */
+.calendar-premium-header {
+    height: 9px;
+    background: linear-gradient(90deg, #2563eb, #1d4ed8);
+    width: 100%;
+}
+
+.dark .calendar-premium-header {
+    background: linear-gradient(90deg, #5b4cb8, #7c3fdb);
+}
+
+/* Contenido interior del Calendario */
+.calendar-premium-content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #2563eb;
+}
+
+.dark .calendar-premium-content {
+    background: #0d1220;
+    color: #a29bfe;
+}
+
+.calendar-premium-day {
+    font-size: 1.22rem;
+    font-weight: 900;
+    font-family: var(--font-display), sans-serif;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #1e293b;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .calendar-premium-day {
+    color: #ffffff;
+}
+
+/* --- Animación de Balanceo (Hanging Swing) --- */
+@keyframes calendar-swing {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(10deg);
+    }
+
+    40% {
+        transform: rotate(-8deg);
+    }
+
+    60% {
+        transform: rotate(5deg);
+    }
+
+    80% {
+        transform: rotate(-3deg);
+    }
+}
+
+/* Disparo de Balanceo y Efectos al Hover de la Tarjeta General */
+.event-card:hover .calendar-premium-card {
+    animation: calendar-swing 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    border-color: #3b82f6;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.16);
+}
+
+.dark .event-card:hover .calendar-premium-card {
+    border-color: #6c5ce7;
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.22);
+}
+
+/* El número del día crece sutilmente en hover */
+.event-card:hover .calendar-premium-day {
+    transform: scale(1.12);
+}
+
+
+/* ==========================================================================
+   DISEÑO PREMIUM DEL MODAL DE DETALLE DE EVENTO (GLASSMORPHISM & SPRING ENTRANCE)
+   ========================================================================== */
+
+/* Overlay del Modal */
+.event-detail-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 24, 0.45);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 60;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        backdrop-filter 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.event-detail-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* Panel del Modal */
+.event-detail-panel {
+    position: fixed;
+    z-index: 61;
+    background: #ffffff;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.12), inset 0 0 1px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Posicionamiento Centrado Universal (Móvil y Escritorio) */
+    left: 50%;
+    top: 50%;
+    width: calc(100% - 32px);
+    /* Deja un margen de 16px a cada lado en móviles */
+    max-width: 480px;
+    max-height: 90vh;
+    border-radius: 2.5rem;
+    transform: translate(-50%, -40%) scale(0.92);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dark .event-detail-panel {
+    background: #0d1324;
+    border-color: rgba(59, 130, 246, 0.15);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5), inset 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* Evitar el efecto de luz (spotlight) en el modal durante el modo día */
+html:not(.dark) .event-detail-panel.spotlight-card::before {
+    display: none !important;
+}
+
+.event-detail-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Responsivo en Escritorio/Tablet */
+@media (min-width: 640px) {
+    .event-detail-panel {
+        width: 100%;
+    }
+}
+
+/* Custom Scrollbar para la descripción del modal */
+.modal-detail-scrollable::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modal-detail-scrollable::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-detail-scrollable::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.dark .modal-detail-scrollable::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.modal-variant-oro {
+    border-color: rgba(245, 158, 11, 0.45) !important;
+}
+
+.modal-variant-plata {
+    border-color: rgba(148, 163, 184, 0.45) !important;
+}
+
+.modal-variant-bronce {
+    border-color: rgba(194, 65, 12, 0.45) !important;
+}
+
+
+
+/* Animaciones de Entrada Escalonada de las Pills */
+@keyframes modal-pill-in {
+    0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.event-detail-panel.active .flex-col>.flex-col,
+.event-detail-panel.active .flex-col>.flex-row>div,
+.event-detail-panel.active .animate-pill-in {
+    animation: modal-pill-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.event-detail-panel.active .flex-col>.flex-row>div:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.event-detail-panel.active .flex-col>.flex-row>div:nth-child(2) {
+    animation-delay: 0.18s;
+}
+
+.event-detail-panel.active .flex-col>.flex-row>div:nth-child(3) {
+    animation-delay: 0.26s;
+}

@@ -1,0 +1,224 @@
+/* ==========================================
+   FestiPro: Dashboard de Talento - Estilos Premium
+   ========================================== */
+
+/* --- SIDEBAR ACTIVE OVERRIDE --- */
+.tab-btn.bg-indigo-50 {
+    background: linear-gradient(135deg, #6c5ce7 0%, #8b5cf6 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 16px rgba(108, 92, 231, 0.25) !important;
+}
+
+html.dark .tab-btn.dark\:bg-indigo-900\/30 {
+    background: linear-gradient(135deg, #9350FF 0%, #a78bfa 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px rgba(147, 80, 255, 0.35) !important;
+}
+
+/* Evitar que los iconos pierdan color al estar activos */
+.tab-btn.bg-indigo-50 i,
+html.dark .tab-btn.dark\:bg-indigo-900\/30 i {
+    color: #ffffff !important;
+}
+
+/* --- BANNER DISPONIBILIDAD CON SHIMMER DINÁMICO --- */
+.disponibilidad-banner {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.disponibilidad-banner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.18),
+        transparent
+    );
+    transform: skewX(-25deg);
+    animation: banner-shimmer 5s infinite ease-in-out;
+}
+
+@keyframes banner-shimmer {
+    0% { left: -150%; }
+    30% { left: 150%; }
+    100% { left: 150%; }
+}
+
+/* Estados de disponibilidad controlados con :has */
+.disponibilidad-banner:has(#toggle-disponibilidad:checked) {
+    background: linear-gradient(135deg, #6c5ce7 0%, #8b5cf6 100%);
+    box-shadow: 0 10px 25px -5px rgba(108, 92, 231, 0.3);
+}
+
+html.dark .disponibilidad-banner:has(#toggle-disponibilidad:checked) {
+    background: linear-gradient(135deg, #18122c 0%, #151124 100%);
+    box-shadow: 0 0 30px rgba(147, 80, 255, 0.25);
+    border-color: rgba(147, 80, 255, 0.45);
+}
+
+html.dark .disponibilidad-banner:has(#toggle-disponibilidad:checked):hover {
+    box-shadow: 0 0 32px rgba(147, 80, 255, 0.65);
+    border-color: rgba(147, 80, 255, 0.75);
+}
+
+.disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)) {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    box-shadow: 0 10px 25px -5px rgba(71, 85, 105, 0.25);
+}
+
+html.dark .disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)) {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    box-shadow: 0 0 30px rgba(148, 163, 184, 0.15);
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+html.dark .disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)):hover {
+    box-shadow: 0 0 32px rgba(148, 163, 184, 0.45);
+    border-color: rgba(148, 163, 184, 0.6);
+}
+
+/* Modificación de contenido según estado */
+.availability-title::before {
+    content: 'Estás Disponible';
+}
+.disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)) .availability-title::before {
+    content: 'Perfil Oculto';
+}
+
+.availability-subtitle::before {
+    content: 'Los anfitriones pueden ver tu perfil y contactarte para eventos.';
+}
+.disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)) .availability-subtitle::before {
+    content: 'Tu perfil no aparecerá en el catálogo de talentos ni en búsquedas.';
+}
+
+.availability-show-checked { display: block; }
+.availability-show-unchecked { display: none; }
+
+.disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)) .availability-show-checked {
+    display: none;
+}
+.disponibilidad-banner:has(#toggle-disponibilidad:not(:checked)) .availability-show-unchecked {
+    display: block;
+}
+
+/* --- BANNER PREVIEW DROPZONE --- */
+.db-banner-dropzone {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.db-banner-dropzone:hover {
+    border-color: #6c5ce7;
+}
+html.dark .db-banner-dropzone:hover {
+    border-color: #9350FF;
+}
+
+.db-banner-dropzone .dropzone-overlay {
+    background: rgba(13, 9, 29, 0.6);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.db-banner-dropzone:hover .dropzone-overlay {
+    opacity: 1;
+}
+
+/* --- ANILLO DE AVATAR CON EFECTO DE LUZ --- */
+.db-avatar-ring {
+    position: relative;
+    padding: 4px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #6c5ce7, #ff7675);
+    transition: all 0.4s ease;
+}
+
+html.dark .db-avatar-ring {
+    background: linear-gradient(135deg, #9350FF, #ff9f43);
+}
+
+.db-avatar-ring::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 9999px;
+    background: inherit;
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(6px);
+    animation: ring-pulse 3s infinite alternate;
+}
+
+@keyframes ring-pulse {
+    0% { filter: blur(6px); opacity: 0.3; }
+    100% { filter: blur(12px); opacity: 0.6; }
+}
+
+/* --- PERSONALIZACIÓN DE ARROW SELECT --- */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.5rem;
+}
+
+.custom-select-wrapper .select-caret {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #94a3b8;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.custom-select-wrapper select:focus ~ .select-caret {
+    transform: translateY(-50%) rotate(180deg);
+    color: #6c5ce7;
+}
+
+html.dark .custom-select-wrapper select:focus ~ .select-caret {
+    color: #9350FF;
+}
+
+/* --- ESTADÍSTICAS & COMPLETITUD --- */
+.completeness-bar {
+    height: 8px;
+    border-radius: 9999px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+html.dark .completeness-bar {
+    background: #201a35;
+}
+.completeness-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6c5ce7, #ff7675);
+    border-radius: 9999px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+html.dark .completeness-bar-fill {
+    background: linear-gradient(90deg, #9350FF, #ff9f43);
+}
+
+.insight-card {
+    transition: all 0.3s ease;
+}
+.insight-card:hover {
+    transform: translateY(-2px);
+}

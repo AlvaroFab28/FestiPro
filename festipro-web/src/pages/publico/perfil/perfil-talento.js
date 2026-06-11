@@ -60,7 +60,7 @@ const profileContent = document.getElementById('profile-content');
 
 // 3.2 Hero: banner y avatar
 const perfilBanner = document.getElementById('perfil-banner');
-const perfilAvatar = document.getElementById('perfil-avatar');
+const perfilAvatarContainer = document.getElementById('perfil-avatar-container');
 
 // 3.3 Cápsulas de información y biografía
 const perfilNombre = document.getElementById('perfil-nombre');
@@ -651,9 +651,12 @@ function setupLightboxListeners() {
     }
 
     // Ampliar Avatar y Banner al hacer clic
-    if (perfilAvatar) {
-        perfilAvatar.addEventListener('click', () => {
-            openLightboxSingle(perfilAvatar.src, 'Foto de perfil');
+    if (perfilAvatarContainer) {
+        perfilAvatarContainer.addEventListener('click', () => {
+            const img = perfilAvatarContainer.querySelector('img');
+            if (img && img.src) {
+                openLightboxSingle(img.src, 'Foto de perfil');
+            }
         });
     }
     if (perfilBanner) {
@@ -776,6 +779,11 @@ async function loadTalentData() {
             perfilBanner.setAttribute('fetchpriority', 'high'); // Optimización de LCP
             perfilBanner.classList.remove('hidden');
             bannerWrapper.className = "absolute inset-0 rounded-3xl overflow-hidden";
+            // Limpiar overlays de fallback si existen
+            const radial = bannerWrapper.querySelector('.radial-overlay');
+            if (radial) radial.remove();
+            const watermark = bannerWrapper.querySelector('.watermark-icon');
+            if (watermark) watermark.remove();
         } else {
             perfilBanner.removeAttribute('src');
             perfilBanner.classList.add('hidden');
@@ -786,15 +794,67 @@ async function loadTalentData() {
                 radial.className = 'absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-40 radial-overlay pointer-events-none';
                 bannerWrapper.appendChild(radial);
             }
+            if (!bannerWrapper.querySelector('.watermark-icon')) {
+                const watermark = document.createElement('div');
+                watermark.className = 'absolute inset-0 flex items-center justify-center pointer-events-none watermark-icon z-10';
+                watermark.innerHTML = '<i class="ph-fill ph-music-notes text-white/10 text-[8rem] sm:text-[12rem] rotate-12"></i>';
+                bannerWrapper.appendChild(watermark);
+            }
         }
-        perfilAvatar.src = getAssetUrl(talent.user?.avatar_url, `https://picsum.photos/seed/avatar_${talent.id}/200/200`);
-        perfilAvatar.setAttribute('fetchpriority', 'high');
+
+        // Renderizado dinámico de la disponibilidad (Como pill en la esquina del banner)
+        const perfilDisponibilidad = document.getElementById('perfil-disponibilidad');
+        if (perfilDisponibilidad) {
+            if (talent.is_available) {
+                perfilDisponibilidad.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-slate-950/45 dark:bg-slate-900/65 text-white backdrop-blur-md border border-white/10 shadow-lg select-none">
+                        <span class="pulse-glow-dot flex-shrink-0"></span>
+                        Disponible para eventos
+                    </span>
+                `;
+            } else {
+                perfilDisponibilidad.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-slate-950/45 dark:bg-slate-900/65 text-white/80 backdrop-blur-md border border-white/10 shadow-lg select-none">
+                        <span class="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span>
+                        Agenda Cerrada
+                    </span>
+                `;
+            }
+        }
+
+        if (talent.user?.avatar_url && talent.user.avatar_url.trim() !== '') {
+            const avatarUrl = getAssetUrl(talent.user.avatar_url);
+            perfilAvatarContainer.innerHTML = `
+                <img id="perfil-avatar" src="${avatarUrl}" alt="${artisticName}" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover bg-slate-150 dark:bg-fp-surface-dark cursor-zoom-in" fetchpriority="high">
+            `;
+        } else {
+            const initial = (artisticName || 'U').charAt(0).toUpperCase();
+            const colors = [
+                'from-purple-500 to-indigo-600',
+                'from-blue-500 to-teal-600',
+                'from-pink-500 to-rose-600',
+                'from-orange-500 to-amber-600',
+                'from-emerald-500 to-teal-600',
+            ];
+            let sum = 0;
+            const nameStr = artisticName || 'Usuario';
+            for (let i = 0; i < nameStr.length; i++) {
+                sum += nameStr.charCodeAt(i);
+            }
+            const colorClass = colors[sum % colors.length];
+            perfilAvatarContainer.innerHTML = `
+                <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br ${colorClass} flex items-center justify-center text-white font-display font-extrabold text-5xl sm:text-7xl shadow-inner select-none cursor-default">
+                    ${initial}
+                </div>
+            `;
+        }
 
         // Carga de datos básicos
         perfilNombre.textContent = artisticName;
         perfilCategoria.innerHTML = `<i class="ph ph-tag text-sm flex-shrink-0"></i> ${talent.category?.name || 'Artista'}`;
         perfilCiudad.innerHTML = `<i class="ph ph-map-pin text-sm flex-shrink-0"></i> ${talent.city?.name || 'Bolivia'}`;
         
+
         const perfilVistasTexto = document.getElementById('perfil-vistas-texto');
         if (perfilVistasTexto) {
             perfilVistasTexto.textContent = `${talent.profile_views || 0} vistas del perfil`;
@@ -803,12 +863,12 @@ async function loadTalentData() {
         if (talent.base_price) {
             const formattedPrice = parseFloat(talent.base_price).toLocaleString('es-BO');
             perfilPrecio.innerHTML = `
-                <span class="text-4xl sm:text-5xl font-black tracking-tight leading-none price-gradient-light dark:price-gradient-dark my-1">${formattedPrice}</span>
+                <span class="text-3xl sm:text-4xl font-black tracking-tight leading-none price-gradient-light dark:price-gradient-dark my-1">${formattedPrice}</span>
                 <span class="text-base font-bold text-slate-400 dark:text-slate-500">Bs.</span>
             `;
         } else {
             perfilPrecio.innerHTML = `
-                <span class="text-2xl sm:text-3xl font-extrabold text-slate-400 dark:text-slate-500 tracking-tight leading-none my-1">A convenir</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-slate-400 dark:text-slate-500 tracking-tight leading-none my-1">A convenir</span>
             `;
         }
 
@@ -819,6 +879,23 @@ async function loadTalentData() {
         if (isTalent) {
             btnContacto.classList.add('hidden');
             contactoRolMsg.classList.remove('hidden');
+        } else if (!talent.is_available) {
+            contactoRolMsg.classList.add('hidden');
+            btnContacto.href = '#';
+            btnContacto.removeAttribute('target');
+            btnContacto.classList.remove('btn-wa-premium', 'requires-auth');
+            btnContacto.classList.add(
+                'bg-slate-200', 'dark:bg-slate-850', 
+                'text-slate-400', 'dark:text-slate-500', 
+                'border', 'border-slate-300', 'dark:border-slate-700', 
+                'cursor-not-allowed', 'opacity-75', 
+                'select-none', 'shadow-none'
+            );
+            btnContacto.innerHTML = `
+                <i class="ph-fill ph-lock-key text-2xl flex-shrink-0"></i>
+                <span>No disponible</span>
+            `;
+            btnContacto.classList.remove('hidden');
         } else {
             contactoRolMsg.classList.add('hidden');
             const waMessage = `Hola ${artisticName}! Vi tu perfil público en FestiPro y me gustaría cotizar un show para mi evento.`;
@@ -826,12 +903,58 @@ async function loadTalentData() {
             const waLink = phone ? formatWhatsAppLink(phone, waMessage) : '#';
 
             btnContacto.href = waLink;
+            btnContacto.classList.add('btn-wa-premium');
+            btnContacto.classList.remove(
+                'bg-slate-200', 'dark:bg-slate-855', 'dark:bg-slate-850',
+                'text-slate-400', 'dark:text-slate-500', 
+                'border', 'border-slate-300', 'dark:border-slate-700', 
+                'cursor-not-allowed', 'opacity-75', 
+                'select-none', 'shadow-none'
+            );
+            btnContacto.innerHTML = `
+                <i class="ph-fill ph-whatsapp-logo text-3xl flex-shrink-0"></i>
+                <span>Contactar</span>
+                <!-- Estrellas interactivas -->
+                <i class="ph-fill ph-star star-item star-1"></i>
+                <i class="ph-fill ph-star star-item star-2"></i>
+                <i class="ph-fill ph-star star-item star-3"></i>
+                <i class="ph-fill ph-star star-item star-4"></i>
+                <i class="ph-fill ph-star star-item star-5"></i>
+                <i class="ph-fill ph-star star-item star-6"></i>
+            `;
+
             if (!token) {
                 btnContacto.classList.add('requires-auth');
             } else {
                 btnContacto.target = '_blank';
             }
             btnContacto.classList.remove('hidden');
+        }
+
+        // Exclusión del efecto spotlight sobre el botón de contacto e inyección de prevención de clics si está deshabilitado
+        if (btnContacto) {
+            const parentCard = btnContacto.closest('.spotlight-card');
+            if (parentCard) {
+                btnContacto.addEventListener('mouseenter', () => {
+                    if (btnContacto.classList.contains('btn-wa-premium')) {
+                        parentCard.style.setProperty('--mouse-opacity', '0');
+                    }
+                });
+                btnContacto.addEventListener('mouseleave', () => {
+                    if (btnContacto.classList.contains('btn-wa-premium')) {
+                        parentCard.style.setProperty('--mouse-opacity', '1');
+                    }
+                });
+            }
+            if (!btnContacto.dataset.clickSetup) {
+                btnContacto.addEventListener('click', (e) => {
+                    if (btnContacto.classList.contains('cursor-not-allowed')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                btnContacto.dataset.clickSetup = 'true';
+            }
         }
 
         // Incrustación de video en el contenedor YouTube

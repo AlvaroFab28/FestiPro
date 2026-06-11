@@ -125,8 +125,9 @@ export function getHeaderHTML() {
         <div class="spotlight-card overflow-visible sticky top-0 z-50 bg-white/85 dark:bg-fp-surface-dark/85 backdrop-blur-md shadow-sm border-b border-slate-200/50 dark:border-fp-border-dark transition-colors duration-300 w-full">
             <div class="container mx-auto px-6 h-[76px] relative z-20 flex items-center justify-between">
                 <!-- Logo con punto degradado premium -->
-                <a href="/" class="text-2xl font-display font-bold text-slate-800 dark:text-white hover:opacity-90 transition-opacity">
-                    FestiPro<span class="text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark font-extrabold">.</span>
+                <a href="/" class="group flex items-center gap-2.5 text-2xl font-display font-bold transition-opacity">
+                    <img src="/logo-optimizado.webp" alt="FestiPro Logo" class="w-16 h-16 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                    <span class="group-hover:opacity-90 transition-opacity text-slate-900 dark:text-white">FestiPro<span class="text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark font-extrabold">.</span></span>
                 </a>
 
                 <!-- Navegación Principal (Desktop) - Centrado geométrico perfecto -->
@@ -171,9 +172,10 @@ export function getHeaderHTML() {
         <div id="mobile-drawer" aria-hidden="true" class="fixed top-0 right-0 bottom-0 w-72 bg-white dark:bg-fp-surface-dark shadow-2xl border-l border-slate-100 dark:border-fp-border-dark z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
             <!-- Header del Drawer -->
             <div class="h-[76px] px-6 border-b border-slate-100 dark:border-fp-border-dark flex items-center justify-between">
-                <span class="text-xl font-bold text-slate-800 dark:text-white font-display">
-                    FestiPro<span class="text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark font-extrabold">.</span>
-                </span>
+                <a href="/" class="group flex items-center gap-2 text-xl font-bold font-display">
+                    <img src="/logo-optimizado.webp" alt="FestiPro Logo" class="w-12 h-12 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                    <span class="group-hover:opacity-90 transition-opacity text-slate-900 dark:text-white">FestiPro<span class="text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-fp-accent-light dark:from-fp-primary-dark dark:to-fp-accent-dark font-extrabold">.</span></span>
+                </a>
                 <button onclick="toggleMobileMenu()" class="p-1.5 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>

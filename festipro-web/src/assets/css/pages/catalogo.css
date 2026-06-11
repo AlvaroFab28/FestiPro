@@ -1,0 +1,717 @@
+/* ==========================================================================
+   ESTILOS PREMIUM PARA EL CATÁLOGO PÚBLICO DE FESTIPRO
+   ========================================================================== */
+
+/* --- Glassmorphism Panel para Tendencias --- */
+.trending-glass-panel {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(108, 92, 231, 0.08);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .trending-glass-panel {
+    background: rgba(21, 17, 36, 0.5);
+    border: 1px solid rgba(147, 80, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* --- Podio Horizontal: Tarjetas Tendencia --- */
+.trending-card-horizontal {
+    position: relative;
+    overflow: visible;
+    /* Permitir que la copa sobresalga */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    z-index: 20;
+    /* Flota sobre el spotlight de la tarjeta padre */
+}
+
+.dark .trending-card-horizontal {
+    background: #09090c;
+    /* VIP Dark Elegante */
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Glow saturados según categoría del podio (Expansivos y Profundos) */
+.trending-card-horizontal.glow-oro {
+    box-shadow: 0 12px 40px 2px rgba(245, 158, 11, 0.14), 0 2px 4px rgba(245, 158, 11, 0.04);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.trending-card-horizontal.glow-oro:hover {
+    box-shadow: 0 16px 48px 4px rgba(245, 158, 11, 0.28);
+    border-color: rgba(245, 158, 11, 0.6);
+    transform: translateY(-5px) scale(1.01);
+}
+
+.trending-card-horizontal.glow-plata {
+    box-shadow: 0 12px 40px 2px rgba(148, 163, 184, 0.22), 0 2px 4px rgba(148, 163, 184, 0.05);
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+.trending-card-horizontal.glow-plata:hover {
+    box-shadow: 0 16px 48px 4px rgba(148, 163, 184, 0.35);
+    border-color: rgba(148, 163, 184, 0.65);
+    transform: translateY(-5px) scale(1.01);
+}
+
+.trending-card-horizontal.glow-bronce {
+    box-shadow: 0 12px 40px 2px rgba(194, 65, 12, 0.14), 0 2px 4px rgba(194, 65, 12, 0.04);
+    border-color: rgba(194, 65, 12, 0.3);
+}
+
+.trending-card-horizontal.glow-bronce:hover {
+    box-shadow: 0 16px 48px 4px rgba(194, 65, 12, 0.28);
+    border-color: rgba(194, 65, 12, 0.6);
+    transform: translateY(-5px) scale(1.01);
+}
+
+/* Modo oscuro glows enriquecidos y de mayor alcance */
+.dark .trending-card-horizontal.glow-oro {
+    box-shadow: 0 14px 44px 3px rgba(245, 158, 11, 0.22), 0 4px 12px rgba(0, 0, 0, 0.4);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+.dark .trending-card-horizontal.glow-oro:hover {
+    box-shadow: 0 18px 54px 5px rgba(245, 158, 11, 0.4);
+    border-color: rgba(245, 158, 11, 0.55);
+}
+
+.dark .trending-card-horizontal.glow-plata {
+    box-shadow: 0 14px 44px 3px rgba(148, 163, 184, 0.32), 0 4px 12px rgba(0, 0, 0, 0.4);
+    border-color: rgba(148, 163, 184, 0.3);
+}
+
+.dark .trending-card-horizontal.glow-plata:hover {
+    box-shadow: 0 18px 54px 5px rgba(148, 163, 184, 0.52);
+    border-color: rgba(148, 163, 184, 0.65);
+}
+
+.dark .trending-card-horizontal.glow-bronce {
+    box-shadow: 0 14px 44px 3px rgba(194, 65, 12, 0.22), 0 4px 12px rgba(0, 0, 0, 0.4);
+    border-color: rgba(194, 65, 12, 0.25);
+}
+
+.dark .trending-card-horizontal.glow-bronce:hover {
+    box-shadow: 0 18px 54px 5px rgba(194, 65, 12, 0.4);
+    border-color: rgba(194, 65, 12, 0.55);
+}
+
+/* Efecto Shimmer Metálico Avanzado (Contenedor Independiente) */
+.card-shimmer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.card-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: -150%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 30%,
+            rgba(255, 255, 255, 0.45) 50%,
+            rgba(255, 255, 255, 0.2) 70%,
+            rgba(255, 255, 255, 0) 100%);
+    animation: trending-shimmer 6s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+/* Shimmers de color metálico específicos en Modo Oscuro */
+.dark .glow-oro .card-shimmer::after {
+    background: linear-gradient(90deg,
+            rgba(245, 158, 11, 0) 0%,
+            rgba(245, 158, 11, 0.04) 30%,
+            rgba(245, 158, 11, 0.22) 50%,
+            rgba(245, 158, 11, 0.04) 70%,
+            rgba(245, 158, 11, 0) 100%);
+}
+
+.dark .glow-plata .card-shimmer::after {
+    background: linear-gradient(90deg,
+            rgba(148, 163, 184, 0) 0%,
+            rgba(148, 163, 184, 0.04) 30%,
+            rgba(148, 163, 184, 0.22) 50%,
+            rgba(148, 163, 184, 0.04) 70%,
+            rgba(148, 163, 184, 0) 100%);
+}
+
+.dark .glow-bronce .card-shimmer::after {
+    background: linear-gradient(90deg,
+            rgba(194, 65, 12, 0) 0%,
+            rgba(194, 65, 12, 0.04) 30%,
+            rgba(194, 65, 12, 0.22) 50%,
+            rgba(194, 65, 12, 0.04) 70%,
+            rgba(194, 65, 12, 0) 100%);
+}
+
+/* --- Colores de Píldoras de Categoría en Tendencias --- */
+.badge-oro {
+    background: rgba(245, 158, 11, 0.06) !important;
+    color: #d97706 !important;
+    border: 1px solid rgba(245, 158, 11, 0.15) !important;
+}
+
+.dark .badge-oro {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+.badge-plata {
+    background: rgba(148, 163, 184, 0.06) !important;
+    color: #475569 !important;
+    border: 1px solid rgba(148, 163, 184, 0.15) !important;
+}
+
+.dark .badge-plata {
+    background: rgba(148, 163, 184, 0.18) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+.badge-bronce {
+    background: rgba(194, 65, 12, 0.06) !important;
+    color: #b45309 !important;
+    border: 1px solid rgba(194, 65, 12, 0.15) !important;
+}
+
+.dark .badge-bronce {
+    background: rgba(194, 65, 12, 0.18) !important;
+    color: #ffedd5 !important;
+    border: 1px solid rgba(194, 65, 12, 0.25) !important;
+}
+
+@keyframes trending-shimmer {
+    0% {
+        left: -150%;
+    }
+
+    40% {
+        left: 150%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+/* --- Contenedor de Medalla Flotante 3D --- */
+.medal-container {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    z-index: 30;
+    animation: float-badge-wrapper 3s ease-in-out infinite;
+}
+
+@keyframes float-badge-wrapper {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* --- Medallas del Podio --- */
+.medal-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dark .medal-badge {
+    border: 2px solid rgba(21, 17, 36, 0.9);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
+}
+
+.medal-oro {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    color: #b45309 !important;
+    animation: gold-glow 2s infinite alternate;
+}
+
+.medal-plata {
+    background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%) !important;
+    color: #334155 !important;
+    animation: silver-glow 2s infinite alternate;
+}
+
+.medal-bronce {
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%) !important;
+    color: #9a3412 !important;
+    animation: bronze-glow 2s infinite alternate;
+}
+
+@keyframes gold-glow {
+    0% {
+        box-shadow: 0 0 4px rgba(245, 158, 11, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 0 16px rgba(245, 158, 11, 0.85);
+    }
+}
+
+@keyframes silver-glow {
+    0% {
+        box-shadow: 0 0 4px rgba(148, 163, 184, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 0 12px rgba(148, 163, 184, 0.75);
+    }
+}
+
+@keyframes bronze-glow {
+    0% {
+        box-shadow: 0 0 4px rgba(194, 65, 12, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 0 12px rgba(194, 65, 12, 0.75);
+    }
+}
+
+/* Interacción de Medalla al pasar cursor sobre la tarjeta */
+.trending-card-horizontal:hover .medal-badge {
+    transform: scale(1.2) rotate(15deg);
+}
+
+/* --- Modal de Filtros Avanzados (Glassmorphic & Centrado) --- */
+.filter-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 8, 20, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filter-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.filter-modal-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+    visibility: hidden;
+    width: calc(100% - 2rem);
+    max-width: 460px;
+    background: rgb(255, 255, 255);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+    z-index: 51;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+}
+
+.dark .filter-modal-panel {
+    background: rgb(21, 17, 36);
+    border: 1px solid rgba(147, 80, 255, 0.15);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.filter-modal-panel.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- Chips de Presupuesto Rápido --- */
+.btn-preset-price {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-preset-price.chip-active {
+    background-color: rgba(108, 92, 231, 0.1) !important;
+    border-color: #6c5ce7 !important;
+    color: #6c5ce7 !important;
+}
+
+.dark .btn-preset-price.chip-active {
+    background-color: rgba(255, 159, 67, 0.15) !important;
+    border-color: #ff9f43 !important;
+    color: #ff9f43 !important;
+}
+
+/* --- Filtro Estrellas Radio Buttons (Visualmente Invertidos en HTML) --- */
+.rating-stars-group {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-label {
+    color: #cbd5e1 !important;
+    /* Slate 300 en modo claro */
+    transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dark .star-label {
+    color: #475569 !important;
+    /* Slate 600 en modo oscuro */
+}
+
+/* Estado seleccionado (Checked) */
+.star-radio:checked~.star-label {
+    color: #f59e0b !important;
+    /* Dorado */
+}
+
+/* Efecto Hover dinámico sobre el grupo de estrellas */
+.rating-stars-group:hover .star-label {
+    color: #cbd5e1 !important;
+    transform: scale(1);
+}
+
+.dark .rating-stars-group:hover .star-label {
+    color: #475569 !important;
+}
+
+/* Ilumina la estrella hovered y todas las anteriores (siguientes en DOM debido a row-reverse) */
+.rating-stars-group:hover .star-label:hover,
+.rating-stars-group:hover .star-label:hover~.star-label {
+    color: #f59e0b !important;
+    transform: scale(1.2);
+}
+
+/* Animación de pulsación al hacer click (Star Pop) */
+@keyframes star-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.35);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.star-pop {
+    display: inline-block;
+    animation: star-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* --- Presupuesto Inputs Premium (Foco Suave y Halo Morado) --- */
+#filtro-precio-min,
+#filtro-precio-max {
+    background-color: rgba(241, 245, 249, 0.8) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dark #filtro-precio-min,
+.dark #filtro-precio-max {
+    background-color: #151124 !important;
+    border: 1px solid rgba(147, 80, 255, 0.12) !important;
+    color: #f1f5f9 !important;
+}
+
+#filtro-precio-min:focus,
+#filtro-precio-max:focus {
+    background-color: #ffffff !important;
+    border-color: #6c5ce7 !important;
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15), 0 4px 12px rgba(108, 92, 231, 0.08) !important;
+    outline: none !important;
+}
+
+.dark #filtro-precio-min:focus,
+.dark #filtro-precio-max:focus {
+    background-color: #1d1830 !important;
+    border-color: #9350FF !important;
+    box-shadow: 0 0 0 3px rgba(147, 80, 255, 0.25), 0 4px 16px rgba(147, 80, 255, 0.15) !important;
+    outline: none !important;
+}
+
+/* --- Switch de Disponibilidad Vibrante --- */
+#filtro-disponibles:checked+div {
+    background-color: #6c5ce7 !important;
+}
+
+.dark #filtro-disponibles:checked+div {
+    background-color: #ff9f43 !important;
+}
+
+/* --- Micro-animaciones para Iconos del Modal --- */
+
+/* 1. Header Sliders Icon Animation (Rotate on modal active) */
+.filter-modal-panel.active #icon-modal-sliders {
+    animation: modal-sliders-spin 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modal-sliders-spin {
+    0% {
+        transform: rotate(-30deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* 2. Hand Coins Pulse Animation */
+#icon-modal-coins {
+    animation: float-coins 3s ease-in-out infinite;
+}
+
+@keyframes float-coins {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+/* 3. Close Button Icon Rotate */
+#btn-cerrar-filtros:hover i {
+    transform: rotate(90deg);
+}
+
+/* 4. Budget Chips Icons Animations */
+/* Wallet tilt */
+.btn-preset-price:hover .ph-wallet {
+    animation: wallet-tilt 0.5s ease infinite alternate;
+}
+
+@keyframes wallet-tilt {
+    0% {
+        transform: rotate(-8deg);
+    }
+
+    100% {
+        transform: rotate(8deg);
+    }
+}
+
+/* Coins spin */
+.btn-preset-price:hover .ph-coins {
+    animation: coin-spin 0.8s ease-in-out infinite;
+}
+
+@keyframes coin-spin {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+/* Crown float */
+.btn-preset-price:hover .ph-crown {
+    animation: crown-float 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes crown-float {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-3px) scale(1.08);
+    }
+}
+
+/* Star glow and check circle spin on hover */
+.rating-stars-group:hover #icon-modal-star {
+    animation: star-glow-pulse 1s infinite alternate;
+}
+
+#card-disponibles:hover #icon-modal-check {
+    animation: check-draw 0.5s ease-out forwards;
+}
+
+@keyframes check-draw {
+    0% {
+        transform: scale(0.9) rotate(-10deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(10deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+
+/* --- Botón Aplicar Filtros (Hover Premium & Glow) --- */
+#btn-modal-aplicar {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#btn-modal-aplicar:hover,
+.dark #btn-modal-aplicar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.35) !important;
+}
+
+#btn-modal-aplicar:active {
+    transform: translateY(1px);
+}
+
+
+/* --- Badge Contador de Filtros en Botón --- */
+.filter-badge-count {
+    background: #6c5ce7;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(108, 92, 231, 0.3);
+}
+
+.filter-badge-count.hidden {
+    display: none !important;
+}
+
+.dark .filter-badge-count {
+    background: #ff9f43;
+    box-shadow: 0 2px 5px rgba(255, 159, 67, 0.4);
+}
+
+/* --- Tarjetas del Catálogo: Estilo y Efecto Revelado --- */
+.catalog-card {
+    opacity: 0;
+    transform: translateY(20px);
+    background: #fafbfe !important;
+    /* Fondo premium con leve matiz azul-gris */
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.02) !important;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dark .catalog-card {
+    background: linear-gradient(135deg, #1f1f1f 0%, #141414 100%) !important;
+    /* Fondo oscuro premium degradado neutro y más claro */
+    border: 1px solid rgba(147, 80, 255, 0.15) !important;
+    /* Borde más nítido morado */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(147, 80, 255, 0.04),
+        0 0 20px rgba(255, 159, 67, 0.02) !important;
+    /* Aura inicial morada/naranja muy tenue */
+}
+
+.catalog-card-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.catalog-card-visible:hover {
+    transform: translateY(-8px) scale(1.01);
+    background: #ffffff !important;
+    /* Resalta en blanco puro */
+    border-color: rgba(108, 92, 231, 0.25) !important;
+    box-shadow: 0 16px 36px rgba(108, 92, 231, 0.08), 0 2px 4px rgba(108, 92, 231, 0.02) !important;
+}
+
+.dark .catalog-card-visible:hover {
+    background: linear-gradient(135deg, #292929 0%, #181818 100%) !important;
+    /* Se aclara en hover con tono neutro */
+    border-color: rgba(147, 80, 255, 0.38) !important;
+    /* Borde brillante en hover */
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55),
+        0 0 24px rgba(147, 80, 255, 0.22),
+        0 0 30px rgba(255, 159, 67, 0.12) !important;
+    /* Resplandor dual morado y naranja */
+}
+
+/* --- Efecto de Texto Degradado para Precio --- */
+.catalog-card-price {
+    background: linear-gradient(135deg, #6c5ce7 0%, #ff7675 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    font-family: var(--font-display) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.02em;
+}
+
+.dark .catalog-card-price {
+    background: linear-gradient(135deg, #a78bfa 0%, #ff9f43 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* --- Decoración de Orbes de Fondo --- */
+.orb-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.dark .orb-glow {
+    opacity: 0.2;
+}
+
+.orb-primary {
+    background: linear-gradient(135deg, #6c5ce7 0%, #9350FF 100%);
+    width: 300px;
+    height: 300px;
+}
+
+.orb-accent {
+    background: linear-gradient(135deg, #ff7675 0%, #ff9f43 100%);
+    width: 250px;
+    height: 250px;
+}
+
+/* Ocultar spotlight de cursor (luz de puntero) en tarjetas de tendencia */
+.trending-card-horizontal.spotlight-card::before {
+    display: none !important;
+}

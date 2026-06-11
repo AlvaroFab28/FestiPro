@@ -8,9 +8,17 @@ use App\Modules\Talento\Models\TalentGallery;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Global\Services\ImageOptimizationService;
 
 class TalentoService
 {
+    protected ImageOptimizationService $imageService;
+
+    public function __construct(ImageOptimizationService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     /**
      * Tarea 3.2: Lógica de Upsert Transaccional.
      * Si el guardado de la BD o la subida de fotos falla, se revierte todo (Rollback).
@@ -43,8 +51,8 @@ class TalentoService
                     $oldPath = str_replace('/storage/', '', $user->avatar_url);
                     Storage::disk('public')->delete($oldPath);
                 }
-                // Guardar la nueva imagen
-                $path = $files['avatar']->store('talentos/avatars', 'public');
+                // Guardar la nueva imagen optimizada
+                $path = $this->imageService->optimizeAvatar($files['avatar'], 'talentos/avatars');
                 $user->avatar_url = '/storage/' . $path;
             }
             $user->save();
@@ -69,7 +77,7 @@ class TalentoService
                         $oldPath = str_replace('/storage/', '', $profile->banner_url);
                         Storage::disk('public')->delete($oldPath);
                     }
-                    $path = $files['banner']->store('talentos/banners', 'public');
+                    $path = $this->imageService->optimizeBanner($files['banner'], 'talentos/banners');
                     $profileData['banner_url'] = '/storage/' . $path;
                 }
 
@@ -99,7 +107,7 @@ class TalentoService
                 // b) Subir e insertar nuevas fotos al portafolio
                 if (isset($files['galeria']) && is_array($files['galeria'])) {
                     foreach ($files['galeria'] as $file) {
-                        $path = $file->store('talentos/galerias', 'public');
+                        $path = $this->imageService->optimizeGallery($file, 'talentos/galerias');
                         
                         TalentGallery::create([
                             'talent_profile_id' => $talentProfile->id,

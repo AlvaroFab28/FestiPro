@@ -16,8 +16,7 @@ class CatalogoEventoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Event::with(['host', 'city', 'category'])
-            ->whereNotIn('status', ['cerrado', 'cancelado']);
+        $query = Event::with(['host', 'city', 'category']);
 
         // Filtro por categoría
         if ($request->filled('categoria')) {
@@ -41,8 +40,47 @@ class CatalogoEventoController extends Controller
             });
         }
 
-        // Paginación
-        $eventos = $query->orderBy('created_at', 'desc')->paginate(12);
+        // Filtro por rango de presupuesto (mínimo)
+        if ($request->filled('min_budget')) {
+            $query->where('estimated_budget', '>=', $request->query('min_budget'));
+        }
+
+        // Filtro por rango de presupuesto (máximo)
+        if ($request->filled('max_budget')) {
+            $query->where('estimated_budget', '<=', $request->query('max_budget'));
+        }
+
+        // Filtro por estado específico
+        if ($request->filled('status')) {
+            $query->where('status', $request->query('status'));
+        }
+
+        // Filtro por solo eventos futuros
+        if ($request->query('solo_futuros') === 'true' || $request->query('solo_futuros') === '1') {
+            $query->where('event_date', '>=', now()->toDateString());
+        }
+
+        // Ordenamiento dinámico
+        $orderBy = $request->query('order_by', 'created_at');
+        $order = $request->query('order', 'desc');
+
+        // Normalizar y validar columnas permitidas
+        if (!in_array($orderBy, ['created_at', 'estimated_budget', 'event_date'])) {
+            $orderBy = 'created_at';
+        }
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
+            $order = 'desc';
+        }
+
+        $query->orderBy($orderBy, $order);
+
+        // Paginación dinámica (soporta 'limit' o 'per_page')
+        $perPage = $request->query('limit', $request->query('per_page', 12));
+        if (!is_numeric($perPage) || $perPage <= 0) {
+            $perPage = 12;
+        }
+
+        $eventos = $query->paginate((int)$perPage);
 
         return $this->successResponse($eventos, 'Catálogo de eventos obtenido correctamente.');
     }

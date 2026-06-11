@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Global\Traits\ApiResponseTrait;
+use App\Global\Services\ImageOptimizationService;
 
 class AnfitrionCuentaController extends Controller
 {
     use ApiResponseTrait;
 
-    public function update(Request $request)
+    public function update(Request $request, ImageOptimizationService $imageService)
     {
         $user = $request->user();
 
@@ -42,7 +43,7 @@ class AnfitrionCuentaController extends Controller
                 }
             }
 
-            $path = $request->file('avatar')->store('anfitriones/avatars', 'public');
+            $path = $imageService->optimizeAvatar($request->file('avatar'), 'anfitriones/avatars');
             $user->avatar_url = '/storage/' . $path;
         }
 

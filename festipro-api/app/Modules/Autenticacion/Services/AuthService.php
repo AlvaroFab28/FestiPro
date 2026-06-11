@@ -51,9 +51,10 @@ class AuthService
         }
 
         // 2.5. Verificar si el usuario está suspendido
-        if ($user->banned_at !== null) {
+        if ($user->isBanned()) {
+            $bannedUntilMsg = $user->banned_until ? ' hasta el ' . $user->banned_until->format('d/m/Y H:i') . '.' : '.';
             throw ValidationException::withMessages([
-                'email' => ['Tu cuenta ha sido suspendida.'],
+                'email' => ['Tu cuenta ha sido suspendida' . $bannedUntilMsg],
             ]);
         }
 

@@ -1,0 +1,498 @@
+ñ/* ==========================================
+   FestiPro: Dashboard de Anfitrión - Estilos Premium
+   ========================================== */
+
+/* --- SIDEBAR ACTIVE OVERRIDE --- */
+.tab-btn.text-fp-primary-light,
+button.text-fp-primary-light {
+    background: linear-gradient(135deg, #6c5ce7 0%, #8b5cf6 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 16px rgba(108, 92, 231, 0.25) !important;
+}
+
+html.dark .tab-btn.text-fp-primary-light,
+html.dark button.text-fp-primary-light {
+    background: linear-gradient(135deg, #9350FF 0%, #a78bfa 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px rgba(147, 80, 255, 0.35) !important;
+}
+
+/* Evitar que los iconos pierdan color al estar activos */
+.tab-btn.text-fp-primary-light i,
+button.text-fp-primary-light i {
+    color: #ffffff !important;
+}
+
+/* --- STAT CARDS (MI OFICINA) --- */
+.afn-stat-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    padding: 1.15rem 1.25rem !important;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.afn-stat-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Light Mode Premium Gradients & Borders */
+.card-total-eventos {
+    background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+    border-color: rgba(99, 102, 241, 0.15);
+}
+.card-eventos-activos {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+.card-talentos-guardados {
+    background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
+    border-color: rgba(244, 63, 94, 0.15);
+}
+.card-presupuesto-acumulado {
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+
+/* Light Mode Hover Shadow Effects */
+.card-total-eventos:hover {
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 10px 10px -5px rgba(99, 102, 241, 0.04);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+.card-eventos-activos:hover {
+    box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.15), 0 10px 10px -5px rgba(16, 185, 129, 0.04);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+.card-talentos-guardados:hover {
+    box-shadow: 0 20px 25px -5px rgba(244, 63, 94, 0.15), 0 10px 10px -5px rgba(244, 63, 94, 0.04);
+    border-color: rgba(244, 63, 94, 0.4);
+}
+.card-presupuesto-acumulado:hover {
+    box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.15), 0 10px 10px -5px rgba(245, 158, 11, 0.04);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Dark Mode Premium Neon Board Simulation */
+html.dark .afn-stat-card {
+    border-width: 1px;
+    background: #12122b;
+}
+
+html.dark .card-total-eventos {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(18, 18, 38, 0.8) 100%);
+    border-color: rgba(129, 140, 248, 0.5) !important;
+    box-shadow: 0 0 20px 1px rgba(99, 102, 241, 0.3), inset 0 0 12px rgba(99, 102, 241, 0.05) !important;
+}
+html.dark .card-total-eventos:hover {
+    border-color: rgba(165, 180, 252, 0.85) !important;
+    box-shadow: 0 0 35px 5px rgba(99, 102, 241, 0.65), inset 0 0 15px rgba(99, 102, 241, 0.1) !important;
+}
+
+html.dark .card-eventos-activos {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(18, 18, 38, 0.8) 100%);
+    border-color: rgba(52, 211, 153, 0.5) !important;
+    box-shadow: 0 0 20px 1px rgba(16, 185, 129, 0.3), inset 0 0 12px rgba(16, 185, 129, 0.05) !important;
+}
+html.dark .card-eventos-activos:hover {
+    border-color: rgba(110, 231, 183, 0.85) !important;
+    box-shadow: 0 0 35px 5px rgba(16, 185, 129, 0.65), inset 0 0 15px rgba(16, 185, 129, 0.1) !important;
+}
+
+html.dark .card-talentos-guardados {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.08) 0%, rgba(18, 18, 38, 0.8) 100%);
+    border-color: rgba(251, 113, 133, 0.5) !important;
+    box-shadow: 0 0 20px 1px rgba(244, 63, 94, 0.3), inset 0 0 12px rgba(244, 63, 94, 0.05) !important;
+}
+html.dark .card-talentos-guardados:hover {
+    border-color: rgba(253, 164, 175, 0.85) !important;
+    box-shadow: 0 0 35px 5px rgba(244, 63, 94, 0.65), inset 0 0 15px rgba(244, 63, 94, 0.1) !important;
+}
+
+html.dark .card-presupuesto-acumulado {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(18, 18, 38, 0.8) 100%);
+    border-color: rgba(251, 191, 36, 0.5) !important;
+    box-shadow: 0 0 20px 1px rgba(245, 158, 11, 0.3), inset 0 0 12px rgba(245, 158, 11, 0.05) !important;
+}
+html.dark .card-presupuesto-acumulado:hover {
+    border-color: rgba(252, 211, 77, 0.85) !important;
+    box-shadow: 0 0 35px 5px rgba(245, 158, 11, 0.65), inset 0 0 15px rgba(245, 158, 11, 0.1) !important;
+}
+
+/* Icon animations wrapper and dynamic effects */
+.stat-icon-wrapper {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card 1: Calendar bounce animation */
+@keyframes icon-calendar-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-6px) scale(1.08) rotate(-3deg); }
+    50% { transform: translateY(2px) scale(0.95) rotate(3deg); }
+    70% { transform: translateY(-2px) scale(1.02); }
+}
+.card-total-eventos:hover .stat-icon-wrapper {
+    animation: icon-calendar-bounce 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
+/* Card 2: Sparkle rotation */
+@keyframes icon-sparkle-spin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.18); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+.card-eventos-activos .stat-icon-wrapper i {
+    animation: icon-sparkle-spin 6s linear infinite;
+    display: inline-block;
+}
+.card-eventos-activos:hover .stat-icon-wrapper {
+    background-color: rgba(52, 211, 153, 0.2);
+    transform: scale(1.1);
+}
+.card-eventos-activos:hover .stat-icon-wrapper i {
+    animation: icon-sparkle-spin 1.5s linear infinite;
+}
+
+/* Card 3: Heartbeat */
+@keyframes icon-heartbeat {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.12); }
+    40% { transform: scale(1.02); }
+    60% { transform: scale(1.18); }
+    80% { transform: scale(1.05); }
+}
+.card-talentos-guardados .stat-icon-wrapper i {
+    animation: icon-heartbeat 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+}
+.card-talentos-guardados:hover .stat-icon-wrapper {
+    background-color: rgba(244, 63, 94, 0.2);
+    transform: scale(1.1);
+}
+.card-talentos-guardados:hover .stat-icon-wrapper i {
+    animation: icon-heartbeat 0.9s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card 4: Coins tilt */
+@keyframes icon-coins-tilt {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-12deg) scale(1.1); }
+    75% { transform: rotate(12deg) scale(1.1); }
+}
+.card-presupuesto-acumulado:hover .stat-icon-wrapper {
+    animation: icon-coins-tilt 0.6s ease-in-out infinite alternate;
+}
+
+/* --- TEXTO DE PRESUPUESTO PREMIUM --- */
+.afn-budget-text {
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 50%, #e67e22 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-weight: 900;
+}
+html.dark .afn-budget-text {
+    background: linear-gradient(135deg, #ffbe0b 0%, #fb5607 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+/* --- ANIMACIÓN DE ENTRADA PARA TARJETAS --- */
+#eventos-container > div,
+#favoritos-container > div {
+    animation: afn-card-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+#eventos-container > div:nth-child(1), #favoritos-container > div:nth-child(1) { animation-delay: 0.05s; }
+#eventos-container > div:nth-child(2), #favoritos-container > div:nth-child(2) { animation-delay: 0.1s; }
+#eventos-container > div:nth-child(3), #favoritos-container > div:nth-child(3) { animation-delay: 0.15s; }
+#eventos-container > div:nth-child(4), #favoritos-container > div:nth-child(4) { animation-delay: 0.2s; }
+#eventos-container > div:nth-child(5), #favoritos-container > div:nth-child(5) { animation-delay: 0.25s; }
+#eventos-container > div:nth-child(n+6), #favoritos-container > div:nth-child(n+6) { animation-delay: 0.3s; }
+
+@keyframes afn-card-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- GLOW PULSING --- */
+.star-cosmic-pulse {
+    animation: cosmic-star-glow 2s infinite alternate;
+}
+@keyframes cosmic-star-glow {
+    0% { filter: drop-shadow(0 0 2px rgba(108, 92, 231, 0.4)); opacity: 0.8; }
+    100% { filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.9)) drop-shadow(0 0 12px rgba(255, 118, 117, 0.5)); opacity: 1; }
+}
+
+/* --- CUSTOM SELECT CARET --- */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+.custom-select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.5rem;
+}
+.custom-select-wrapper .select-caret {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #94a3b8;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.custom-select-wrapper select:focus ~ .select-caret {
+    transform: translateY(-50%) rotate(180deg);
+    color: #6c5ce7;
+}
+html.dark .custom-select-wrapper select:focus ~ .select-caret {
+    color: #9350FF;
+}
+
+/* --- GLOW EN CONTENEDOR MODAL --- */
+.afn-modal-inner {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+html.dark .afn-modal-inner {
+    border-color: rgba(147, 80, 255, 0.2);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(147, 80, 255, 0.05);
+}
+
+/* --- PREMIUM NEXT EVENT CARD --- */
+.afn-next-event-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.08);
+    overflow: hidden;
+}
+.afn-next-event-card:hover {
+    transform: translateY(-4px) scale(1.005);
+    box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.18);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Dark Mode Premium Pizarra/Violeta profundo styling */
+html.dark .afn-next-event-card {
+    background: linear-gradient(135deg, rgba(27, 22, 50, 0.85) 0%, rgba(13, 10, 26, 0.85) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(147, 80, 255, 0.18);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(147, 80, 255, 0.02);
+}
+html.dark .afn-next-event-card:hover {
+    border-color: rgba(147, 80, 255, 0.35);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(147, 80, 255, 0.05);
+}
+
+/* Calendar Widget */
+.afn-calendar-widget {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease;
+}
+.afn-next-event-card:hover .afn-calendar-widget {
+    transform: scale(1.05) rotate(-2deg);
+}
+.afn-calendar-widget-header {
+    color: #ffffff;
+    transition: background 0.3s ease;
+}
+html.dark .afn-calendar-widget {
+    background: rgba(21, 17, 36, 0.7);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .afn-calendar-widget-header {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* --- PREMIUM NEXT EVENT ACCENT BAR --- */
+.afn-next-event-accent-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    z-index: 20;
+    transition: background 0.3s ease;
+}
+
+/* --- STATUS ABIERTO (GREEN ACCENTS) --- */
+.status-abierto .afn-next-event-accent-bar {
+    background: linear-gradient(to bottom, #10b981, #059669);
+}
+.status-abierto .afn-calendar-widget-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+html.dark .status-abierto .afn-calendar-widget-header {
+    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+}
+.status-abierto .afn-calendar-widget {
+    border-color: rgba(16, 185, 129, 0.25);
+}
+html.dark .status-abierto .afn-calendar-widget {
+    border-color: rgba(52, 211, 153, 0.25);
+}
+
+/* --- STATUS CERRADO (SLATE GRAY ACCENTS) --- */
+.status-cerrado .afn-next-event-accent-bar {
+    background: linear-gradient(to bottom, #64748b, #475569);
+}
+.status-cerrado .afn-calendar-widget-header {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+}
+html.dark .status-cerrado .afn-calendar-widget-header {
+    background: linear-gradient(135deg, #94a3b8 0%, #475569 100%);
+}
+.status-cerrado .afn-calendar-widget {
+    border-color: rgba(100, 116, 139, 0.25);
+}
+html.dark .status-cerrado .afn-calendar-widget {
+    border-color: rgba(148, 163, 184, 0.25);
+}
+
+/* Premium animation for background pulse */
+.animate-pulse-subtle {
+    animation: pulse-subtle 2s infinite alternate;
+}
+@keyframes pulse-subtle {
+    0% { opacity: 0.9; }
+    100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.2)); }
+}
+
+/* Empty calendar design */
+.afn-empty-calendar-card {
+    border: 1.5px dashed rgba(203, 213, 225, 0.8);
+    transition: all 0.3s ease;
+}
+html.dark .afn-empty-calendar-card {
+    border-color: rgba(147, 80, 255, 0.2);
+    background: rgba(32, 26, 53, 0.3);
+}
+.afn-empty-calendar-card:hover {
+    border-color: rgba(108, 92, 231, 0.5);
+    background: rgba(108, 92, 231, 0.02);
+}
+html.dark .afn-empty-calendar-card:hover {
+    border-color: rgba(147, 80, 255, 0.5);
+    background: rgba(147, 80, 255, 0.02);
+}
+
+/* --- PREMIUM EVENT CARD (MIS EVENTOS HORIZONTAL) --- */
+.afn-event-card-horizontal {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 255, 0.95) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    box-shadow: 0 10px 25px -12px rgba(99, 102, 241, 0.08);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.afn-event-card-horizontal:hover {
+    transform: translateY(-4px) scale(1.005);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.18);
+}
+
+/* Status-specific hover borders */
+.afn-event-card-horizontal.status-abierto:hover {
+    border-color: rgba(16, 185, 129, 0.35);
+    box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.15);
+}
+.afn-event-card-horizontal.status-cancelado:hover {
+    border-color: rgba(244, 63, 94, 0.35);
+    box-shadow: 0 20px 40px -15px rgba(244, 63, 94, 0.15);
+}
+.afn-event-card-horizontal.status-cerrado:hover {
+    border-color: rgba(148, 163, 184, 0.35);
+    box-shadow: 0 20px 40px -15px rgba(148, 163, 184, 0.1);
+}
+
+/* Dark Mode Premium Glassmorphism & Neon Shadows */
+html.dark .afn-event-card-horizontal {
+    background: linear-gradient(135deg, rgba(21, 17, 36, 0.8) 0%, rgba(29, 23, 50, 0.6) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(147, 80, 255, 0.2);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+html.dark .afn-event-card-horizontal:hover {
+    border-color: rgba(167, 139, 250, 0.5);
+    box-shadow: 0 0 30px rgba(147, 80, 255, 0.2), inset 0 0 15px rgba(147, 80, 255, 0.05);
+}
+
+/* Status-specific neon glow overrides in Dark Mode */
+html.dark .afn-event-card-horizontal.status-abierto:hover {
+    border-color: rgba(52, 211, 153, 0.6);
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.25), inset 0 0 15px rgba(52, 211, 153, 0.05);
+}
+html.dark .afn-event-card-horizontal.status-cancelado:hover {
+    border-color: rgba(248, 113, 113, 0.6);
+    box-shadow: 0 0 30px rgba(248, 113, 113, 0.25), inset 0 0 15px rgba(248, 113, 113, 0.05);
+}
+html.dark .afn-event-card-horizontal.status-cerrado:hover {
+    border-color: rgba(156, 163, 175, 0.5);
+    box-shadow: 0 0 30px rgba(156, 163, 175, 0.2), inset 0 0 15px rgba(156, 163, 175, 0.05);
+}
+
+/* Horizontal Ticket Notches */
+.afn-notch-top, .afn-notch-bottom {
+    width: 22px;
+    height: 11px;
+    background: #ffffff; /* Matching light mode parent bg */
+    position: absolute;
+    z-index: 20;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html.dark .afn-notch-top, html.dark .afn-notch-bottom {
+    background: #151124; /* Matching dark mode parent bg */
+}
+
+.afn-notch-top {
+    top: -1px;
+    border-radius: 0 0 11px 11px;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+    border-left: 1px solid rgba(99, 102, 241, 0.15);
+    border-right: 1px solid rgba(99, 102, 241, 0.15);
+}
+.afn-notch-bottom {
+    bottom: -1px;
+    border-radius: 11px 11px 0 0;
+    border-top: 1px solid rgba(99, 102, 241, 0.15);
+    border-left: 1px solid rgba(99, 102, 241, 0.15);
+    border-right: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+html.dark .afn-notch-top, html.dark .afn-notch-bottom {
+    border-color: rgba(147, 80, 255, 0.25);
+}
+
+.afn-event-card-horizontal:hover .afn-notch-top,
+.afn-event-card-horizontal:hover .afn-notch-bottom {
+    border-color: rgba(99, 102, 241, 0.3);
+}
+html.dark .afn-event-card-horizontal:hover .afn-notch-top,
+html.dark .afn-event-card-horizontal:hover .afn-notch-bottom {
+    border-color: rgba(167, 139, 250, 0.5);
+}
+
+/* Left Accent Bar */
+.afn-left-accent-bar {
+    width: 4px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 15;
+}
+

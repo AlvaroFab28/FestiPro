@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Anfitrión - FestiPro</title>
+    <title>Dashboard Anfitrión | FestiPro</title>
     <link rel="stylesheet" href="/src/assets/css/global.css">
+    
+    <!-- Evitar FOUC (Flash of Unstyled Content) en Modo Oscuro -->
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -15,305 +17,403 @@
     </script>
 </head>
 
-<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
-    <header id="app-header" class="sticky top-0 z-50 min-h-[76px] w-full"></header>
+<body class="min-h-screen flex flex-col bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 transition-colors duration-300 relative">
+    
+    <!-- Decoración de Orbes de Fondo -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="orb-glow orb-primary absolute -top-40 -left-40 opacity-30 dark:opacity-20"></div>
+        <div class="orb-glow orb-accent absolute top-1/2 -right-40 opacity-30 dark:opacity-20"></div>
+    </div>
 
-    <main class="flex-grow container mx-auto px-4 sm:px-6 py-8 requires-auth">
-        <div class="flex flex-col md:flex-row gap-8">
+    <div class="relative z-10 flex flex-col min-h-screen">
+        <!-- Navbar con min-h fijo para evitar saltos de layout cuando inyecta el JS -->
+        <div id="app-header" class="sticky top-0 z-50 min-h-[76px] w-full"></div>
+
+        <!-- Layout principal -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8 requires-auth font-sans">
+            
             <!-- Sidebar -->
             <aside class="w-full md:w-64 shrink-0">
-                <div
-                    class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sticky top-[100px]">
-                    <div class="flex items-center gap-4 mb-8 px-2">
-                        <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white dark:border-fp-border-dark bg-slate-100 dark:bg-fp-surface-muted-dark flex items-center justify-center shrink-0 shadow-md">
-                            <img id="sidebar-avatar" src="" alt="Avatar" class="w-full h-full object-cover hidden">
-                            <span id="sidebar-avatar-placeholder" class="text-xl font-bold text-slate-500 dark:text-slate-400 uppercase hidden">A</span>
+                <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-4 sticky top-24 flex flex-col">
+                    <div>
+                        <!-- Watermark Festipro -->
+                        <div class="flex flex-col items-center justify-center py-6 mb-6 border-b border-slate-100 dark:border-fp-border-dark/60 select-none">
+                            <span class="text-2xl font-display font-black text-slate-800 dark:text-white tracking-wider flex items-center gap-1.5">
+                                FestiPro<span class="text-fp-primary-light dark:text-fp-primary-dark">.</span>
+                                <span class="text-[9px] font-black bg-gradient-to-r from-fp-primary-light to-purple-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider star-cosmic-pulse">PRO</span>
+                            </span>
+                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1.5">Panel de Control</span>
                         </div>
-                        <div class="overflow-hidden">
-                            <h2 class="font-bold text-slate-800 dark:text-white truncate text-lg" id="sidebar-name">Anfitrión</h2>
-                            <span class="text-sm text-fp-primary-light dark:text-fp-primary-dark font-medium block">Organizador</span>
-                        </div>
+                        
+                        <nav class="space-y-1.5">
+                            <button onclick="switchTab('resumen')" id="btn-tab-resumen"
+                                class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-fp-primary-light bg-fp-primary-light/10 transition-all duration-300">
+                                <i class="ph ph-squares-four text-lg shrink-0 transition-transform group-hover:scale-110 group-hover:rotate-6"></i>
+                                <span>Mi Oficina</span>
+                            </button>
+                            <button onclick="switchTab('eventos')" id="btn-tab-eventos"
+                                class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300">
+                                <i class="ph ph-calendar-blank text-lg shrink-0 animate-bounce-hover"></i>
+                                <span>Mis Eventos</span>
+                            </button>
+                            <button onclick="switchTab('favoritos')" id="btn-tab-favoritos"
+                                class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300">
+                                <i class="ph ph-heart text-lg shrink-0 animate-wiggle-hover"></i>
+                                <span>Favoritos</span>
+                            </button>
+                            <button onclick="switchTab('cuenta')" id="btn-tab-cuenta"
+                                class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300">
+                                <i class="ph ph-user text-lg shrink-0 animate-bounce-hover"></i>
+                                <span>Mi Cuenta</span>
+                            </button>
+                        </nav>
                     </div>
-                    <script>
-                        (function () {
-                            const cachedName = localStorage.getItem('cached_host_name');
-                            const cachedAvatar = localStorage.getItem('cached_host_avatar_full');
-                            if (cachedName) {
-                                document.getElementById('sidebar-name').textContent = cachedName;
-                                const placeholder = document.getElementById('sidebar-avatar-placeholder');
-                                const img = document.getElementById('sidebar-avatar');
-                                if (cachedAvatar) {
-                                    img.src = cachedAvatar;
-                                    img.classList.remove('hidden');
-                                    placeholder.classList.add('hidden');
-                                } else {
-                                    placeholder.textContent = cachedName.charAt(0).toUpperCase();
-                                    placeholder.classList.remove('hidden');
-                                    img.classList.add('hidden');
-                                }
-                            }
-                        })();
-                    </script>
-
-                    <nav class="space-y-2">
-                        <button onclick="switchTab('cuenta')" id="btn-tab-cuenta"
-                            class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors bg-fp-primary-light/10 text-fp-primary-light font-medium">
-                            <i class="ph ph-user text-xl"></i>
-                            <span>Mi Cuenta</span>
-                        </button>
-                        <button onclick="switchTab('eventos')" id="btn-tab-eventos"
-                            class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                            <i class="ph ph-calendar-blank text-xl"></i>
-                            <span>Mis Eventos</span>
-                        </button>
-                        <button onclick="switchTab('favoritos')" id="btn-tab-favoritos"
-                            class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                            <i class="ph ph-heart text-xl"></i>
-                            <span>Favoritos</span>
-                        </button>
-                    </nav>
                 </div>
             </aside>
 
-            <!-- Main Content -->
+            <!-- Main Content Area -->
             <div class="flex-1 w-full max-w-4xl relative">
 
+                <!-- Tab Resumen (Mi Oficina) -->
+                <section id="tab-resumen" class="block animate-fade-in space-y-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8">
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5 mb-6">
+                            <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph-fill ph-squares-four text-fp-primary-light dark:text-fp-primary-dark text-2xl animate-wiggle-hover"></i>
+                                Mi Oficina
+                            </h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Controla tus publicaciones de eventos y accede a tus talentos favoritos.</p>
+                        </div>
+                        
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                            <!-- Total Eventos -->
+                            <div class="afn-stat-card card-total-eventos rounded-2xl p-4 flex items-center justify-between">
+                                <div class="flex flex-col justify-between">
+                                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total Eventos</span>
+                                    <span id="resumen-total-eventos" class="text-3xl sm:text-4xl font-black font-display text-slate-800 dark:text-white tracking-tight leading-none mt-1">0</span>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center stat-icon-wrapper bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-500 dark:text-indigo-400 shrink-0 ml-3">
+                                    <i class="ph ph-calendar text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Eventos Activos -->
+                            <div class="afn-stat-card card-eventos-activos rounded-2xl p-4 flex items-center justify-between">
+                                <div class="flex flex-col justify-between">
+                                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Buscando Artistas</span>
+                                    <span id="resumen-eventos-activos" class="text-3xl sm:text-4xl font-black font-display text-slate-800 dark:text-white tracking-tight leading-none mt-1">0</span>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center stat-icon-wrapper bg-emerald-50/80 dark:bg-emerald-950/30 text-emerald-500 dark:text-emerald-400 shrink-0 ml-3">
+                                    <i class="ph ph-sparkle text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Talentos Guardados -->
+                            <div class="afn-stat-card card-talentos-guardados rounded-2xl p-4 flex items-center justify-between">
+                                <div class="flex flex-col justify-between">
+                                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Guardados</span>
+                                    <span id="resumen-total-favoritos" class="text-3xl sm:text-4xl font-black font-display text-slate-800 dark:text-white tracking-tight leading-none mt-1">0</span>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center stat-icon-wrapper bg-rose-50/80 dark:bg-rose-950/30 text-rose-500 dark:text-rose-400 shrink-0 ml-3">
+                                    <i class="ph ph-heart text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Presupuesto Acumulado -->
+                            <div class="afn-stat-card card-presupuesto-acumulado rounded-2xl p-4 flex items-center justify-between">
+                                <div class="flex flex-col justify-between">
+                                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Presupuesto</span>
+                                    <span id="resumen-presupuesto-total" class="text-xl sm:text-2xl font-black font-display afn-budget-text leading-none mt-1.5 py-0.5 animate-pulse-subtle">Bs. 0</span>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center stat-icon-wrapper bg-amber-50/80 dark:bg-amber-950/30 text-amber-500 dark:text-amber-400 shrink-0 ml-3">
+                                    <i class="ph ph-coins text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Próximo Evento Section -->
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Próximo Evento Agendado</h4>
+                            <div id="resumen-proximo-evento-container">
+                                <!-- Carga dinámica por JS -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Consejo Contextual Box -->
+                    <div id="resumen-tip-content" class="bg-amber-50/30 dark:bg-amber-500/5 border border-amber-100/30 dark:border-amber-500/10 p-5 rounded-2xl font-sans transition-all duration-300">
+                        <!-- Carga dinámica por JS -->
+                    </div>
+                </section>
 
                 <!-- Tab Eventos -->
                 <section id="tab-eventos" class="hidden animate-fade-in">
-                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-slate-100 dark:border-fp-border-dark/60 pb-5 mb-6">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
-                                    <i class="ph-fill ph-calendar-blank text-fp-primary-light text-2xl"></i>
+                                <h3 class="text-xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
+                                    <i class="ph-fill ph-calendar-blank text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
                                     Mis Eventos
                                 </h3>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Publica tus necesidades y encuentra al talento perfecto.</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Publica tus necesidades y encuentra al talento perfecto.</p>
                             </div>
                             <button onclick="openEventoModal()"
-                                class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-5 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto text-sm">
-                                <i class="ph ph-plus text-lg"></i>
+                                class="cursor-pointer shimmer-btn bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 w-full sm:w-auto text-xs active:scale-[0.98]">
+                                <i class="ph ph-plus text-base"></i>
                                 Nuevo Evento
                             </button>
                         </div>
 
-                    <!-- Loader Eventos -->
-                    <div id="eventos-loader" class="flex justify-center items-center py-12">
-                        <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div id="eventos-empty"
-                        class="hidden bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-12 text-center">
-                        <div
-                            class="w-20 h-20 bg-slate-50 dark:bg-fp-surface-muted-dark rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
-                            <i class="ph ph-calendar-blank text-4xl"></i>
+                        <!-- Loader Eventos -->
+                        <div id="eventos-loader" class="flex justify-center items-center py-12">
+                            <svg class="animate-spin h-8 w-8 text-fp-primary-light" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                                </circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Aún no has publicado eventos
-                        </h3>
-                        <p class="text-slate-500 mb-6 max-w-md mx-auto">Crea tu primer evento para que los talentos
-                            puedan descubrirlo y postularse a tu fiesta.</p>
-                        <button onclick="openEventoModal()"
-                            class="text-fp-primary-light hover:text-fp-primary-light/80 font-medium transition-colors">Publicar
-                            mi primer evento &rarr;</button>
-                    </div>
 
-                    <!-- Container Grid -->
-                    <div id="eventos-container" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+                        <!-- Empty State -->
+                        <div id="eventos-empty"
+                            class="hidden bg-slate-50/50 dark:bg-fp-surface-muted-dark/20 rounded-2xl border border-slate-200 dark:border-fp-border-dark p-12 text-center">
+                            <div
+                                class="w-20 h-20 bg-slate-100 dark:bg-fp-surface-muted-dark rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 dark:text-slate-500 animate-bounce-subtle">
+                                <i class="ph ph-calendar-blank text-4xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Aún no has publicado eventos</h3>
+                            <p class="text-slate-505 text-slate-500 dark:text-slate-400 text-xs mb-6 max-w-md mx-auto">Crea tu primer evento para que los talentos puedan descubrirlo y postularse a tu fiesta.</p>
+                            <button onclick="openEventoModal()"
+                                class="text-xs text-fp-primary-light hover:text-fp-primary-light/80 font-bold transition-colors cursor-pointer">Publicar mi primer evento &rarr;</button>
+                        </div>
+
+                        <!-- Container List -->
+                        <div id="eventos-container" class="hidden flex flex-col gap-5"></div>
                     </div>
                 </section>
 
                 <!-- Tab Favoritos -->
                 <section id="tab-favoritos" class="hidden animate-fade-in">
-                    <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
-                        <div class="mb-6">
-                            <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
-                                <i class="ph-fill ph-heart text-red-500 text-2xl"></i>
+                    <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8">
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5 mb-6">
+                            <h3 class="text-xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph-fill ph-heart text-rose-500 text-2xl"></i>
                                 Talentos Guardados
                             </h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">Los perfiles artísticos que has marcado como favoritos.</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Los perfiles artísticos que has marcado como favoritos.</p>
                         </div>
                         <div id="favoritos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <!-- El grid se llenará en la Tarea 4.4 -->
+                            <!-- El grid se llenará por JS -->
                         </div>
                     </div>
                 </section>
 
                 <!-- Tab Cuenta -->
-                <section id="tab-cuenta" class="block animate-fade-in">
-                    <form id="form-cuenta" class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8 space-y-6">
-                        <div class="mb-6">
-                            <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
-                                <i class="ph-fill ph-user-circle text-fp-primary-light text-2xl"></i>
+                <section id="tab-cuenta" class="hidden animate-fade-in">
+                    <form id="form-cuenta" class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 space-y-6">
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <h3 class="text-xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph-fill ph-user-circle text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
                                 Configuración de Cuenta
                             </h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">Actualiza tus datos personales y credenciales.</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Actualiza tus datos personales y credenciales de acceso.</p>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Column 1: Input Fields -->
                             <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nombre Completo <span class="text-red-500 font-bold">*</span></label>
-                                    <input type="text" id="cuenta-name" name="name" required class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                <!-- Nombre -->
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nombre Completo <span class="text-red-500 font-bold">*</span></label>
+                                    <div class="relative">
+                                        <input type="text" id="cuenta-name" name="name" required class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <i class="ph ph-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Correo Electrónico <span class="text-red-500 font-bold">*</span></label>
-                                    <input type="email" id="cuenta-email" name="email" required class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                <!-- Correo -->
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Correo Electrónico <span class="text-red-500 font-bold">*</span></label>
+                                    <div class="relative">
+                                        <input type="email" id="cuenta-email" name="email" required class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <i class="ph ph-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Número de WhatsApp</label>
-                                    <input type="text" id="cuenta-whatsapp" name="whatsapp_number" placeholder="+591 70000000" class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                <!-- WhatsApp -->
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Número de WhatsApp <span class="text-red-500 font-bold">*</span></label>
+                                    <div class="relative">
+                                        <input type="text" id="cuenta-whatsapp" name="whatsapp_number" placeholder="+591 70000000" required class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <i class="ph ph-whatsapp-logo absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nueva Contraseña (Opcional)</label>
-                                    <input type="password" id="cuenta-password" name="password" placeholder="Mínimo 8 caracteres" minlength="8" class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                                <!-- Contraseña -->
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nueva Contraseña (Opcional)</label>
+                                    <div class="relative">
+                                        <input type="password" id="cuenta-password" name="password" placeholder="Mínimo 8 caracteres" minlength="8" class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <i class="ph ph-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Column 2: Avatar Section -->
-                            <div class="flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-200 dark:border-fp-border-dark pt-6 md:pt-0 md:pl-6">
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-4 w-full text-center md:text-left">Foto de Perfil</label>
+                            <div class="flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-100 dark:border-fp-border-dark/60 pt-6 md:pt-0 md:pl-8">
+                                <h4 class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-purple-600 dark:to-purple-400 mb-5 text-center w-full tracking-[0.25em] uppercase drop-shadow-md">MI AVATAR</h4>
                                 
-                                <div class="relative group cursor-pointer w-48 h-48 rounded-full border-4 border-white dark:border-fp-border-dark shadow-xl bg-slate-100 dark:bg-fp-surface-muted-dark overflow-hidden shrink-0 mb-4">
-                                    <div id="cuenta-avatar-placeholder" class="w-full h-full rounded-full bg-fp-primary-light/10 text-fp-primary-light flex items-center justify-center font-bold text-7xl uppercase">A</div>
-                                    <img id="cuenta-avatar-preview" src="" alt="Avatar Preview" class="w-full h-full rounded-full object-cover hidden">
-                                    <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity" onclick="document.getElementById('cuenta-avatar').click()">
-                                        <i class="ph ph-camera text-3xl text-white"></i>
+                                <!-- Tarjeta de Avatar Actual con Glow y Animación (Clickeable directo) -->
+                                <label for="cuenta-avatar" class="db-avatar-ring avatar-glow-aura mb-5 shrink-0 group/avatar cursor-pointer relative block">
+                                    <div class="relative z-10 w-40 h-40 rounded-full overflow-hidden bg-gradient-to-tr from-fp-primary-light to-purple-500 flex items-center justify-center border-4 border-white dark:border-fp-surface-dark shadow-xl">
+                                        <img id="cuenta-avatar-preview" src="" class="w-full h-full object-cover hidden" alt="Tu Avatar">
+                                        <span id="cuenta-avatar-placeholder" class="text-4xl font-display font-black text-white tracking-widest flex items-center justify-center">A</span>
+                                        <!-- Hover overlay premium con cámara -->
+                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                            <i class="ph ph-camera text-white text-3xl animate-bounce-subtle"></i>
+                                        </div>
                                     </div>
-                                    <input type="file" id="cuenta-avatar" name="avatar" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden">
-                                </div>
-                                
-                                <button type="button" onclick="document.getElementById('cuenta-avatar').click()" class="cursor-pointer bg-white dark:bg-fp-surface-dark border border-slate-200 dark:border-fp-border-dark hover:bg-slate-50 dark:hover:bg-slate-700 px-4 py-2 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors shadow-sm flex items-center gap-2">
-                                    <i class="ph ph-upload-simple"></i>
-                                    Cambiar Foto
-                                </button>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 text-center">Se recomienda una imagen cuadrada de al menos 400x400px.</p>
+                                    <input id="cuenta-avatar" name="avatar" type="file" class="hidden" accept="image/png, image/jpeg, image/jpg, image/webp">
+                                </label>
+                                <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-1 text-center leading-relaxed font-semibold uppercase tracking-wider">Se recomienda imagen cuadrada (mín. 400x400px)</p>
                             </div>
                         </div>
-
                     </form>
 
                     <!-- Action Buttons -->
                     <div id="cuenta-action-buttons-container" class="mt-8 flex justify-center sm:justify-end gap-3 sticky bottom-4 z-10 opacity-0 max-h-0 overflow-hidden pointer-events-none transition-all duration-300 ease-out transform translate-y-4 scale-95">
-                        <button type="button" id="btn-cancelar-cuenta" class="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-fp-surface-muted-dark dark:hover:bg-slate-600 dark:text-slate-200 font-bold py-2.5 px-6 rounded-full shadow-lg transition-transform active:scale-95 flex items-center gap-2">
-                            <i class="ph ph-x-circle text-lg"></i>
+                        <button type="button" id="btn-cancelar-cuenta" class="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-fp-surface-muted-dark dark:hover:bg-slate-600 dark:text-slate-200 font-bold py-2.5 px-6 rounded-full shadow-lg transition-all active:scale-95 flex items-center gap-2 text-xs">
+                            <i class="ph ph-x-circle text-base"></i>
                             Cancelar
                         </button>
-                        <button type="submit" form="form-cuenta" id="btn-submit-cuenta" class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white font-bold py-2.5 px-6 rounded-full shadow-lg shadow-fp-primary-light/30 transition-transform active:scale-95 flex items-center gap-2">
-                            <i class="ph ph-floppy-disk text-lg"></i>
-                            Guardar
+                        <button type="submit" form="form-cuenta" id="btn-submit-cuenta" class="cursor-pointer shimmer-btn bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white font-bold py-2.5 px-6 rounded-full shadow-lg shadow-fp-primary-light/30 transition-all active:scale-95 flex items-center gap-2 text-xs">
+                            <i class="ph ph-floppy-disk text-base"></i>
+                            Guardar Cambios
                         </button>
                     </div>
                 </section>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <!-- Modals -->
     <!-- Modal Nuevo/Editar Evento -->
-    <div id="modal-evento" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeEventoModal()">
-        </div>
-        <div
-            class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0 pointer-events-none">
-            <div
-                class="pointer-events-auto relative bg-white dark:bg-fp-surface-dark rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:max-w-2xl w-full max-h-[90vh] flex flex-col">
-                <div
-                    class="px-6 py-5 border-b border-slate-200 dark:border-fp-border-dark flex justify-between items-center shrink-0">
-                    <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="modal-evento-title">Publicar Evento
+    <div id="modal-evento" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onclick="closeEventoModal()"></div>
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0 pointer-events-none">
+            <div class="pointer-events-auto relative bg-white/95 dark:bg-fp-surface-dark/95 backdrop-blur-md rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all duration-300 ease-out sm:max-w-lg w-full max-h-[85vh] flex flex-col border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner scale-95 opacity-0 z-10">
+                
+                <!-- Orbes Decorativos Internos -->
+                <div class="absolute -top-10 -right-10 w-48 h-48 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+                <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+                <div class="px-6 py-4 bg-gradient-to-r from-fp-primary-light to-purple-600 dark:from-fp-primary-dark dark:to-purple-700 flex justify-between items-center shrink-0 shadow-md relative z-10">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2" id="modal-evento-title">
+                        <i class="ph ph-calendar-blank text-xl text-white"></i>
+                        Publicar Evento
                     </h3>
-                    <button onclick="closeEventoModal()" class="text-slate-400 hover:text-slate-500 transition-colors">
-                        <i class="ph ph-x text-2xl"></i>
+                    <button onclick="closeEventoModal()" class="group/close text-white/80 hover:text-white transition-all duration-300 cursor-pointer bg-white/10 hover:bg-white/25 w-8 h-8 rounded-full flex items-center justify-center hover:scale-105 active:scale-95">
+                        <i class="ph ph-x text-lg transition-transform duration-300 group-hover/close:rotate-90"></i>
                     </button>
                 </div>
 
-                <form id="form-evento" class="flex flex-col flex-grow overflow-hidden">
-                    <div class="flex-grow overflow-y-auto px-6 py-6 space-y-6">
+                <form id="form-evento" class="flex flex-col flex-grow overflow-hidden relative z-10">
+                    <div class="flex-grow overflow-y-auto px-6 py-5 space-y-4">
                         <input type="hidden" id="evento-id" name="evento_id">
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="col-span-2">
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Título
-                                    del Evento <span class="text-red-500 font-bold">*</span></label>
-                                <input type="text" id="ev-title" name="title" required
-                                    placeholder="Ej. Fiesta Privada Neón"
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Título del Evento -->
+                            <div class="sm:col-span-2 space-y-1.5">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Título del Evento <span class="text-red-500 font-bold">*</span></label>
+                                <div class="relative">
+                                    <input type="text" id="ev-title" name="title" required placeholder="Ej. Fiesta Privada Neón"
+                                        class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                    <i class="ph ph-pencil absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                </div>
                             </div>
 
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Categoría
-                                    <span class="text-red-500 font-bold">*</span></label>
-                                <select id="ev-category" name="category_id" required
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
-                                    <option value="">Selecciona categoría</option>
-                                </select>
+                            <!-- Categoría -->
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Categoría <span class="text-red-500 font-bold">*</span></label>
+                                <div class="relative custom-select-wrapper">
+                                    <select id="ev-category" name="category_id" required
+                                        class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-10 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <option value="">Selecciona categoría</option>
+                                    </select>
+                                    <i class="ph ph-tag absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    <i class="ph ph-caret-down select-caret"></i>
+                                </div>
                             </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Ciudad
-                                    <span class="text-red-500 font-bold">*</span></label>
-                                <select id="ev-city" name="city_id" required
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
-                                    <option value="">Selecciona ciudad</option>
-                                </select>
+                            <!-- Ciudad -->
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ciudad <span class="text-red-500 font-bold">*</span></label>
+                                <div class="relative custom-select-wrapper">
+                                    <select id="ev-city" name="city_id" required
+                                        class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-10 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <option value="">Selecciona ciudad</option>
+                                    </select>
+                                    <i class="ph ph-map-pin absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    <i class="ph ph-caret-down select-caret"></i>
+                                </div>
                             </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fecha
-                                    del Evento <span class="text-red-500 font-bold">*</span></label>
-                                <input type="date" id="ev-date" name="event_date" required
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                            <!-- Fecha del Evento -->
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha del Evento <span class="text-red-500 font-bold">*</span></label>
+                                <div class="relative">
+                                    <input type="date" id="ev-date" name="event_date" required
+                                        class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                    <i class="ph ph-calendar absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                </div>
                             </div>
 
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Presupuesto
-                                    Estimado (Bs.) <span class="text-red-500 font-bold">*</span></label>
-                                <input type="number" step="0.01" min="0" id="ev-budget" name="estimated_budget" required
-                                    placeholder="0.00"
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
+                            <!-- Presupuesto Estimado -->
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Presupuesto (Bs.) <span class="text-red-500 font-bold">*</span></label>
+                                <div class="relative">
+                                    <input type="number" step="0.01" min="0" id="ev-budget" name="estimated_budget" required placeholder="0.00"
+                                        class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                    <i class="ph ph-coins absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                </div>
                             </div>
 
-                            <div class="col-span-2 hidden" id="status-container">
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Estado
-                                    del Evento</label>
-                                <select id="ev-status" name="status"
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all">
-                                    <option value="abierto">Abierto (Buscando talento)</option>
-                                    <option value="cerrado">Cerrado (Talento encontrado)</option>
-                                    <option value="cancelado">Cancelado</option>
-                                </select>
+                            <!-- Estado (Edición) -->
+                            <div class="sm:col-span-2 space-y-1.5 hidden" id="status-container">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado del Evento</label>
+                                <div class="relative custom-select-wrapper">
+                                    <select id="ev-status" name="status"
+                                        class="peer w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl pl-10 pr-10 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300">
+                                        <option value="abierto">Abierto (Buscando talento)</option>
+                                        <option value="cerrado">Cerrado (Talento encontrado)</option>
+                                        <option value="cancelado">Cancelado</option>
+                                    </select>
+                                    <i class="ph ph-info absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    <i class="ph ph-caret-down select-caret"></i>
+                                </div>
                             </div>
 
-                            <div class="col-span-2">
-                                <label
-                                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Descripción
-                                    <span class="text-red-500 font-bold">*</span></label>
-                                <textarea id="ev-description" name="description" required rows="4"
-                                    placeholder="Describe los requerimientos específicos..."
-                                    class="w-full bg-slate-50 dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/50 transition-all"></textarea>
+                            <!-- Descripción -->
+                            <div class="sm:col-span-2 space-y-1.5">
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Descripción <span class="text-red-500 font-bold">*</span></label>
+                                <textarea id="ev-description" name="description" required rows="4" placeholder="Describe los requerimientos específicos de tu evento..."
+                                    class="w-full bg-slate-50/50 dark:bg-fp-surface-muted-dark/50 border border-slate-200 dark:border-fp-border-dark rounded-xl px-4 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/35 focus:border-fp-primary-light dark:focus:ring-fp-primary-dark/35 dark:focus:border-fp-primary-dark transition-all duration-300"></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div
-                        class="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-fp-border-dark shrink-0">
+                    <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-fp-border-dark/60 shrink-0 relative z-10 bg-white/50 dark:bg-fp-surface-dark/50 backdrop-blur-sm">
                         <button type="button" onclick="closeEventoModal()"
-                            class="px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors">Cancelar</button>
+                            class="cursor-pointer px-5 py-2 rounded-xl text-xs font-bold text-slate-650 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                            Cancelar
+                        </button>
                         <button type="submit" id="btn-submit-evento"
-                            class="bg-fp-primary-light hover:bg-fp-primary-light/90 dark:bg-fp-primary-dark dark:hover:bg-fp-primary-dark/90 text-white px-6 py-2.5 rounded-xl font-medium transition-colors shadow-sm">Guardar
-                            Evento</button>
+                            class="cursor-pointer shimmer-btn bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white px-6 py-2 rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-500/20 active:scale-[0.98]">
+                            Guardar Evento
+                        </button>
                     </div>
                 </form>
             </div>
@@ -321,30 +421,30 @@
     </div>
 
     <!-- Modal Confirmación Borrar -->
-    <div id="modal-confirm" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeConfirmModal()">
-        </div>
+    <div id="modal-confirm" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
         <div class="flex items-center justify-center min-h-screen px-4 text-center pointer-events-none">
-            <div
-                class="pointer-events-auto relative bg-white dark:bg-fp-surface-dark rounded-2xl p-8 max-w-sm w-full shadow-2xl transform transition-all text-center">
-                <div
-                    class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="pointer-events-auto relative bg-white/95 dark:bg-fp-surface-dark/95 backdrop-blur-md rounded-2xl p-8 max-w-sm w-full shadow-2xl transform transition-all duration-300 ease-out text-center border border-slate-200/50 dark:border-fp-border-dark/50 afn-modal-inner scale-95 opacity-0">
+                <div class="w-16 h-16 bg-rose-50 dark:bg-rose-900/20 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100 dark:border-rose-900/30 animate-pulse">
                     <i class="ph ph-warning text-3xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">¿Eliminar evento?</h3>
-                <p class="text-slate-500 mb-6">Esta acción no se puede deshacer. El evento será borrado permanentemente.
-                </p>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 font-display">¿Eliminar evento?</h3>
+                <p class="text-xs text-slate-505 text-slate-500 dark:text-slate-400 mb-6">Esta acción no se puede deshacer. El evento será borrado permanentemente de FestiPro.</p>
                 <div class="flex gap-3 justify-center">
                     <button onclick="closeConfirmModal()"
-                        class="px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors w-full">Cancelar</button>
+                        class="cursor-pointer px-5 py-2.5 text-xs font-bold text-slate-650 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-xl transition-colors w-full">
+                        Cancelar
+                    </button>
                     <button id="btn-confirm-delete"
-                        class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full">Eliminar</button>
+                        class="cursor-pointer bg-gradient-to-r from-red-500 to-rose-600 hover:from-rose-600 hover:to-red-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-red-500/20 active:scale-[0.98] w-full">
+                        Eliminar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer id="app-footer" class="min-h-[76px] w-full"></footer>
+    <footer id="app-footer" class="min-h-[76px] w-full mt-auto"></footer>
 
     <script type="module" src="/src/assets/js/utils.js"></script>
     <script type="module" src="/src/pages/anfitrion/dashboard.js"></script>

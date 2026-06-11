@@ -1,0 +1,176 @@
+/* ==========================================
+   FestiPro: Dashboard de Administrador - Estilos Premium
+   ========================================== */
+
+/* --- SIDEBAR ACTIVE OVERRIDE --- */
+.tab-btn.active-admin-tab {
+    background: linear-gradient(135deg, #6c5ce7 0%, #8b5cf6 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 16px rgba(108, 92, 231, 0.25) !important;
+}
+
+html.dark .tab-btn.active-admin-tab {
+    background: linear-gradient(135deg, #9350FF 0%, #a78bfa 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px rgba(147, 80, 255, 0.35) !important;
+}
+
+/* Evitar que los iconos pierdan color al estar activos */
+.tab-btn.active-admin-tab i {
+    color: #ffffff !important;
+}
+
+/* --- STAT CARDS (KPI WIDGETS) --- */
+.adm-stat-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+.adm-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(108, 92, 231, 0.25);
+}
+html.dark .adm-stat-card:hover {
+    box-shadow: 0 12px 28px -8px rgba(147, 80, 255, 0.35);
+}
+
+/* --- TIMELINE DE ACTIVIDAD RECIENTE --- */
+.adm-timeline {
+    position: relative;
+    padding-left: 24px;
+}
+.adm-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #e2e8f0;
+}
+html.dark .adm-timeline::before {
+    background: #334155;
+}
+.adm-timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+}
+.adm-timeline-item:last-child {
+    margin-bottom: 0;
+}
+.adm-timeline-badge {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+html.dark .adm-timeline-badge {
+    border-color: #1e293b;
+}
+
+/* --- BAN DURATION PILLS --- */
+.adm-ban-pill {
+    transition: all 0.2s ease;
+}
+.adm-ban-pill.active {
+    background-color: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
+html.dark .adm-ban-pill.active {
+    background-color: #f87171;
+    color: #0f172a;
+    border-color: #f87171;
+}
+
+/* --- WELCOME OVERLAY --- */
+.adm-welcome-overlay {
+    animation: adm-welcome-fade-in 0.35s ease-out both;
+}
+.adm-welcome-pop {
+    animation: adm-welcome-scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes adm-welcome-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes adm-welcome-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* --- ANIMACIÓN STAGGERED FILAS DE TABLA --- */
+@keyframes adm-row-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.adm-row-animate {
+    animation: adm-row-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* --- GALLERY ITEM MODERATION HOVER --- */
+#mod-gallery-grid .group {
+    position: relative;
+    overflow: hidden;
+}
+
+#mod-gallery-grid .group img {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#mod-gallery-grid .group:hover img {
+    transform: scale(1.05);
+}
+
+#mod-gallery-grid .group .absolute {
+    transition: opacity 0.25s ease-in-out;
+}
+
+#mod-gallery-grid .group button {
+    transform: scale(0.9);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#mod-gallery-grid .group:hover button {
+    transform: scale(1);
+}
+
+/* --- PILLS FILTER SYSTEM --- */
+.pill-filter {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pill-filter.active {
+    background: linear-gradient(135deg, #6c5ce7 0%, #8b5cf6 100%) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2) !important;
+}
+html.dark .pill-filter.active {
+    background: linear-gradient(135deg, #9350FF 0%, #a78bfa 100%) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 12px rgba(147, 80, 255, 0.3) !important;
+}

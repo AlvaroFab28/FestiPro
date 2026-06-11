@@ -23,9 +23,12 @@ Route::post('/login', [AuthController::class, 'login']);
 // Catálogos Estáticos (Maestros) para llenar selects dinámicos en el Frontend
 Route::get('/categorias', [CatalogoEstaticoController::class, 'getCategorias']);
 Route::get('/ciudades', [CatalogoEstaticoController::class, 'getCiudades']);
+Route::get('/stats', [CatalogoEstaticoController::class, 'getStats']);
+Route::get('/stats/map', [CatalogoEstaticoController::class, 'getMapStats']);
 
 // Catálogos Públicos de Descubrimiento
 Route::get('/talentos', [CatalogoTalentoController::class, 'index']);
+Route::get('/talentos/top', [CatalogoTalentoController::class, 'topTendencia']);
 Route::get('/talentos/{id}', [CatalogoTalentoController::class, 'show']);
 Route::get('/eventos', [CatalogoEventoController::class, 'index']);
 
@@ -78,10 +81,31 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/usuarios', [\App\Modules\Admin\Controllers\AdminUsuarioController::class, 'index']);
         Route::patch('/usuarios/{id}/ban', [\App\Modules\Admin\Controllers\AdminUsuarioController::class, 'toggleBan']);
         Route::patch('/usuarios/{id}/rol', [\App\Modules\Admin\Controllers\AdminUsuarioController::class, 'toggleRole']);
+        Route::get('/stats', [\App\Modules\Admin\Controllers\AdminUsuarioController::class, 'stats']);
+        Route::get('/actividad/reciente', [\App\Modules\Admin\Controllers\AdminUsuarioController::class, 'recentActivity']);
+        
         Route::get('/categorias', [\App\Modules\Admin\Controllers\AdminCategoriaController::class, 'index']);
         Route::post('/categorias', [\App\Modules\Admin\Controllers\AdminCategoriaController::class, 'store']);
         Route::post('/categorias/{id}', [\App\Modules\Admin\Controllers\AdminCategoriaController::class, 'update']);
         Route::patch('/categorias/{id}/toggle', [\App\Modules\Admin\Controllers\AdminCategoriaController::class, 'toggle']);
+        Route::delete('/categorias/{id}', [\App\Modules\Admin\Controllers\AdminCategoriaController::class, 'destroy']);
+
+        // Moderación de contenido
+        Route::get('/contenido/talentos', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'indexTalentos']);
+        Route::get('/contenido/talentos/{id}', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'showTalento']);
+        Route::delete('/contenido/talentos/{id}', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'destroyTalento']);
+        Route::delete('/contenido/talentos/{id}/fotos/{fotoId}', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'destroyTalentoFoto']);
+        Route::patch('/contenido/talentos/{id}/descripcion', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'clearTalentoDescripcion']);
+        Route::patch('/contenido/talentos/{id}/avatar', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'clearTalentoAvatar']);
+        Route::patch('/contenido/talentos/{id}/banner', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'clearTalentosBanner']);
+
+        Route::get('/contenido/eventos', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'indexEventos']);
+        Route::get('/contenido/eventos/{id}', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'showEvento']);
+        Route::patch('/contenido/eventos/{id}/cerrar', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'closeEvento']);
+        Route::delete('/contenido/eventos/{id}', [\App\Modules\Admin\Controllers\AdminContenidoController::class, 'destroyEvento']);
+
+        // Logs de Administrador
+        Route::get('/logs', [\App\Modules\Admin\Controllers\AdminUsuarioController::class, 'indexLogs']);
     });
 
 });

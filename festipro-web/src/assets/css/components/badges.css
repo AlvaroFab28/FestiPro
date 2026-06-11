@@ -111,3 +111,36 @@ html.dark .glass-badge-rating {
 .glass-badge-rating:hover {
     transform: scale(1.04);
 }
+
+/* --- MICRO-ANIMACIONES AL HACER HOVER EN LOS BADGES --- */
+
+/* Icono de Etiqueta (Categoría): Balanceo */
+.glass-badge-primary:hover i {
+    animation: icon-wiggle 0.5s ease-in-out;
+    display: inline-block;
+}
+
+/* Icono de Pin de Mapa (Ciudad): Salto Elástico */
+.glass-badge-accent:hover i {
+    animation: icon-bounce 0.6s ease-in-out;
+    display: inline-block;
+}
+
+/* Icono de Ojo (Vistas): Parpadeo Realista */
+@keyframes eye-blink {
+    0%, 100% { transform: scaleY(1); }
+    45% { transform: scaleY(0.15); }
+    55% { transform: scaleY(0.15); }
+}
+
+.glass-badge-views:hover i {
+    animation: eye-blink 0.45s ease-in-out;
+    display: inline-block;
+}
+
+/* Icono de Estrella (Calificación): Pop Elástico */
+.glass-badge-rating:hover i {
+    animation: star-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    display: inline-block;
+}
+

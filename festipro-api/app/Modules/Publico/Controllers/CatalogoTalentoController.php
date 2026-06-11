@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 class CatalogoTalentoController extends Controller
 {
     use ApiResponseTrait;
-
     /**
      * Listar talentos con filtros dinámicos (Público).
      */
@@ -18,14 +17,9 @@ class CatalogoTalentoController extends Controller
     {
         $query = TalentProfile::with(['user', 'city', 'category']);
 
-        // Filtro por disponibilidad (si no se envía, muestra todos; si es true, filtra por disponibles)
-        if ($request->query('solo_disponibles') === 'true') {
+        // Filtro por disponibilidad
+        if ($request->query('solo_disponibles') === 'true' || $request->query('solo_disponibles') === '1') {
             $query->where('is_available', true);
-        }
-
-        // Filtro por puntuación mínima
-        if ($request->filled('puntuacion')) {
-            $query->where('average_rating', '>=', (float)$request->query('puntuacion'));
         }
 
         // Filtro por categoría
@@ -46,6 +40,11 @@ class CatalogoTalentoController extends Controller
         // Filtro por precio máximo
         if ($request->filled('precio_max')) {
             $query->where('base_price', '<=', $request->query('precio_max'));
+        }
+
+        // Filtro por rating mínimo
+        if ($request->filled('rating_min')) {
+            $query->where('average_rating', '>=', $request->query('rating_min'));
         }
 
         // Filtro por búsqueda de texto (nombre artístico, bio o nombre del usuario)
@@ -84,5 +83,20 @@ class CatalogoTalentoController extends Controller
         $profile->increment('profile_views');
 
         return $this->successResponse($profile, 'Perfil de talento obtenido correctamente.');
+    }
+
+    /**
+     * Obtener el top 3 de talentos en tendencia.
+     */
+    public function topTendencia()
+    {
+        $top = TalentProfile::with(['user', 'city', 'category'])
+            ->where('is_available', true)
+            ->orderBy('average_rating', 'desc')
+            ->orderBy('profile_views', 'desc')
+            ->limit(3)
+            ->get();
+
+        return $this->successResponse($top, 'Top talentos en tendencia.');
     }
 }

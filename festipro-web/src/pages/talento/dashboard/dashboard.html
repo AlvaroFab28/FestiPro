@@ -15,272 +15,467 @@
         }
     </script>
 </head>
-<body class="bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 flex flex-col min-h-screen transition-colors duration-300">
+<body class="bg-fp-bg-light dark:bg-fp-bg-dark text-slate-800 dark:text-slate-200 flex flex-col min-h-screen transition-colors duration-300 relative">
     
-    <!-- Navbar con min-h fijo para evitar saltos de layout cuando inyecta el JS -->
-    <div id="app-header" class="sticky top-0 z-50 min-h-[64px]"></div>
+    <!-- Decoración de Orbes de Fondo -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="orb-glow orb-primary absolute -top-40 -left-40 opacity-30 dark:opacity-20"></div>
+        <div class="orb-glow orb-accent absolute top-1/2 -right-40 opacity-30 dark:opacity-20"></div>
+    </div>
 
-    <!-- Layout principal -->
-    <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-8">
-        
-        <!-- Sidebar -->
-        <aside class="w-full md:w-64 shrink-0">
-            <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-4 sticky top-24">
-                <div class="flex items-center gap-4 mb-6 px-2">
-                    <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white dark:border-fp-border-dark bg-slate-100 dark:bg-fp-surface-muted-dark flex items-center justify-center shrink-0 shadow-md">
-                        <img id="sb-avatar" src="" alt="Avatar" class="w-full h-full object-cover hidden">
-                        <span id="sb-initial" class="text-xl font-bold text-slate-500 dark:text-slate-400 hidden"></span>
-                    </div>
-                    <div class="overflow-hidden">
-                        <h3 id="sb-name" class="font-bold text-slate-800 dark:text-white truncate text-lg">Cargando...</h3>
-                        <span id="sb-role" class="text-sm text-fp-primary-light dark:text-fp-primary-dark font-medium block">Talento</span>
-                    </div>
-                </div>
-                
-                <nav class="space-y-1">
-                    <button onclick="switchTab('resumen')" id="tab-btn-resumen" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl text-indigo-700 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-900/30 transition-colors">
-                        <i class="ph ph-squares-four text-xl shrink-0"></i>
-                        Resumen
-                    </button>
-                    <button onclick="switchTab('cuenta')" id="tab-btn-cuenta" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                        <i class="ph ph-user text-xl shrink-0"></i>
-                        Mi Cuenta
-                    </button>
-                    <button onclick="switchTab('perfil')" id="tab-btn-perfil" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                        <i class="ph ph-identification-card text-xl shrink-0"></i>
-                        Perfil de Talento
-                    </button>
-                    <button onclick="switchTab('portafolio')" id="tab-btn-portafolio" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                        <i class="ph ph-image text-xl shrink-0"></i>
-                        Portafolio
-                    </button>
-                </nav>
-            </div>
-        </aside>
+    <div class="relative z-10 flex flex-col min-h-screen">
+        <!-- Navbar con min-h fijo para evitar saltos de layout cuando inyecta el JS -->
+        <div id="app-header" class="sticky top-0 z-50 min-h-[64px]"></div>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 w-full max-w-4xl">
-            <!-- TAB 1: Resumen -->
-            <div id="panel-resumen" class="tab-panel space-y-6">
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8 space-y-6">
+        <!-- Layout principal -->
+        <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-8">
+            
+            <!-- Sidebar -->
+            <aside class="w-full md:w-64 shrink-0">
+                <div class="bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-4 sticky top-24 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
-                            <i class="ph-fill ph-squares-four text-indigo-500 text-2xl"></i>
-                            Mi Oficina
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Gestiona tu perfil público y contenido multimedia.</p>
-                    </div>
-
-                    <!-- Disponibilidad Card -->
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center shrink-0">
-                                <i class="ph-fill ph-check-circle text-green-300 text-3xl"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-xl font-bold">Estás Disponible</h2>
-                                <p class="text-indigo-100 text-sm">Los anfitriones pueden ver tu perfil y contactarte.</p>
-                            </div>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="toggle-disponibilidad" class="sr-only peer" checked>
-                            <div class="w-14 h-7 bg-white/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-400"></div>
-                        </label>
-                    </div>
-
-                    <!-- Metrics Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-gray-50 dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200 dark:border-fp-border-dark flex items-center gap-4">
-                            <div class="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-500 rounded-xl">
-                                <i class="ph-fill ph-eye text-2xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-gray-500 dark:text-gray-400 text-sm font-medium">Vistas del Perfil</div>
-                                <div class="text-2xl font-black font-display text-gray-900 dark:text-white" id="metric-vistas">0</div>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200 dark:border-fp-border-dark flex items-center gap-4">
-                            <div class="p-3 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-500 rounded-xl">
-                                <i class="ph-fill ph-star text-2xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-gray-500 dark:text-gray-400 text-sm font-medium">Calificación</div>
-                                <div class="text-2xl font-black font-display text-gray-900 dark:text-white" id="metric-calificacion">0.0</div>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200 dark:border-fp-border-dark flex items-center gap-4">
-                            <div class="p-3 bg-green-50 dark:bg-green-900/30 text-green-500 rounded-xl">
-                                <i class="ph-fill ph-chat-text text-2xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-gray-500 dark:text-gray-400 text-sm font-medium">Comentarios</div>
-                                <div class="text-2xl font-black font-display text-gray-900 dark:text-white" id="metric-comentarios">0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 2: Mi Cuenta -->
-            <div id="panel-cuenta" class="tab-panel hidden space-y-6">
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                        <i class="ph-fill ph-user-circle text-indigo-500 text-2xl"></i>
-                        Datos de Usuario
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre Completo</label>
-                                <input type="text" id="input-nombre-completo" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="Ej. Juan Pérez">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Correo Electrónico</label>
-                                <input type="email" id="input-email" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="correo@ejemplo.com">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Teléfono (WhatsApp)</label>
-                                <input type="text" id="input-telefono" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="+591...">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nueva Contraseña <span class="text-xs text-gray-400 font-normal">(Opcional)</span></label>
-                                <input type="password" id="input-password" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="Déjalo en blanco para no cambiar">
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4 w-full text-left">Foto de Perfil (Avatar)</label>
-                            
-                            <!-- Tarjeta de Avatar Actual -->
-                            <div class="relative w-48 h-48 mb-4 rounded-full overflow-hidden border-4 border-white dark:border-fp-border-dark shadow-lg bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shrink-0">
-                                <img id="avatar-preview-img" src="" class="w-full h-full object-cover hidden" alt="Tu Avatar">
-                                <span id="avatar-initial" class="text-4xl font-bold text-white tracking-widest hidden"></span>
-                            </div>
-
-                            <!-- Botón de subida pequeño -->
-                            <label for="input-avatar" class="cursor-pointer bg-white dark:bg-fp-surface-muted-dark border border-gray-300 dark:border-fp-border-dark px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm flex items-center gap-2">
-                                <i class="ph ph-upload-simple"></i>
-                                Cambiar Foto
-                                <input id="input-avatar" type="file" class="hidden" accept="image/*">
-                            </label>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">Se recomienda una imagen cuadrada de al menos 400x400px.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: Perfil de Talento -->
-            <div id="panel-perfil" class="tab-panel hidden space-y-6">
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                        <i class="ph-fill ph-identification-card text-indigo-500 text-2xl"></i>
-                        Perfil de Talento
-                    </h3>
-                    
-                    <div class="space-y-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre de Talento</label>
-                                <input type="text" id="input-nombre-artistico" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="Tu marca personal">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Precio Base (Bs.)</label>
-                                <input type="number" id="input-precio" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="1000">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
-                                <select id="select-categoria" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors">
-                                    <option value="" disabled selected>Cargando categorías...</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ubicación principal</label>
-                                <select id="select-ciudad" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors">
-                                    <option value="" disabled selected>Cargando ciudades...</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Biografía / Servicios</label>
-                            <textarea id="input-biografia" rows="4" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="Cuéntales a los anfitriones qué ofreces..."></textarea>
+                        <!-- Watermark Festipro -->
+                        <div class="flex flex-col items-center justify-center py-6 mb-6 border-b border-slate-100 dark:border-fp-border-dark/60 select-none">
+                            <span class="text-2xl font-display font-black text-slate-800 dark:text-white tracking-wider flex items-center gap-1.5">
+                                FestiPro<span class="text-fp-primary-light dark:text-fp-primary-dark">.</span>
+                                <span class="text-[9px] font-black bg-gradient-to-r from-fp-primary-light to-purple-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider star-cosmic-pulse">PRO</span>
+                            </span>
+                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1.5">Panel de Control</span>
                         </div>
                         
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link a YouTube (Opcional)</label>
-                            <input type="url" id="input-youtube" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" placeholder="https://youtube.com/...">
+                        <nav class="space-y-1.5">
+                            <button onclick="switchTab('resumen')" id="tab-btn-resumen" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-indigo-700 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-900/30 transition-all duration-300">
+                                <i class="ph ph-squares-four text-lg shrink-0 transition-transform group-hover:scale-110 group-hover:rotate-6"></i>
+                                Resumen
+                            </button>
+                            <button onclick="switchTab('cuenta')" id="tab-btn-cuenta" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300">
+                                <i class="ph ph-user text-lg shrink-0 animate-bounce-hover"></i>
+                                Mi Cuenta
+                            </button>
+                            <button onclick="switchTab('perfil')" id="tab-btn-perfil" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300">
+                                <i class="ph ph-identification-card text-lg shrink-0 animate-wiggle-hover"></i>
+                                Perfil Artístico
+                            </button>
+                            <button onclick="switchTab('portafolio')" id="tab-btn-portafolio" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300">
+                                <i class="ph ph-image text-lg shrink-0 animate-bounce-hover"></i>
+                                Portafolio
+                            </button>
+                            <button onclick="switchTab('estadisticas')" id="tab-btn-estadisticas" class="tab-btn group w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold rounded-xl text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all duration-300">
+                                <i class="ph ph-chart-line-up text-lg shrink-0 animate-wiggle-hover"></i>
+                                Estadísticas & Insights
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Sello Talento Verificado (Solo al 100% de completitud) -->
+                    <div id="sidebar-verification-container" class="mt-4 pt-4 border-t border-slate-100 dark:border-fp-border-dark/60 flex items-center justify-center hidden">
+                        <span class="flex items-center gap-1 text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                            <i class="ph ph-shield-check text-xs"></i>
+                            Talento Verificado
+                        </span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 w-full max-w-4xl">
+                
+                <!-- TAB 1: Resumen -->
+                <div id="panel-resumen" class="tab-panel space-y-6">
+                    <div class="spotlight-card bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 relative overflow-hidden">
+                        <div class="relative z-20 space-y-6">
+                        
+                        <!-- Header panel con botón público -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <div>
+                                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                    <i class="ph-fill ph-squares-four text-fp-primary-light dark:text-fp-primary-dark text-2xl animate-wiggle-hover"></i>
+                                    Mi Oficina
+                                </h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Gestiona tu disponibilidad y analiza el tráfico de tu perfil.</p>
+                            </div>
+                            <a href="#" id="btn-ver-perfil-publico" class="shimmer-btn self-start sm:self-auto flex items-center gap-2 bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hidden">
+                                <i class="ph ph-arrow-square-out text-sm"></i>
+                                Ver Perfil Público
+                            </a>
                         </div>
 
-                        <div class="flex flex-col items-start w-full">
-                            <div class="flex justify-between items-center w-full mb-2">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Foto de Portada (Banner)</label>
-                                <span class="text-xs text-gray-500">Recomendado: 1200x400px</span>
+                        <!-- Disponibilidad Card -->
+                        <div class="disponibilidad-banner rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+                            <div class="flex items-center gap-4 z-10">
+                                <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 shadow-inner">
+                                    <i class="ph-fill ph-check-circle text-green-300 text-3xl availability-show-checked animate-bounce-subtle"></i>
+                                    <i class="ph-fill ph-minus-circle text-red-300 text-3xl availability-show-unchecked animate-pulse"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-white text-xl font-display font-black tracking-wide availability-title"></h2>
+                                    <p class="text-white/90 text-xs font-medium availability-subtitle mt-0.5"></p>
+                                </div>
                             </div>
-                            
-                            <!-- Tarjeta de Banner Actual -->
-                            <div class="relative w-full aspect-[3/1] max-h-64 mb-3 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 dark:border-fp-border-dark bg-gray-50 dark:bg-fp-surface-muted-dark flex items-center justify-center shrink-0 shadow-sm group">
-                                <img id="banner-preview-img" src="" class="w-full h-full object-cover hidden" alt="Tu Banner">
-                                <div id="banner-placeholder" class="flex flex-col items-center justify-center text-gray-400">
-                                    <i class="ph ph-image text-3xl mb-2"></i>
-                                    <span class="text-sm font-medium">Sin portada</span>
+                            <label class="relative inline-flex items-center cursor-pointer z-10">
+                                <input type="checkbox" id="toggle-disponibilidad" class="sr-only peer" checked>
+                                <div class="w-14 h-7 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-400 shadow-inner"></div>
+                            </label>
+                        </div>
+
+                        <!-- Metrics Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <div class="overflow-hidden card-accent-border bg-white dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200/50 dark:border-blue-500/35 dark:hover:border-blue-500/60 flex items-center gap-4 shadow-md hover:shadow-lg dark:shadow-[0_0_30px_rgba(59,130,246,0.25)] dark:hover:shadow-[0_0_32px_rgba(59,130,246,0.65)] transition-all duration-300 group">
+                                <div class="p-3 bg-blue-50 dark:bg-blue-950/40 text-blue-500 dark:text-blue-400 rounded-xl transition-transform group-hover:scale-110">
+                                    <i class="ph-fill ph-eye text-2xl animate-bounce-subtle"></i>
+                                </div>
+                                <div>
+                                    <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Vistas</div>
+                                    <div class="text-2xl font-black font-display text-gray-900 dark:text-white mt-0.5" id="metric-vistas">0</div>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden card-accent-border bg-white dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200/50 dark:border-amber-500/35 dark:hover:border-amber-500/60 flex items-center gap-4 shadow-md hover:shadow-lg dark:shadow-[0_0_30px_rgba(245,158,11,0.25)] dark:hover:shadow-[0_0_32px_rgba(245,158,11,0.65)] transition-all duration-300 group">
+                                <div class="p-3 bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 rounded-xl transition-transform group-hover:scale-110">
+                                    <i class="ph-fill ph-star text-2xl animate-bounce-subtle"></i>
+                                </div>
+                                <div>
+                                    <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Calificación</div>
+                                    <div class="text-2xl font-black font-display text-gray-900 dark:text-white mt-0.5" id="metric-calificacion">0.0</div>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden card-accent-border bg-white dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200/50 dark:border-emerald-500/35 dark:hover:border-emerald-500/60 flex items-center gap-4 shadow-md hover:shadow-lg dark:shadow-[0_0_30px_rgba(16,185,129,0.25)] dark:hover:shadow-[0_0_32px_rgba(16,185,129,0.65)] transition-all duration-300 group">
+                                <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-500 dark:text-emerald-400 rounded-xl transition-transform group-hover:scale-110">
+                                    <i class="ph-fill ph-chat-text text-2xl animate-bounce-subtle"></i>
+                                </div>
+                                <div>
+                                    <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Comentarios</div>
+                                    <div class="text-2xl font-black font-display text-gray-900 dark:text-white mt-0.5" id="metric-comentarios">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: Mi Cuenta -->
+                <div id="panel-cuenta" class="tab-panel hidden space-y-6">
+                    <div class="spotlight-card bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 relative overflow-hidden">
+                        <div class="relative z-20">
+                        <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-slate-100 dark:border-fp-border-dark/60 flex items-center gap-2">
+                            <i class="ph-fill ph-user-circle text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                            Datos de Usuario
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nombre Completo</label>
+                                    <div class="relative">
+                                        <input type="text" id="input-nombre-completo" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="Ej. Juan Pérez">
+                                        <i class="ph ph-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Correo Electrónico</label>
+                                    <div class="relative">
+                                        <input type="email" id="input-email" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="correo@ejemplo.com">
+                                        <i class="ph ph-envelope-simple absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Teléfono (WhatsApp) <span class="text-red-500 ml-0.5">*</span></label>
+                                    <div class="relative">
+                                        <input type="text" id="input-telefono" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="+591...">
+                                        <i class="ph ph-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nueva Contraseña <span class="text-[10px] text-slate-400 dark:text-slate-500 font-normal">(Opcional)</span></label>
+                                    <div class="relative">
+                                        <input type="password" id="input-password" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="Déjalo en blanco para conservar">
+                                        <i class="ph ph-lock-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <h4 class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-fp-primary-light to-purple-600 dark:to-purple-400 mb-5 text-center w-full tracking-[0.25em] uppercase drop-shadow-md">MI AVATAR</h4>
+                                
+                                <!-- Tarjeta de Avatar Actual con Glow y Animación (Clickeable directo) -->
+                                <label for="input-avatar" class="db-avatar-ring avatar-glow-aura mb-5 shrink-0 group/avatar cursor-pointer relative block">
+                                    <div class="relative z-10 w-40 h-40 rounded-full overflow-hidden bg-gradient-to-tr from-fp-primary-light to-purple-500 flex items-center justify-center border-4 border-white dark:border-fp-surface-dark shadow-xl">
+                                        <img id="avatar-preview-img" src="" class="w-full h-full object-cover hidden" alt="Tu Avatar">
+                                        <span id="avatar-initial" class="text-4xl font-display font-black text-white tracking-widest hidden"></span>
+                                        <!-- Hover overlay premium con cámara -->
+                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                            <i class="ph ph-camera text-white text-3xl animate-bounce-subtle"></i>
+                                        </div>
+                                    </div>
+                                    <input id="input-avatar" type="file" class="hidden" accept="image/*">
+                                </label>
+                                <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-1 text-center leading-relaxed font-semibold uppercase tracking-wider">Se recomienda imagen cuadrada (mín. 400x400px)</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Perfil de Talento -->
+                <div id="panel-perfil" class="tab-panel hidden space-y-6">
+                    <div class="spotlight-card bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 relative overflow-hidden">
+                        <div class="relative z-20">
+                        <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-slate-100 dark:border-fp-border-dark/60 flex items-center gap-2">
+                            <i class="ph-fill ph-identification-card text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                            Perfil Artístico
+                        </h3>
+                        
+                        <div class="space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nombre Artístico / Marca</label>
+                                    <div class="relative">
+                                        <input type="text" id="input-nombre-artistico" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="Tu marca o nombre artístico">
+                                        <i class="ph ph-sparkle absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Precio Base (Bs.)</label>
+                                    <div class="relative">
+                                        <input type="number" id="input-precio" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="1000">
+                                        <i class="ph ph-coins absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Botón de subida pequeño -->
-                            <label for="input-banner" class="cursor-pointer bg-white dark:bg-fp-surface-muted-dark border border-gray-300 dark:border-fp-border-dark px-4 py-2 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm flex items-center gap-2 self-start">
-                                <i class="ph ph-upload-simple"></i>
-                                Cambiar Portada
-                                <input id="input-banner" type="file" class="hidden" accept="image/*">
-                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Categoría de Arte</label>
+                                    <div class="custom-select-wrapper">
+                                        <select id="select-categoria" class="peer w-full pl-10 pr-10 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm">
+                                            <option value="" disabled selected>Cargando categorías...</option>
+                                        </select>
+                                        <i class="ph ph-tag absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                        <i class="ph ph-caret-down select-caret text-base"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Ubicación Principal</label>
+                                    <div class="custom-select-wrapper">
+                                        <select id="select-ciudad" class="peer w-full pl-10 pr-10 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm">
+                                            <option value="" disabled selected>Cargando ciudades...</option>
+                                        </select>
+                                        <i class="ph ph-map-pin absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                        <i class="ph ph-caret-down select-caret text-base"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Biografía / Descripción del Show</label>
+                                <textarea id="input-biografia" rows="4" class="w-full px-4 py-2.5 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="Cuéntales a los anfitriones qué ofreces, tu trayectoria y detalles del show..."></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Enlace a Video de YouTube <span class="text-[10px] text-slate-400 dark:text-slate-500 font-normal">(Opcional)</span></label>
+                                <div class="relative">
+                                    <input type="url" id="input-youtube" class="peer w-full pl-10 pr-4 py-2 bg-white dark:bg-fp-surface-muted-dark border border-slate-200 dark:border-fp-border-dark rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-fp-primary-light/25 dark:focus:ring-fp-primary-dark/25 focus:border-fp-primary-light dark:focus:border-fp-primary-dark transition-all duration-300 shadow-sm" placeholder="https://youtube.com/watch?v=...">
+                                    <i class="ph ph-youtube-logo absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-lg pointer-events-none input-icon-anim"></i>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start w-full">
+                                <div class="flex justify-between items-center w-full mb-2">
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">Foto de Portada (Banner)</label>
+                                    <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Recomendado: 1200x400px (Aspecto 3:1)</span>
+                                </div>
+                                
+                                <!-- Dropzone de Banner con Hover Overlay (Clickeable directo) -->
+                                <label for="input-banner" class="db-banner-dropzone w-full aspect-[3/1] max-h-64 mb-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-fp-border-dark bg-white dark:bg-fp-surface-muted-dark flex items-center justify-center shrink-0 shadow-sm group relative cursor-pointer overflow-hidden block">
+                                    <img id="banner-preview-img" src="" class="w-full h-full object-cover hidden" alt="Tu Banner">
+                                    <div id="banner-placeholder" class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 transition-transform duration-300 group-hover:scale-105">
+                                        <i class="ph ph-image text-4xl mb-2 text-slate-300 dark:text-slate-600"></i>
+                                        <span class="text-xs font-bold">Sin portada cargada</span>
+                                    </div>
+                                    <!-- Dropzone hover overlay -->
+                                    <div class="dropzone-overlay absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                                        <i class="ph ph-camera text-white text-3xl animate-bounce-subtle"></i>
+                                    </div>
+                                    <input id="input-banner" type="file" class="hidden" accept="image/*">
+                                </label>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- TAB 4: Portafolio -->
-            <div id="panel-portafolio" class="tab-panel hidden space-y-6">
-                <div class="bg-white dark:bg-fp-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-fp-border-dark p-6 sm:p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i class="ph-fill ph-images text-indigo-500 text-2xl"></i>
-                            Mi Portafolio Multimedia
-                        </h3>
-                        <label for="input-galeria" class="cursor-pointer bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-medium px-4 py-2 rounded-xl text-sm hover:bg-indigo-100 transition-colors">
-                            + Seleccionar Fotos
-                            <input id="input-galeria" type="file" class="hidden" accept="image/*" multiple>
-                        </label>
-                    </div>
-                    
-                    <!-- Text to show selected files -->
-                    <p id="galeria-selected-text" class="text-sm text-indigo-600 dark:text-indigo-400 mb-4 font-medium hidden"></p>
+                <!-- TAB 4: Portafolio -->
+                <div id="panel-portafolio" class="tab-panel hidden space-y-6">
+                    <div class="spotlight-card bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 relative overflow-hidden">
+                        <div class="relative z-20">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-fp-border-dark/60">
+                            <div>
+                                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                    <i class="ph-fill ph-images text-fp-primary-light dark:text-fp-primary-dark text-2xl animate-wiggle-hover"></i>
+                                    Mi Portafolio Multimedia
+                                </h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Sube fotos de tus shows y performances (máximo 8 fotos, peso máx. 2MB por imagen).</p>
+                            </div>
+                            <label for="input-galeria" class="cursor-pointer shimmer-btn self-start sm:self-auto bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 font-bold px-4 py-2.5 rounded-xl text-xs hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-all duration-300 flex items-center gap-1.5 shadow-sm">
+                                <i class="ph ph-plus text-sm"></i>
+                                Seleccionar Fotos
+                                <input id="input-galeria" type="file" class="hidden" accept="image/*" multiple>
+                            </label>
+                        </div>
+                        
 
-                    <!-- Grid de fotos existentes -->
-                    <div id="galeria-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <!-- Las fotos se inyectarán aquí -->
+
+                        <!-- Grid de fotos existentes -->
+                        <div id="galeria-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <!-- Las fotos se inyectarán aquí -->
+                        </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Action Buttons -->
-            <div id="talento-action-buttons-container" class="mt-8 flex justify-center sm:justify-end gap-3 sticky bottom-4 z-10 opacity-0 max-h-0 overflow-hidden pointer-events-none transition-all duration-300 ease-out transform translate-y-4 scale-95">
-                <button type="button" id="btn-cancel-changes" class="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-fp-surface-muted-dark dark:hover:bg-slate-600 dark:text-slate-200 font-bold py-2.5 px-6 rounded-full shadow-lg transition-transform active:scale-95 flex items-center gap-2">
-                    <i class="ph ph-x-circle text-lg"></i>
-                    Cancelar
-                </button>
-                <button type="button" id="btn-save-all" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-full shadow-lg shadow-indigo-500/30 transition-transform active:scale-95 flex items-center gap-2">
-                    <i class="ph ph-floppy-disk text-lg"></i>
-                    Guardar
-                </button>
-            </div>
+                <!-- TAB 5: Estadísticas & Insights (NEW) -->
+                <div id="panel-estadisticas" class="tab-panel hidden space-y-6">
+                    <div class="spotlight-card bg-white/80 dark:bg-fp-surface-dark/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/50 dark:border-fp-border-dark/50 p-6 sm:p-8 relative overflow-hidden">
+                        <div class="relative z-20 space-y-6">
+                        
+                        <!-- Header -->
+                        <div class="border-b border-slate-100 dark:border-fp-border-dark/60 pb-5">
+                            <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-1">
+                                <i class="ph-fill ph-chart-line-up text-fp-primary-light dark:text-fp-primary-dark text-2xl"></i>
+                                Estadísticas & Insights
+                            </h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Analiza la efectividad de tu portafolio y tu reputación en la plataforma.</p>
+                        </div>
 
-        </main>
+                        <!-- 2-Column Grid: Completeness & Checklist -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Left: Completeness Card -->
+                            <div class="bg-white dark:bg-fp-surface-muted-dark p-6 rounded-2xl border border-slate-200/50 dark:border-fp-border-dark/50 flex flex-col justify-between shadow-md hover:shadow-lg transition-all duration-300">
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-2">
+                                        <i class="ph ph-sparkle text-sm text-amber-500 animate-pulse"></i>
+                                        Optimización del Perfil
+                                    </h4>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-5 leading-relaxed">Completa todos los requisitos para recibir visibilidad preferencial en las búsquedas e inteligencia de FestiPro.</p>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-end">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Completado</span>
+                                        <span id="completeness-text" class="text-xl font-black font-display text-fp-primary-light dark:text-fp-primary-dark">0%</span>
+                                    </div>
+                                    <!-- Bar -->
+                                    <div class="completeness-bar shadow-inner">
+                                        <div id="completeness-bar-fill" class="completeness-bar-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Checklist -->
+                            <div class="bg-white dark:bg-fp-surface-muted-dark p-6 rounded-2xl border border-slate-200/50 dark:border-fp-border-dark/50 shadow-md hover:shadow-lg transition-all duration-300">
+                                <h4 class="text-xs font-bold text-slate-800 dark:text-white mb-4 uppercase tracking-wider">Requisitos de tu Ficha</h4>
+                                <ul class="grid grid-cols-2 gap-y-3 gap-x-4">
+                                    <li id="chk-avatar" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Foto de Perfil</span>
+                                    </li>
+                                    <li id="chk-nombre" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Nombre Artístico</span>
+                                    </li>
+                                    <li id="chk-precio" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Precio Base</span>
+                                    </li>
+                                    <li id="chk-categoria" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Categoría</span>
+                                    </li>
+                                    <li id="chk-ciudad" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Ubicación</span>
+                                    </li>
+                                    <li id="chk-biografia" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Biografía</span>
+                                    </li>
+                                    <li id="chk-banner" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Banner Portada</span>
+                                    </li>
+                                    <li id="chk-galeria" class="flex items-center gap-2">
+                                        <i class="ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">Portafolio</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Metric Details Row -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <!-- Views Card -->
+                            <div class="insight-card bg-white dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200/50 dark:border-fp-border-dark/50 flex flex-col gap-2 shadow-md hover:shadow-lg transition-all duration-300">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Tráfico de Perfil</span>
+                                <div class="flex items-baseline justify-between mt-1">
+                                    <span id="stats-vistas" class="text-3xl font-black font-display text-gray-900 dark:text-white">0</span>
+                                    <span class="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">+15%</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed font-semibold mt-1">Visitas totales del catálogo público acumuladas.</p>
+                            </div>
+                            
+                            <!-- Rating Card -->
+                            <div class="insight-card bg-white dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200/50 dark:border-fp-border-dark/50 flex flex-col gap-2 shadow-md hover:shadow-lg transition-all duration-300">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Reputación</span>
+                                <div class="flex items-center justify-between mt-1">
+                                    <span id="stats-calificacion" class="text-3xl font-black font-display text-gray-900 dark:text-white">0.0</span>
+                                    <div id="stats-stars" class="flex gap-0.5 text-base">
+                                        <!-- Renderizado dinámico -->
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed font-semibold mt-1">Promedio de valoraciones de tus contratistas.</p>
+                            </div>
+
+                            <!-- Reviews Card -->
+                            <div class="insight-card bg-white dark:bg-fp-surface-muted-dark p-5 rounded-2xl border border-slate-200/50 dark:border-fp-border-dark/50 flex flex-col gap-2 shadow-md hover:shadow-lg transition-all duration-300">
+                                <span class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Comentarios</span>
+                                <div class="flex items-baseline justify-between mt-1">
+                                    <span id="stats-comentarios" class="text-3xl font-black font-display text-gray-900 dark:text-white">0</span>
+                                    <i class="ph ph-chat-text text-xl text-slate-400 dark:text-slate-500"></i>
+                                </div>
+                                <p class="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed font-semibold mt-1">Opiniones escritas por organizadores de eventos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Optimization Tips (Alert Box) -->
+                        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-2xl p-5 border border-indigo-100/50 dark:border-indigo-900/40 flex items-start gap-4 shadow-md transition-all duration-300">
+                            <div class="p-2.5 bg-white dark:bg-fp-surface-dark rounded-xl shadow-sm text-center shrink-0">
+                                <i id="tip-icon" class="ph ph-lightbulb-fill text-2xl text-fp-primary-light dark:text-fp-primary-dark"></i>
+                            </div>
+                            <div>
+                                <h4 id="tip-title" class="text-sm font-bold text-slate-900 dark:text-white mb-1">Optimización Automática</h4>
+                                <p id="tip-text" class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Cargando recomendaciones personalizadas...</p>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Guardar/Cancelar) -->
+                <div id="talento-action-buttons-container" class="mt-8 flex justify-center sm:justify-end gap-3 sticky bottom-4 z-10 opacity-0 max-h-0 overflow-hidden pointer-events-none transition-all duration-300 ease-out transform translate-y-4 scale-95">
+                    <button type="button" id="btn-cancel-changes" class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 dark:bg-fp-surface-dark dark:hover:bg-fp-surface-muted-dark dark:border-fp-border-dark dark:text-slate-200 font-bold py-2.5 px-6 rounded-full shadow-lg transition-all active:scale-95 flex items-center gap-2 group">
+                        <i class="ph ph-x-circle text-lg animate-wiggle-hover"></i>
+                        Cancelar
+                    </button>
+                    <button type="button" id="btn-save-all" class="shimmer-btn bg-gradient-to-r from-fp-primary-light to-purple-600 hover:from-purple-600 hover:to-fp-primary-light text-white font-bold py-2.5 px-6 rounded-full shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center gap-2 group">
+                        <i class="ph ph-floppy-disk text-lg animate-bounce-hover"></i>
+                        Guardar Cambios
+                    </button>
+                </div>
+
+            </main>
+        </div>
+
+        <div id="app-footer"></div>
     </div>
 
-    <div id="app-footer"></div>
-
-    <script type="module" src="/src/assets/js/utils.js"></script>
     <script type="module" src="/src/pages/talento/dashboard/dashboard.js"></script>
 </body>
 </html>

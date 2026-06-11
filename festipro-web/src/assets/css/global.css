@@ -43,7 +43,50 @@
 @layer base {
     html {
         scroll-behavior: smooth;
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in srgb, var(--color-fp-primary-light) 35%, transparent) var(--color-fp-bg-light);
     }
+    
+    html.dark {
+        scrollbar-color: color-mix(in srgb, var(--color-fp-primary-dark) 35%, transparent) var(--color-fp-bg-dark);
+    }
+
+    /* Webkit Scrollbars (Chrome, Safari, Edge) */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--color-fp-bg-light);
+    }
+
+    .dark ::-webkit-scrollbar-track,
+    html.dark ::-webkit-scrollbar-track {
+        background: var(--color-fp-bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--color-fp-primary-light) 35%, transparent);
+        border-radius: 10px;
+        border: 2px solid var(--color-fp-bg-light);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-fp-primary-light);
+    }
+
+    .dark ::-webkit-scrollbar-thumb,
+    html.dark ::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--color-fp-primary-dark) 35%, transparent);
+        border: 2px solid var(--color-fp-bg-dark);
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover,
+    html.dark ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-fp-primary-dark);
+    }
+
     body {
         @apply font-sans bg-fp-bg-light text-slate-800 antialiased;
     }
@@ -81,3 +124,11 @@
 @import "./components/cards.css";
 @import "./pages/auth.css";
 @import "./pages/profile.css";
+@import "./pages/catalogo.css";
+@import "./pages/eventos.css";
+@import "./pages/dashboard.css";
+@import "./pages/anfitrion-dashboard.css";
+@import "./pages/admin-dashboard.css";
+@import "./pages/landing.css";
+
+

@@ -46,6 +46,8 @@ class PerfilTalentoController extends Controller
                 'banner_url' => $user->talentProfile->banner_url,
                 'esta_disponible' => $user->talentProfile->is_available,
                 'vistas_perfil' => $user->talentProfile->profile_views,
+                'calificacion_promedio' => (float)$user->talentProfile->average_rating,
+                'comentarios_count' => $user->talentProfile->reviews()->count(),
                 'galleries' => $user->talentProfile->galleries->map(function ($g) {
                     return [
                         'id' => $g->id,
@@ -92,6 +94,8 @@ class PerfilTalentoController extends Controller
                 'banner_url' => $userActualizado->talentProfile->banner_url,
                 'esta_disponible' => $userActualizado->talentProfile->is_available,
                 'vistas_perfil' => $userActualizado->talentProfile->profile_views,
+                'calificacion_promedio' => (float)$userActualizado->talentProfile->average_rating,
+                'comentarios_count' => $userActualizado->talentProfile->reviews()->count(),
                 'galleries' => $userActualizado->talentProfile->galleries->map(function ($g) {
                     return [
                         'id' => $g->id,

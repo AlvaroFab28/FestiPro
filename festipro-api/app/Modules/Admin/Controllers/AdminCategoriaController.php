@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Global\Models\Category;
 use App\Global\Traits\ApiResponseTrait;
-use Illuminate\Support\Facades\Storage;
+
 
 class AdminCategoriaController extends Controller
 {
@@ -15,7 +15,9 @@ class AdminCategoriaController extends Controller
     public function index(Request $request)
     {
         // Devolver todas las categorías (incluyendo las inactivas) para administración
-        $categorias = Category::orderBy('name', 'asc')->get();
+        $categorias = Category::withCount('talentProfiles')
+            ->orderBy('name', 'asc')
+            ->get();
 
         return $this->successResponse($categorias, 'Categorías obtenidas correctamente.');
     }
@@ -24,16 +26,21 @@ class AdminCategoriaController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
-            'icon' => 'required|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'icon_class' => 'required|string|max:50',
         ]);
-
-        $path = $request->file('icon')->store('categories', 'public');
 
         $categoria = Category::create([
             'name' => $request->name,
-            'icon_url' => '/storage/' . $path,
+            'icon_class' => $request->icon_class,
             'is_active' => true,
         ]);
+
+        \App\Modules\Admin\Models\AdminLog::log(
+            'create_category',
+            'category',
+            $categoria->id,
+            "Se creó la categoría: {$categoria->name}"
+        );
 
         return $this->successResponse($categoria, 'Categoría creada con éxito.', 201);
     }
@@ -48,25 +55,19 @@ class AdminCategoriaController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $id,
-            'icon' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'icon_class' => 'required|string|max:50',
         ]);
 
         $categoria->name = $request->name;
-
-        if ($request->hasFile('icon')) {
-            // Eliminar icono anterior si existe
-            if ($categoria->icon_url) {
-                $oldPath = str_replace('/storage/', '', $categoria->icon_url);
-                if (Storage::disk('public')->exists($oldPath)) {
-                    Storage::disk('public')->delete($oldPath);
-                }
-            }
-
-            $path = $request->file('icon')->store('categories', 'public');
-            $categoria->icon_url = '/storage/' . $path;
-        }
-
+        $categoria->icon_class = $request->icon_class;
         $categoria->save();
+
+        \App\Modules\Admin\Models\AdminLog::log(
+            'update_category',
+            'category',
+            $categoria->id,
+            "Se actualizó la categoría: {$categoria->name}"
+        );
 
         return $this->successResponse($categoria, 'Categoría actualizada con éxito.');
     }
@@ -82,6 +83,46 @@ class AdminCategoriaController extends Controller
         $categoria->is_active = !$categoria->is_active;
         $categoria->save();
 
+        $estado = $categoria->is_active ? 'activó' : 'desactivó';
+        \App\Modules\Admin\Models\AdminLog::log(
+            'toggle_category',
+            'category',
+            $categoria->id,
+            "Se {$estado} la categoría: {$categoria->name}"
+        );
+
         return $this->successResponse($categoria, 'Estado de la categoría actualizado con éxito.');
+    }
+
+    public function destroy($id)
+    {
+        $categoria = Category::find($id);
+
+        if (!$categoria) {
+            return $this->errorResponse('Categoría no encontrada.', 404);
+        }
+
+        $nombreCategoria = $categoria->name;
+        
+        try {
+            $categoria->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Error de integridad referencial (llave foránea)
+            if ($e->getCode() == 23000) {
+                return $this->errorResponse('No puedes eliminar esta categoría porque está siendo usada por talentos o eventos activos.', 409);
+            }
+            return $this->errorResponse('Error en la base de datos al intentar eliminar la categoría.', 500);
+        } catch (\Exception $e) {
+            return $this->errorResponse('Error interno al intentar eliminar la categoría.', 500);
+        }
+
+        \App\Modules\Admin\Models\AdminLog::log(
+            'delete_category',
+            'category',
+            $id,
+            "Se eliminó la categoría: {$nombreCategoria}"
+        );
+
+        return $this->successResponse(null, 'Categoría eliminada con éxito.');
     }
 }

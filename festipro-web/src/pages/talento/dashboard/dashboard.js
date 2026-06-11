@@ -1,5 +1,6 @@
-import { injectShell, showToast } from '../../../assets/js/utils.js';
+import { injectShell, showToast, setupSpotlights } from '../../../assets/js/utils.js';
 import { apiClient } from '../../../assets/js/api-client.js';
+import { getHeaderHTML } from '../../../components/header.js';
 
 let currentGallery = [];
 let fotosParaEliminar = [];
@@ -15,8 +16,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         cancelBtn.onclick = () => {
             fotosParaEliminar = [];
             archivosNuevosGaleria = [];
-            document.querySelectorAll('.img-preview').forEach(img => img.remove());
-            document.querySelectorAll('div.flex.flex-col').forEach(div => div.classList.remove('opacity-0'));
+            
+            // Vaciar inputs de tipo file para evitar que se suban archivos descartados
+            const avatarInput = document.getElementById('input-avatar');
+            const bannerInput = document.getElementById('input-banner');
+            const galeriaInput = document.getElementById('input-galeria');
+            if (avatarInput) avatarInput.value = '';
+            if (bannerInput) bannerInput.value = '';
+            if (galeriaInput) galeriaInput.value = '';
             
             if (originalData) fillFormWithData(originalData);
             showToast('Cambios descartados');
@@ -45,8 +52,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Detección de cambios (Dirty state) para mostrar los botones
     document.querySelectorAll('input, select, textarea').forEach(el => {
         if (el.id === 'toggle-disponibilidad') return; // Ignorar el toggle porque tiene autoguardado
-        el.addEventListener('input', showCancelBtn);
-        el.addEventListener('change', showCancelBtn);
+        el.addEventListener('input', showTalentoButtons);
+        el.addEventListener('change', showTalentoButtons);
     });
 
     // Preview simple para Avatar y Banner
@@ -67,13 +74,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            nuevasSeleccionadas.forEach(file => {
+            // Validar peso máximo de 2MB por imagen
+            const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+            const validFiles = [];
+            for (const file of nuevasSeleccionadas) {
+                if (file.size > MAX_SIZE) {
+                    showToast(`La imagen "${file.name}" supera el límite de 2MB.`, 'error');
+                } else {
+                    validFiles.push(file);
+                }
+            }
+
+            if (validFiles.length === 0) {
+                inputGaleria.value = '';
+                return;
+            }
+
+            validFiles.forEach(file => {
                 file.tempId = Math.random().toString(36).substring(7);
                 archivosNuevosGaleria.push(file);
             });
             inputGaleria.value = ''; // Reset para poder seleccionar la misma
             renderGallery();
-            showCancelBtn();
+            showTalentoButtons();
         });
     }
 
@@ -109,17 +132,13 @@ async function loadInitialData() {
 
         // 1. Rellenar Categorías
         const selectCat = document.getElementById('select-categoria');
-        selectCat.innerHTML = '<option value="" disabled selected>Selecciona tu arte</option>';
-        catRes.data.forEach(cat => {
-            selectCat.innerHTML += `<option value="${cat.id}">${cat.nombre}</option>`;
-        });
+        const catOptions = catRes.data.map(cat => `<option value="${cat.id}">${cat.nombre}</option>`).join('');
+        selectCat.innerHTML = '<option value="" disabled selected>Selecciona tu arte</option>' + catOptions;
 
         // 2. Rellenar Ciudades
         const selectCiu = document.getElementById('select-ciudad');
-        selectCiu.innerHTML = '<option value="" disabled selected>¿Dónde te ubicas?</option>';
-        ciuRes.data.forEach(ciu => {
-            selectCiu.innerHTML += `<option value="${ciu.id}">${ciu.ciudad} (${ciu.departamento})</option>`;
-        });
+        const ciuOptions = ciuRes.data.map(ciu => `<option value="${ciu.id}">${ciu.ciudad} (${ciu.departamento})</option>`).join('');
+        selectCiu.innerHTML = '<option value="" disabled selected>¿Dónde te ubicas?</option>' + ciuOptions;
 
         // 3. Rellenar datos del Perfil en la UI
         fillFormWithData(profileRes.data);
@@ -146,10 +165,6 @@ function hideTalentoButtons() {
     }
 }
 
-function showCancelBtn() {
-    showTalentoButtons();
-}
-
 function handleAvatarPreview() {
     const input = document.getElementById('input-avatar');
     if (!input) return;
@@ -165,7 +180,7 @@ function handleAvatarPreview() {
             avatarPreview.classList.remove('hidden');
             avatarInitial.classList.add('hidden');
             
-            showCancelBtn();
+            showTalentoButtons();
         }
     });
 }
@@ -185,7 +200,7 @@ function handleBannerPreview() {
             bannerPreview.classList.remove('hidden');
             bannerPlaceholder.classList.add('hidden');
             
-            showCancelBtn();
+            showTalentoButtons();
         }
     });
 }
@@ -200,23 +215,27 @@ function fillFormWithData(data) {
     const user = data.user;
     const profile = data.talent_profile;
 
+    // El mini profile del sidebar fue removido en favor de la verificación por completitud.
+
     // Llenar tabla users
     document.getElementById('input-nombre-completo').value = user.nombre_completo || user.name || '';
     document.getElementById('input-email').value = user.email || '';
     document.getElementById('input-telefono').value = user.telefono_whatsapp || user.whatsapp_number || '';
     
-    // Sidebar Header
-    document.getElementById('sb-name').innerText = user.nombre_completo;
-    const sbAvatar = document.getElementById('sb-avatar');
-    const sbInitial = document.getElementById('sb-initial');
+    // Actualizar localStorage para el header
+    const finalUserName = user.nombre_completo || user.name || '';
+    localStorage.setItem('user_name', finalUserName);
     if (user.avatar_url) {
-        sbAvatar.src = `${import.meta.env.VITE_API_URL.replace('/api', '')}${user.avatar_url}`;
-        sbAvatar.classList.remove('hidden');
-        sbInitial.classList.add('hidden');
+        localStorage.setItem('user_avatar', user.avatar_url);
     } else {
-        sbInitial.innerText = user.nombre_completo.charAt(0).toUpperCase();
-        sbInitial.classList.remove('hidden');
-        sbAvatar.classList.add('hidden');
+        localStorage.removeItem('user_avatar');
+    }
+    
+    // Actualizar el header dinámicamente al instante
+    const headerContainer = document.getElementById('app-header');
+    if (headerContainer) {
+        headerContainer.innerHTML = getHeaderHTML();
+        setupSpotlights();
     }
 
     // Avatar Card UI
@@ -256,9 +275,9 @@ function fillFormWithData(data) {
         const toggleDispo = document.getElementById('toggle-disponibilidad');
         toggleDispo.checked = profile.esta_disponible;
 
-        // Rellenar métricas (simuladas o reales del backend si existen)
-        document.getElementById('metric-vistas').innerText = profile.vistas || '0';
-        document.getElementById('metric-calificacion').innerText = profile.calificacion ? Number(profile.calificacion).toFixed(1) : '0.0';
+        // Rellenar métricas reales del backend
+        document.getElementById('metric-vistas').innerText = profile.vistas_perfil || '0';
+        document.getElementById('metric-calificacion').innerText = profile.calificacion_promedio ? Number(profile.calificacion_promedio).toFixed(1) : '0.0';
         document.getElementById('metric-comentarios').innerText = profile.comentarios_count || '0';
 
         toggleDispo.disabled = false;
@@ -274,6 +293,13 @@ function fillFormWithData(data) {
         // Habilitar pestaña de portafolio
         document.getElementById('tab-btn-portafolio').classList.remove('opacity-50', 'cursor-not-allowed');
         document.getElementById('tab-btn-portafolio').onclick = () => switchTab('portafolio');
+
+        // Link del botón Ver Perfil Público
+        const btnVerPerfil = document.getElementById('btn-ver-perfil-publico');
+        if (btnVerPerfil) {
+            btnVerPerfil.href = `/src/pages/publico/perfil/perfil-talento.html?id=${profile.id}`;
+            btnVerPerfil.classList.remove('hidden');
+        }
     } else {
         // Vaciar inputs por si se cancelan cambios de un perfil no guardado
         document.getElementById('input-nombre-artistico').value = '';
@@ -295,7 +321,16 @@ function fillFormWithData(data) {
             e.preventDefault();
             showToast('Debes guardar tu Perfil Artístico primero.', 'error');
         };
+
+        // Ocultar botón de perfil público si no hay perfil
+        const btnVerPerfil = document.getElementById('btn-ver-perfil-publico');
+        if (btnVerPerfil) {
+            btnVerPerfil.classList.add('hidden');
+        }
     }
+
+    // Actualizar Estadísticas & Insights
+    updateStatsTab(data);
 }
 
 /**
@@ -305,42 +340,63 @@ function renderGallery() {
     const grid = document.getElementById('galeria-grid');
     grid.innerHTML = '';
     const baseUrl = import.meta.env.VITE_API_URL.replace('/api', '');
+    const fragment = document.createDocumentFragment();
 
     // 1. Fotos del servidor
     currentGallery.forEach(foto => {
-        if (fotosParaEliminar.includes(foto.id)) return;
-        createGalleryItem(grid, baseUrl + foto.imagen_url, () => marcarParaEliminar(foto.id), false);
+        const isMarked = fotosParaEliminar.includes(foto.id);
+        const item = createGalleryItem(
+            baseUrl + foto.imagen_url, 
+            isMarked ? () => desmarcarParaEliminar(foto.id) : () => marcarParaEliminar(foto.id), 
+            false,
+            isMarked
+        );
+        fragment.appendChild(item);
     });
 
     // 2. Fotos nuevas pendientes de subir (Preview)
     archivosNuevosGaleria.forEach(file => {
         const url = URL.createObjectURL(file);
-        createGalleryItem(grid, url, () => quitarFotoNueva(file.tempId), true);
+        const item = createGalleryItem(url, () => quitarFotoNueva(file.tempId), true, false);
+        fragment.appendChild(item);
     });
+
+    grid.appendChild(fragment);
 }
 
-function createGalleryItem(grid, url, onRemove, isNew) {
+function createGalleryItem(url, onAction, isNew, isMarked) {
     const div = document.createElement('div');
-    div.className = 'relative group aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-fp-surface-muted-dark';
+    const borderClass = isMarked ? 'border-2 border-red-500/80 shadow-inner' : '';
+    div.className = `relative group aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-fp-surface-muted-dark ${borderClass}`;
+    
     div.innerHTML = `
-        <img src="${url}" class="w-full h-full object-cover transition-transform group-hover:scale-105" alt="Portafolio">
-        ${isNew ? '<span class="absolute top-2 left-2 bg-indigo-500 text-white text-xs font-bold px-2 py-1 rounded shadow-md z-10">Nueva</span>' : ''}
-        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-20">
-            <button type="button" class="btn-remove bg-red-500 text-white w-9 h-9 flex items-center justify-center rounded-full hover:bg-red-600 transition-colors shadow-lg hover:scale-110 active:scale-95">
-                <i class="ph ph-trash text-lg"></i>
+        <img src="${url}" loading="lazy" class="w-full h-full object-cover transition-transform ${isMarked ? 'brightness-[30%] grayscale' : 'group-hover:scale-105'}" alt="Portafolio">
+        ${isNew ? '<span class="absolute top-2 left-2 bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-md z-10 uppercase tracking-wider">Nueva</span>' : ''}
+        ${isMarked ? '<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-md z-10 uppercase tracking-wider flex items-center gap-1"><i class="ph-fill ph-x-circle"></i> Borrar</span>' : ''}
+        
+        <div class="absolute inset-0 bg-black/55 ${isMarked ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity flex items-center justify-center z-20">
+            <button type="button" class="btn-action ${isMarked ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-red-500 hover:bg-red-600'} text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-lg hover:scale-105 active:scale-95 flex items-center gap-1.5">
+                <i class="${isMarked ? 'ph ph-arrow-counter-clockwise' : 'ph ph-trash'} text-sm"></i>
+                <span>${isMarked ? 'Deshacer' : 'Eliminar'}</span>
             </button>
         </div>
     `;
-    div.querySelector('.btn-remove').onclick = onRemove;
-    grid.appendChild(div);
+    div.querySelector('.btn-action').onclick = onAction;
+    return div;
 }
 
 // Exportar global para el onClick
 window.marcarParaEliminar = function(id) {
     fotosParaEliminar.push(id);
     renderGallery(); // Repintamos
-    showCancelBtn();
+    showTalentoButtons();
     showToast('Foto marcada para eliminar.', 'success');
+};
+
+window.desmarcarParaEliminar = function(id) {
+    fotosParaEliminar = fotosParaEliminar.filter(x => x !== id);
+    renderGallery();
+    showToast('Foto recuperada temporalmente.', 'info');
 };
 
 window.quitarFotoNueva = function(tempId) {
@@ -353,6 +409,7 @@ window.quitarFotoNueva = function(tempId) {
 // ==========================================
 document.getElementById('btn-save-all').addEventListener('click', async (e) => {
     const btn = e.currentTarget;
+    const originalBtnHTML = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<i class="ph ph-spinner-gap animate-spin text-lg"></i> Guardando...';
 
@@ -375,6 +432,10 @@ document.getElementById('btn-save-all').addEventListener('click', async (e) => {
         // 2. Datos Perfil (Solo si el usuario decide crearlo llenando el nombre)
         const nombreArtistico = document.getElementById('input-nombre-artistico').value;
         if (nombreArtistico.trim() !== '') {
+            const telefonoVal = document.getElementById('input-telefono').value;
+            if (!telefonoVal || telefonoVal.trim() === '') {
+                throw new Error('El teléfono WhatsApp es obligatorio para crear o actualizar un perfil de talento.');
+            }
             formData.append('nombre_artistico', nombreArtistico);
             
             const catId = document.getElementById('select-categoria').value;
@@ -434,7 +495,6 @@ document.getElementById('btn-save-all').addEventListener('click', async (e) => {
         fotosParaEliminar = [];
         archivosNuevosGaleria = []; // Vaciamos los archivos pendientes
         document.getElementById('input-galeria').value = "";
-        document.getElementById('galeria-selected-text').classList.add('hidden');
         document.getElementById('input-password').value = ""; // Limpiar password tras éxito
         
         // Recargar con los datos frescos devueltos
@@ -444,8 +504,138 @@ document.getElementById('btn-save-all').addEventListener('click', async (e) => {
         showToast(error.message, 'error');
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="ph ph-floppy-disk text-lg"></i> Guardar';
+        btn.innerHTML = originalBtnHTML;
     }
 });
+
+/**
+ * Calcula y actualiza la pestaña de Estadísticas & Insights
+ */
+function updateStatsTab(data) {
+    const user = data.user;
+    const profile = data.talent_profile;
+
+    // 1. Calcular completitud del perfil
+    let completeness = 0;
+    const checklistItems = {
+        avatar: !!user.avatar_url,
+        nombre: !!profile?.nombre_artistico,
+        precio: !!profile?.precio_base,
+        categoria: !!profile?.categoria_id,
+        ciudad: !!profile?.ciudad_id,
+        biografia: !!profile?.biografia,
+        banner: !!profile?.banner_url,
+        galeria: !!(profile?.galleries && profile.galleries.length > 0)
+    };
+
+    if (checklistItems.avatar) completeness += 15;
+    if (checklistItems.nombre) completeness += 15;
+    if (checklistItems.precio) completeness += 10;
+    if (checklistItems.categoria) completeness += 10;
+    if (checklistItems.ciudad) completeness += 10;
+    if (checklistItems.biografia) completeness += 15;
+    if (checklistItems.banner) completeness += 15;
+    if (checklistItems.galeria) completeness += 10;
+
+    // Actualizar porcentaje e interfaz
+    const bar = document.getElementById('completeness-bar-fill');
+    const text = document.getElementById('completeness-text');
+    if (bar) bar.style.width = `${completeness}%`;
+    if (text) text.innerText = `${completeness}%`;
+
+    // Sello de verificación condicional
+    const verificationContainer = document.getElementById('sidebar-verification-container');
+    if (verificationContainer) {
+        if (completeness === 100) {
+            verificationContainer.classList.remove('hidden');
+        } else {
+            verificationContainer.classList.add('hidden');
+        }
+    }
+
+    // Actualizar checklist
+    updateChecklistItem('chk-avatar', checklistItems.avatar);
+    updateChecklistItem('chk-nombre', checklistItems.nombre);
+    updateChecklistItem('chk-precio', checklistItems.precio);
+    updateChecklistItem('chk-categoria', checklistItems.categoria);
+    updateChecklistItem('chk-ciudad', checklistItems.ciudad);
+    updateChecklistItem('chk-biografia', checklistItems.biografia);
+    updateChecklistItem('chk-banner', checklistItems.banner);
+    updateChecklistItem('chk-galeria', checklistItems.galeria);
+
+    // Actualizar métricas reales del backend
+    const vistas = profile?.vistas_perfil || 0;
+    const rating = profile?.calificacion_promedio ? Number(profile.calificacion_promedio) : 0;
+    const reviews = profile?.comentarios_count || 0;
+
+    const statsVistas = document.getElementById('stats-vistas');
+    const statsCalificacion = document.getElementById('stats-calificacion');
+    const statsComentarios = document.getElementById('stats-comentarios');
+    
+    if (statsVistas) statsVistas.innerText = vistas;
+    if (statsCalificacion) statsCalificacion.innerText = rating.toFixed(1);
+    if (statsComentarios) statsComentarios.innerText = reviews;
+
+    // Renderizar estrellas de reputación
+    const starsContainer = document.getElementById('stats-stars');
+    if (starsContainer) {
+        let starsHTML = '';
+        const fullStars = Math.floor(rating);
+        const hasHalf = (rating - fullStars) >= 0.4;
+        for (let i = 1; i <= 5; i++) {
+            if (i <= fullStars) {
+                starsHTML += '<i class="ph-fill ph-star text-amber-400"></i>';
+            } else if (i === fullStars + 1 && hasHalf) {
+                starsHTML += '<i class="ph-fill ph-star-half text-amber-400"></i>';
+            } else {
+                starsHTML += '<i class="ph ph-star text-slate-300 dark:text-slate-600"></i>';
+            }
+        }
+        starsContainer.innerHTML = starsHTML;
+    }
+
+    // Consejo de optimización dinámico
+    const tipTitle = document.getElementById('tip-title');
+    const tipText = document.getElementById('tip-text');
+    const tipIcon = document.getElementById('tip-icon');
+
+    if (tipTitle && tipText) {
+        if (!checklistItems.banner) {
+            if (tipIcon) tipIcon.className = "ph ph-image text-3xl text-fp-primary-light dark:text-fp-primary-dark";
+            tipTitle.innerText = "Sube una foto de portada (Banner)";
+            tipText.innerText = "Los perfiles de talento con una portada atractiva reciben hasta un 150% más de visitas y proyectan mayor profesionalismo.";
+        } else if (!checklistItems.galeria) {
+            if (tipIcon) tipIcon.className = "ph ph-images text-3xl text-fp-primary-light dark:text-fp-primary-dark";
+            tipTitle.innerText = "Añade fotos a tu portafolio";
+            tipText.innerText = "Un portafolio multimedia con fotos de tus presentaciones reales convence más rápido a los anfitriones de contratarte.";
+        } else if (!checklistItems.biografia || (profile?.biografia && profile.biografia.length < 50)) {
+            if (tipIcon) tipIcon.className = "ph ph-article text-3xl text-fp-primary-light dark:text-fp-primary-dark";
+            tipTitle.innerText = "Amplía tu biografía";
+            tipText.innerText = "Describe detalladamente tus shows, repertorio y requerimientos técnicos. Esto ayuda a los anfitriones a conocerte mejor.";
+        } else if (completeness < 100) {
+            if (tipIcon) tipIcon.className = "ph ph-sparkle text-3xl text-fp-primary-light dark:text-fp-primary-dark";
+            tipTitle.innerText = "Completa tu perfil al 100%";
+            tipText.innerText = "Falta muy poco. Los perfiles completados tienen prioridad de visibilidad en el catálogo inteligente de FestiPro.";
+        } else {
+            if (tipIcon) tipIcon.className = "ph ph-rocket-launch text-3xl text-emerald-500";
+            tipTitle.innerText = "¡Tu perfil es una obra de arte!";
+            tipText.innerText = "Tienes toda la información configurada. Ahora mantén activa tu disponibilidad para recibir ofertas de contratación directas.";
+        }
+    }
+}
+
+function updateChecklistItem(id, completed) {
+    const item = document.getElementById(id);
+    if (!item) return;
+    const icon = item.querySelector('i');
+    const text = item.querySelector('span');
+    if (completed) {
+        if (icon) icon.className = "ph-fill ph-check-circle text-purple-600 dark:text-purple-400 text-lg shrink-0";
+        if (text) text.className = "text-xs text-slate-700 dark:text-slate-300 font-semibold";
+    } else {
+        if (icon) icon.className = "ph ph-circle text-slate-400 dark:text-slate-600 text-lg shrink-0";
+        if (text) text.className = "text-xs text-slate-700 dark:text-slate-300 font-medium";
+    }
+}
 
 
