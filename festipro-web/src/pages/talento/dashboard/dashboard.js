@@ -1,6 +1,6 @@
 import { injectShell, showToast, setupSpotlights } from '../../../assets/js/utils.js';
 import { apiClient } from '../../../assets/js/api-client.js';
-import { getHeaderHTML } from '../../../components/Header.js';
+import { getHeaderHTML } from '../../../components/header.js';
 
 let currentGallery = [];
 let fotosParaEliminar = [];
