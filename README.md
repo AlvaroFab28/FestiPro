@@ -1,8 +1,9 @@
 <div align="center">
+  <img src="assets/banner.jpg" alt="FestiPro Banner" width="100%" style="border-radius: 8px;" />
 
-  # 🎸 FestiPro
-
-  **Conectando talento local con eventos inolvidables.**
+  # FESTIPRO
+  
+  **Conexión directa entre talento local y eventos extraordinarios**
 
   [![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](#)
   [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](#)
@@ -13,146 +14,123 @@
 
 ---
 
-## 🌟 Visión General
+## Visión General
 
-**FestiPro** es una aplicación web (webapp) estilo marketplace "mobile-first" diseñada para centralizar y digitalizar la búsqueda y contratación de talento local (músicos, DJs, payasos, animadores). 
+FestiPro es una plataforma web móvil-first que redefine la búsqueda y contratación de talento local como músicos, DJs, animadores y artistas. 
 
-Reemplazando el tradicional y desestructurado "boca a boca" por una plataforma premium, rápida e intuitiva. Su enfoque está en la **conexión directa**: sin comisiones internas ni pasarelas de pago. La negociación y el trato final se derivan estratégicamente de forma nativa a **WhatsApp**.
-
----
-
-## ✨ Características Principales
-
-*   🎭 **Gestión Multi-Rol:** Experiencias separadas y optimizadas para **Anfitriones** (buscan talento y publican eventos) y **Talento** (ofrecen sus servicios y aplican a eventos).
-*   🔍 **Catálogo Dinámico y Filtrado Inteligente:** Búsqueda en tiempo real con filtros avanzados (ubicación, precio, categoría, disponibilidad y reputación).
-*   📱 **Integración Nativa con WhatsApp:** Contacto directo y sin fricciones a un solo clic de distancia.
-*   🔒 **Gatekeeper (Redirección Fuerte):** Sistema inteligente que intercepta interacciones anónimas obligando al registro/login, para luego retornar al usuario exactamente a donde estaba.
-*   🎨 **UI/UX Premium:** Interfaz minimalista inspirada en Airbnb. Soporte para **Modo Claro / Oscuro**, uso de micro-interacciones, efectos glassmorphism y la regla de color `60/30/10` para una jerarquía visual perfecta.
-*   ⚡ **Mobile-First:** Diseño 100% responsivo para ofrecer la mejor experiencia en dispositivos móviles.
+Al erradicar la informalidad del boca a boca tradicional, FestiPro establece un canal de comunicación directo y eficiente. La plataforma actúa como un puente libre de comisiones intermedias, enrutando estratégicamente el acuerdo final hacia WhatsApp para garantizar un trato ágil, humano y personalizado.
 
 ---
 
-## 🏗️ Arquitectura y Tecnologías
+## Características Clave
 
-FestiPro utiliza una arquitectura desacoplada estructurada en dos repositorios principales en un flujo "Feature Branch Workflow":
-
-### Frontend (`festipro-web`)
-Construido como una *Multiple Page Application (MPA)* enfocada en rendimiento bruto.
-*   **Lenguajes:** HTML5, Vanilla JavaScript (ES6+).
-*   **Estilos:** Tailwind CSS v4 para diseño atómico y responsivo.
-*   **Tipografía e Iconos:** Google Fonts (Outfit e Inter) y Phosphor Icons.
-*   **Build Tool:** Vite (Servidor de desarrollo ultrarrápido, HMR y empaquetador para producción).
-
-### Backend (`festipro-api`)
-Patrón de Monolito Modular expuesto exclusivamente como una API REST.
-*   **Framework:** Laravel v13.
-*   **Base de Datos:** MySQL.
-*   **Arquitectura:** Controladores API orientados a recursos, respuestas estándar en formato JSON y gestión segura de almacenamiento para medios (avatares, banners).
+* **Roles Independientes** — Interfaces y flujos optimizados de forma diferenciada para **Anfitriones** (organizadores) y **Talentos** (artistas).
+* **Catálogo Dinámico** — Búsqueda en tiempo real con filtros avanzados de ubicación, tarifas, categoría, disponibilidad y reputación.
+* **Contacto Directo** — Integración fluida con WhatsApp para cerrar acuerdos en un solo toque, sin intermediarios.
+* **Control de Acceso (Gatekeeper)** — Intercepción inteligente de interacciones anónimas que redirige al usuario exactamente donde estaba después de iniciar sesión.
+* **Diseño Premium** — Interfaz minimalista inspirada en Airbnb, con soporte nativo de modo claro/oscuro y efectos visuales modernos.
 
 ---
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
-```text
-/
-├── festipro-api/          # Backend (Laravel REST API)
-│   ├── app/Modules/       # Lógica modular separada por dominio (Publico, Auth, Talento, etc)
-│   ├── routes/            # Rutas de la API (api.php)
-│   └── ...
-├── festipro-web/          # Frontend (Vite + Vanilla JS + Tailwind)
-│   ├── src/
-│   │   ├── components/    # Componentes inyectables (Header, Footer, Modales)
-│   │   ├── pages/         # Vistas HTML organizadas por dominios (auth, talento, publico)
-│   │   ├── css/           # Archivos de estilos (Tailwind directives)
-│   │   └── main.js        # Entry point de Vite
-│   └── index.html         # Landing page (Escaparate)
-└── docs/                  # Documentación extendida (Arquitectura, Requisitos, Contexto)
-```
+El repositorio está organizado en dos componentes principales para separar la lógica de servidor de la interfaz de usuario:
+
+* **`festipro-api/`** — Backend desarrollado con **Laravel v13** que funciona como API REST.
+* **`festipro-web/`** — Frontend modular (MPA) construido con **Vite**, **Vanilla JS** y **Tailwind CSS**.
 
 ---
 
-## 🚀 Instalación y Despliegue Local
+## Stack Tecnológico
 
-Sigue estos pasos para levantar el entorno completo de desarrollo de FestiPro localmente.
+### Frontend
+* **Core** — HTML5 y JavaScript moderno (ES6+).
+* **Estilos** — Tailwind CSS v4 para maquetación responsiva.
+* **Diseño** — Tipografías Outfit e Inter junto con Phosphor Icons.
+* **Build Tool** — Vite para desarrollo en tiempo real y optimización de producción.
+
+### Backend
+* **Core** — Laravel v13 (REST API).
+* **Base de datos** — MySQL para persistencia de datos.
+* **Estructura** — Controladores de recursos y almacenamiento local/nube para medios.
+
+---
+
+## Guía de Instalación Local
+
+Siga estas instrucciones paso a paso para desplegar FestiPro en su entorno de desarrollo local.
 
 ### Prerrequisitos
-*   [PHP >= 8.2](https://www.php.net/) y [Composer](https://getcomposer.org/) (Para el Backend).
-*   [Node.js >= 18](https://nodejs.org/) y npm (Para el Frontend).
-*   Servidor web y base de datos MySQL (Recomendado: [Laragon](https://laragon.org/) o XAMPP).
+* PHP >= 8.2 y Composer
+* Node.js >= 18 y npm
+* Servidor de base de datos MySQL (Laragon, XAMPP o Docker)
 
-### Paso 1: Configurar la API (Backend)
+### 1. Configuración del Servidor API (Backend)
 
-1. Entra a la carpeta del backend:
+1. Entre al directorio de la API:
    ```bash
    cd festipro-api
    ```
-2. Instala las dependencias de PHP:
+2. Instale las dependencias de PHP:
    ```bash
    composer install
    ```
-3. Configura las variables de entorno:
+3. Configure el entorno local:
    ```bash
    cp .env.example .env
    php artisan key:generate
    ```
-4. Configura tu conexión a MySQL en el archivo `.env` y ejecuta las migraciones (con datos semilla):
+4. Configure la base de datos MySQL en el archivo `.env` y ejecute las migraciones con datos semilla:
    ```bash
    php artisan migrate --seed
    ```
-5. Levanta el servidor local de Laravel:
+5. Inicie el servidor de Laravel:
    ```bash
    php artisan serve
    ```
-   *El backend estará corriendo típicamente en `http://localhost:8000` o en el virtual host configurado (ej: `http://festipro-api.test`).*
 
-### Paso 2: Configurar la WebApp (Frontend)
+### 2. Configuración del Cliente (Frontend)
 
-1. En otra terminal, entra a la carpeta del frontend:
+1. En una nueva terminal, entre al directorio web:
    ```bash
    cd festipro-web
    ```
-2. Instala las dependencias de Node:
+2. Instale las dependencias de Node.js:
    ```bash
    npm install
    ```
-3. Configura el `.env` del frontend (si aplica) para apuntar a la URL de la API:
+3. Conecte el frontend con el backend creando un archivo `.env` con la URL de la API:
    ```env
    VITE_API_BASE_URL="http://localhost:8000/api"
    ```
-4. Inicia el servidor de desarrollo Vite:
+4. Inicie el servidor de desarrollo de Vite:
    ```bash
    npm run dev
    ```
-   *El frontend estará corriendo en `http://localhost:5173`. Abre este enlace en tu navegador.*
 
 ---
 
-## 📸 Capturas de Pantalla
+## Equipo de Desarrollo
 
-*(Próximamente... Añade aquí capturas de la Landing Page, Catálogo de Talentos y Dashboard)*
-
----
-
-## 👨‍💻 Equipo de Desarrollo
-
-*   **Villena Mamani Alvaro Fabian**
-*   **Huallpa Franses Luis Hernan**
-*   **Lopez Yapu Marco**
-*   **Apaza Albarado Gustavo Gabriel**
+* **Villena Mamani Alvaro Fabian**
+* **Huallpa Franses Luis Hernan**
+* **Lopez Yapu Marco**
+* **Apaza Albarado Gustavo Gabriel**
 
 ---
 
-## 🤝 Contribuciones
+## Flujo de Contribución
 
-Este proyecto sigue el modelo de **Feature Branch Workflow**.
-1. Haz un Fork del repositorio.
-2. Crea tu rama para la nueva característica (`git checkout -b feature/NuevaCaracteristica`).
-3. Haz tus commits (`git commit -m 'Añadir nueva característica'`).
-4. Sube la rama (`git push origin feature/NuevaCaracteristica`).
-5. Abre un Pull Request dirigido a `master`.
+Alineado bajo la metodología **Feature Branch Workflow**:
+
+1. Realice un **Fork** de este repositorio.
+2. Cree una rama para su desarrollo: `git checkout -b feature/nombre-caracteristica`.
+3. Confirme sus modificaciones: `git commit -m 'Añadir nueva característica'`.
+4. Suba su rama al servidor: `git push origin feature/nombre-caracteristica`.
+5. Abra un **Pull Request** dirigido a `master`.
 
 ---
 
 <div align="center">
-  Hecho con ❤️ para revolucionar el entretenimiento local.
+  Diseñado para redefinir y profesionalizar el mercado de entretenimiento local.
 </div>
