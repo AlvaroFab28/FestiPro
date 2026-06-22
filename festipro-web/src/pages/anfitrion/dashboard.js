@@ -1,6 +1,6 @@
 import { apiClient } from '../../assets/js/api-client.js';
 import { showToast } from '../../assets/js/utils.js';
-import { getHeaderHTML } from '../../components/header.js';
+import { getHeaderHTML } from '../../components/Header.js';
 
 let currentEventoIdToDelete = null;
 let catalogosCargados = false;

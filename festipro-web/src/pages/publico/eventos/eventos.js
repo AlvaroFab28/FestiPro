@@ -73,9 +73,15 @@ function formatWhatsAppLink(phone, message) {
  */
 function timeAgo(dateString) {
     if (!dateString) return 'Recientemente';
-    const date = new Date(dateString);
+    
+    // Asegurar que se interprete como UTC si no tiene zona horaria
+    const safeDateString = dateString.endsWith('Z') ? dateString : dateString + 'Z';
+    const date = new Date(safeDateString);
     const now = new Date();
-    const seconds = Math.floor((now - date) / 1000);
+    
+    // Si la fecha es en el futuro por desincronización, devolvemos 0 para caer en "Hace un momento"
+    let seconds = Math.floor((now - date) / 1000);
+    if (seconds < 0) seconds = 0;
     
     if (seconds < 60) return 'Hace un momento';
     const minutes = Math.floor(seconds / 60);

@@ -195,7 +195,7 @@ function renderUsuariosTable(usuarios) {
     if (usuarios.length === 0) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td colspan="6" class="px-6 py-12 text-center text-slate-400 dark:text-slate-500 font-medium">
+            <td colspan="7" class="px-6 py-12 text-center text-slate-400 dark:text-slate-500 font-medium">
                 No se encontraron usuarios que coincidan con la búsqueda.
             </td>
         `;
@@ -210,6 +210,7 @@ function renderUsuariosTable(usuarios) {
         tr.style.animationDelay = `${index * 0.02}s`;
         
         const initials = user.name ? user.name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase() : 'U';
+        const profile = user.talent_profile || user.talentProfile;
         
         let actionButtons = '';
         if (user.is_super_admin) {
@@ -226,7 +227,6 @@ function renderUsuariosTable(usuarios) {
             const banBtnColor = user.banned_at ? 'text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/20' : 'text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20';
             
             let viewProfileBtn = '';
-            const profile = user.talent_profile || user.talentProfile;
             if (user.role === 'talento' && profile) {
                 viewProfileBtn = `
                     <a href="/src/pages/publico/perfil/perfil-talento.html?id=${profile.id}" target="_blank" class="w-[72px] py-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-[10px] font-bold text-slate-600 dark:text-slate-300 transition-colors inline-flex items-center justify-center gap-1 whitespace-nowrap" title="Ver Perfil Público">
@@ -268,6 +268,11 @@ function renderUsuariosTable(usuarios) {
         const userRole = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Sin Rol';
         const registrationDate = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
 
+        // Alias visual
+        const aliasVal = (user.role === 'talento' && profile && profile.artistic_name)
+            ? `<span class="font-semibold text-slate-800 dark:text-white">${profile.artistic_name}</span>`
+            : `<span class="text-slate-400 dark:text-slate-500 font-medium">-</span>`;
+
         tr.innerHTML = `
             <td class="px-5 py-3 flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-fp-primary-light to-purple-600 text-white flex items-center justify-center font-bold text-xs uppercase shadow-sm shrink-0">
@@ -278,6 +283,7 @@ function renderUsuariosTable(usuarios) {
                     <span class="text-[10px] text-slate-400 dark:text-slate-500 font-medium block mt-0.5" title="Fecha de Registro">Reg: ${registrationDate}</span>
                 </div>
             </td>
+            <td class="px-5 py-3 text-xs text-center">${aliasVal}</td>
             <td class="px-5 py-3 text-xs text-slate-500 dark:text-slate-400 font-medium">${user.email}</td>
             <td class="px-5 py-3 text-xs font-semibold text-slate-500">${userRole}</td>
             <td class="px-5 py-3">${rolAdminBadge}</td>
@@ -1274,7 +1280,7 @@ async function cargarActividadPublica(forceRefresh = false) {
                     type: 'usuario',
                     title: 'Nuevo Registro',
                     description: `El usuario <strong>${u.name}</strong> (${u.email}) se registró como <strong>${u.role || 'Admin'}</strong>.`,
-                    date: new Date(u.created_at.endsWith('Z') ? u.created_at.slice(0, -1) : u.created_at),
+                    date: new Date(u.created_at.endsWith('Z') ? u.created_at : u.created_at + 'Z'),
                     icon: 'ph ph-user-plus',
                     colorClass: 'bg-blue-500 text-white dark:bg-blue-950 dark:text-blue-400'
                 });
@@ -1287,7 +1293,7 @@ async function cargarActividadPublica(forceRefresh = false) {
                     type: 'evento',
                     title: 'Nuevo Evento Publicado',
                     description: `El anfitrión <strong>${ev.host?.name || 'Usuario'}</strong> publicó el evento <strong>"${ev.title}"</strong> con presupuesto de <strong>Bs. ${parseFloat(ev.estimated_budget).toLocaleString()}</strong>.`,
-                    date: new Date(ev.created_at.endsWith('Z') ? ev.created_at.slice(0, -1) : ev.created_at),
+                    date: new Date(ev.created_at.endsWith('Z') ? ev.created_at : ev.created_at + 'Z'),
                     icon: 'ph ph-calendar-plus',
                     colorClass: 'bg-amber-500 text-white dark:bg-amber-950 dark:text-amber-400'
                 });
@@ -1300,7 +1306,7 @@ async function cargarActividadPublica(forceRefresh = false) {
                     type: 'review',
                     title: 'Nueva Opinión Recibida',
                     description: `El anfitrión <strong>${rev.host?.name || 'Anfitrión'}</strong> calificó con <strong>${rev.rating} ★</strong> al talento <strong>${rev.talent_profile?.artistic_name || 'Talento'}</strong>: <em>"${rev.comment}"</em>.`,
-                    date: new Date(rev.created_at.endsWith('Z') ? rev.created_at.slice(0, -1) : rev.created_at),
+                    date: new Date(rev.created_at.endsWith('Z') ? rev.created_at : rev.created_at + 'Z'),
                     icon: 'ph ph-chat-text',
                     colorClass: 'bg-pink-500 text-white dark:bg-pink-950 dark:text-pink-400'
                 });
@@ -1372,7 +1378,7 @@ async function cargarAdminLogs(forceRefresh = false) {
             item.className = 'adm-timeline-item adm-row-animate';
             item.style.animationDelay = `${index * 0.03}s`;
 
-            const formattedTime = timeAgo(new Date(log.created_at.endsWith('Z') ? log.created_at.slice(0, -1) : log.created_at));
+            const formattedTime = timeAgo(new Date(log.created_at.endsWith('Z') ? log.created_at : log.created_at + 'Z'));
             
             // Map actions to icons and colors
             let icon = 'ph ph-shield-warning';
@@ -1436,18 +1442,24 @@ window.switchActividadSubTab = function(subTabName) {
 };
 
 function timeAgo(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
-    let interval = Math.floor(seconds / 31536000);
+    let seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds < 0) seconds = 0; // Prevenir fechas futuras
 
+    let interval = Math.floor(seconds / 31536000);
     if (interval >= 1) return `hace ${interval} año${interval > 1 ? 's' : ''}`;
+    
     interval = Math.floor(seconds / 2592000);
     if (interval >= 1) return `hace ${interval} me${interval > 1 ? 'ses' : 's'}`;
+    
     interval = Math.floor(seconds / 86400);
     if (interval >= 1) return `hace ${interval} día${interval > 1 ? 's' : ''}`;
+    
     interval = Math.floor(seconds / 3600);
     if (interval >= 1) return `hace ${interval} hora${interval > 1 ? 's' : ''}`;
+    
     interval = Math.floor(seconds / 60);
     if (interval >= 1) return `hace ${interval} minuto${interval > 1 ? 's' : ''}`;
+    
     return 'hace unos momentos';
 }
 

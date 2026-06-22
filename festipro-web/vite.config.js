@@ -28,7 +28,7 @@ export default defineConfig({
             admin: resolve(__dirname, 'src/pages/admin/admin.html'),
             }
         }
-    }/*
+    },/*
     
     server: {
         host: '0.0.0.0', // Escucha en toda la red local

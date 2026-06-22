@@ -1,5 +1,5 @@
-import { getHeaderHTML } from '../../components/header.js';
-import { getFooterHTML, setupFooter } from '../../components/footer.js';
+import { getHeaderHTML } from '../../components/Header.js';
+import { getFooterHTML, setupFooter } from '../../components/Footer.js';
 
 /**
  * Alterna el tema visual (Claro/Oscuro) y guarda la preferencia

@@ -944,6 +944,63 @@ function renderMapaBolivia() {
     hideTooltip();
 }
 
+/**
+ * Configura el botón y el modal de agradecimiento (USFX)
+ */
+function setupAgradecimientoModal() {
+    const btnAgradecimiento = document.getElementById('btn-agradecimiento');
+    const modalAgradecimiento = document.getElementById('modal-agradecimiento');
+    const btnCloseBottom = document.getElementById('btn-close-modal-bottom');
+
+    if (!modalAgradecimiento) return;
+
+    // Función para abrir el modal
+    const openModal = () => {
+        modalAgradecimiento.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Evitar scroll del fondo
+    };
+
+    // Función para cerrar el modal
+    const closeModal = () => {
+        modalAgradecimiento.classList.remove('active');
+        document.body.style.overflow = ''; // Restaurar scroll
+    };
+
+    // Registrar eventos para abrir
+    if (btnAgradecimiento) {
+        btnAgradecimiento.addEventListener('click', openModal);
+    }
+
+    // Registrar eventos para cerrar
+    if (btnCloseBottom) {
+        btnCloseBottom.addEventListener('click', closeModal);
+    }
+
+    // Cerrar al hacer click fuera del contenedor del modal
+    modalAgradecimiento.addEventListener('click', (e) => {
+        if (e.target === modalAgradecimiento) {
+            closeModal();
+        }
+    });
+
+    // Cerrar con la tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalAgradecimiento.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // Auto-abrir en la primera visita usando sessionStorage
+    const yaVisito = sessionStorage.getItem('festipro_agradecimiento_visto');
+    if (!yaVisito) {
+        // Un leve retraso de 800ms para permitir que carguen las animaciones de la landing antes del modal
+        setTimeout(() => {
+            openModal();
+            sessionStorage.setItem('festipro_agradecimiento_visto', 'true');
+        }, 800);
+    }
+}
+
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     initHeroParticles();
@@ -954,4 +1011,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setupPremiumScrollAnimations();
     setupScrollProgress();
     cargarDatosMapa();
+    setupAgradecimientoModal();
 });

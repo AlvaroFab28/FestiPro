@@ -15,7 +15,7 @@ class AdminUsuarioController extends Controller
     {
         // Obtener todos los usuarios de la base de datos para administración
         $superAdminEmail = env('SUPER_ADMIN_EMAIL');
-        $usuarios = User::with('talentProfile:id,user_id')
+        $usuarios = User::with('talentProfile:id,user_id,artistic_name')
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($user) use ($superAdminEmail) {
